@@ -22,6 +22,10 @@ Now, log in to your Craft project's admin panel, go to plugin settings and insta
 
 That's it.
 
+You may now go to the plugin's settings page and activate the `enableAnchorLinks` option unless you want the plugin to just print non-clickable numbers for the footnotes.
+
+![settings page with option to enable anchor links](./README-pics/setting-anchor-links.png)
+
 ## Usage
 
 ### TL;DR
@@ -112,6 +116,16 @@ The plugin provides you with the new Twig function `footnotes()`. It returns an 
 <ul>
 	{% for number, footnote in footnotes() %}
 		<li>{{ number }} {{ footnote }}</li>
+	{% endfor %}
+</ul>
+```
+
+When activating the `enableAnchorLinks` option on the plugin's settings page you should better use the `raw` filter for printing the footnotes' numbers.
+
+```twig
+<ul>
+	{% for number, footnote in footnotes() %}
+		<li>{{ number | raw }} {{ footnote }}</li>
 	{% endfor %}
 </ul>
 ```

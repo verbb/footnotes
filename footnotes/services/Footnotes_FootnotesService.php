@@ -13,6 +13,10 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 	 * @var string[]
 	 */
 	protected $footnotes;
+	/**
+	 * @var BaseModel
+	 */
+	protected $settings;
 
 	/**
 	 * Footnotes_FootnotesService constructor.
@@ -20,6 +24,8 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 	public function __construct() {
 		//	reset footnotes array
 		$this->set();
+		//	get plugin settings
+		$this->settings = craft()->plugins->getPlugin('footnotes')->getSettings();
 	}
 
 	/**
@@ -66,7 +72,15 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 
 		foreach ($footnotesWithSup as $key => $footnote) {
 			$number = $this->add($footnotes[$key]);
-			$string = str_replace($footnote, '<sup>' . $number . '</sup>', $string);
+			$replaceWith = $number;
+
+			//	add anchor link
+			if ($this->settings->enableAnchorLinks) {
+				$replaceWith = '<a href="#footnote-' . $number . '"">' . $replaceWith . '</a>';
+			}
+
+			$replaceWith = '<sup>' . $replaceWith . '</sup>';
+			$string = str_replace($footnote, $replaceWith, $string);
 		}
 
 		return $string;
@@ -116,10 +130,19 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 	 * @see filter()
 	 */
 	public function get() {
-		//	little hacky, but it works and that's everything that counts…
-		//	create an array whose first entry is empty
-		//	then kick this element out by filtering
-		//	result is an array with keys beginning with 1
-		return array_filter(array_merge(array(null), $this->footnotes));
+		$result = array();
+
+		foreach ($this->footnotes as $key => $footnote) {
+			$number = $key + 1;
+
+			//	add anchor
+			if ($this->settings->enableAnchorLinks) {
+				$number = '<a name="footnote-' . $number . '">' . $number . '</a>';
+			}
+
+			$result[$number] = $footnote;
+		}
+
+		return $result;
 	}
 }

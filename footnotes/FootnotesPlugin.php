@@ -86,4 +86,26 @@ class FootnotesPlugin extends BasePlugin {
 
 		return new FootnotesTwigExtension();
 	}
+
+	/**
+	 * Defines the settings.
+	 *
+	 * @return array
+	 */
+	protected function defineSettings() {
+		return array(
+			'enableAnchorLinks' => array(AttributeType::Bool, 'default' => false),
+		);
+	}
+
+	/**
+	 * Returns the plugins’s settings HTML.
+	 *
+	 * @return string
+	 */
+	public function getSettingsHtml() {
+		return craft()->templates->render('footnotes/settings', array(
+			'settings' => $this->getSettings(),
+		));
+	}
 }
