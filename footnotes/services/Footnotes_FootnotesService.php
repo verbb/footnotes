@@ -76,7 +76,7 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 
 			//	add anchor link
 			if ($this->settings->enableAnchorLinks) {
-				$replaceWith = '<a href="#footnote-' . $number . '"">' . $replaceWith . '</a>';
+				$replaceWith = '<a href="#footnote-' . $number . '">' . $replaceWith . '</a>';
 			}
 
 			$replaceWith = '<sup>' . $replaceWith . '</sup>';
