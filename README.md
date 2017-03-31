@@ -113,21 +113,25 @@ Therefore the rendered string will be:
 The plugin provides you with the new Twig function `footnotes()`. It returns an array whose string entries (those that has been collected on usage of the `footnotes` filter mentioned above) are indexed by the number of the footnote.
 
 ```twig
+{% if footnotes_exist() %}
 <ul>
 	{% for number, footnote in footnotes() %}
 		<li>{{ number }} {{ footnote }}</li>
 	{% endfor %}
 </ul>
+{% endif %}
 ```
 
 When activating the `enableAnchorLinks` option on the plugin's settings page you should better use the `raw` filter for printing the footnotes' numbers.
 
 ```twig
+{% if footnotes_exist() %}
 <ul>
 	{% for number, footnote in footnotes() %}
 		<li>{{ number | raw }} {{ footnote }}</li>
 	{% endfor %}
 </ul>
+{% endif %}
 ```
 
 ### Usage for editors
