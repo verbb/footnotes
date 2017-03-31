@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.1.2](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.2) (2016-07-19)
+Bugfix: Fixed anchor link replacement in "footnotes" filter.
+
 ## [1.1.1](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.1) (2016-07-19)
 Bugfix: Settings template has been missing. See [#2](https://github.com/Vierbeuter/craft-footnotes/issues/2).
 
