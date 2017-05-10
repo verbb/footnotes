@@ -83,6 +83,19 @@ class Footnotes_FootnotesService extends BaseApplicationComponent {
 			$string = str_replace($footnote, $replaceWith, $string);
 		}
 
+		//	enable multiple, comma-separated footnotes
+		//	like "<sup>2, 3</sup>" instead of having "<sup>2</sup><sup>3</sup>"
+
+		//	therefore find all closing </sup> followed by opening <sup> tags (eventually divided by whitespaces)
+		preg_match_all('#</sup>\s*<sup.*?>#', $string, $matches);
+		$footnotesCloseAndOpen = reset($matches);
+
+		//	iterate all found "</sup><sup>" (including those with whitespaces such as "</sup> <sup>" or even "</sup>  	 <sup>")
+		foreach ($footnotesCloseAndOpen as $footnoteCloseAndOpen) {
+			//	replace with just a comma
+			$string = str_replace($footnoteCloseAndOpen, ', ', $string);
+		}
+
 		return $string;
 	}
 
