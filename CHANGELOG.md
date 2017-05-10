@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.1.3](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.3) (2017-05-10)
+Minor improvement: Footnotes directly followed by other footnotes (either with or without whitespace characters between them) will now be comma-separated:  
+*your text<sup>2</sup> <sup>3</sup><sup>4</sup>* will now be rendered as *your text<sup>2, 3, 4</sup>*
+
 ## [1.1.2](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.2) (2017-03-31)
 Bugfix: Fixed anchor link replacement in "footnotes" filter.
 
