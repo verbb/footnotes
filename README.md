@@ -136,7 +136,7 @@ When activating the `enableAnchorLinks` option on the plugin's settings page, yo
 {% endif %}
 ```
 
-From there, you might want to add a link that jumps readers back to their position, too. Each rendered string with `<sup>` has an ID prefiex with `fnref:`, ex. `fnref:1`, so you can link back to that ID from your footnote.
+From there, you might want to add a link that jumps readers back to their position, too. Each rendered string with `<sup>` has an ID prefix with `fnref:`, ex. `fnref:1`, so you can link back to that ID from your footnote.
 
 ```twig
 {% if footnotes_exist() %}
