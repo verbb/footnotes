@@ -105,7 +105,7 @@ What happens here? Each substring surrounded by `<sup>` tags will be replaced wi
 Therefore the rendered string will be:
 
 ```html
-<p>My awsome content is indeed awesome.<sup>1</sup></p>
+<p>My awsome content is indeed awesome.<sup id="fnref:1">1</sup></p>
 ```
 
 #### Render all collected footnotes
@@ -122,17 +122,36 @@ The plugin provides you with the new Twig function `footnotes()`. It returns an 
 {% endif %}
 ```
 
-When activating the `enableAnchorLinks` option on the plugin's settings page you should better use the `raw` filter for printing the footnotes' numbers.
+When activating the `enableAnchorLinks` option on the plugin's settings page, you can get the footnote number without formatting via [Twig’s `loop` variable](https://twig.symfony.com/doc/2.x/tags/for.html):
 
 ```twig
 {% if footnotes_exist() %}
-<ul>
+<ol>
 	{% for number, footnote in footnotes() %}
-		<li>{{ number | raw }} {{ footnote }}</li>
+		<li id="footnote-{{ loop.index }}">
+			{{ footnote }}
+		</li>
 	{% endfor %}
-</ul>
+</ol>
 {% endif %}
 ```
+
+From there, you might want to add a link that jumps readers back to their position, too. Each rendered string with `<sup>` has an ID prefiex with `fnref:`, ex. `fnref:1`, so you can link back to that ID from your footnote.
+
+```twig
+{% if footnotes_exist() %}
+<ol>
+	{% for number, footnote in footnotes() %}
+		<li id="footnote-{{ loop.index }}">
+			{{ number | raw }} {{ footnote }}
+			<a href="#fnref:{{ loop.index }}">back</a>
+		</li>
+	{% endfor %}
+</ol>
+{% endif %}
+```
+
+```twig
 
 ### Usage for editors
 
