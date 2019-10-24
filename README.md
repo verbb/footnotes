@@ -12,7 +12,7 @@ Also, it adds new filters and functions to your Twig templates that help you han
 
 This plugin is by far not perfect. It's intentionally held simple. If you want a more or less fail-safe, fancy, super-cool Swiss army Craft plugin feel free to fork it and make changes as you need them.
 
-Also, lots of translations are missing (see TODO in [footnote-button.js](./footnotes/resources/redactor-plugin/footnote-button.js) for details). Any pull requests are welcome.
+Also, lots of translations are missing (see TODO in [footnotebutton.js](./src/assetbundles/redactor/dist/footnote-button.js) for details). Any pull requests are welcome.
 
 ## Install
 
@@ -150,8 +150,6 @@ From there, you might want to add a link that jumps readers back to their positi
 </ol>
 {% endif %}
 ```
-
-```twig
 
 ### Usage for editors
 
