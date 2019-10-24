@@ -5,8 +5,6 @@ namespace vierbeuter\footnotes;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
-use craft\helpers\UrlHelper;
-use craft\web\View;
 use vierbeuter\footnotes\assetbundles\redactor\FootnotesRedactorBundle;
 use vierbeuter\footnotes\models\FootnotesSettings;
 use vierbeuter\footnotes\services\FootnotesService;
