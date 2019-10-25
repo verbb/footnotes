@@ -5,10 +5,12 @@ namespace vierbeuter\footnotes;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
-use vierbeuter\footnotes\assetbundles\redactor\FootnotesRedactorBundle;
+use craft\redactor\events\RegisterPluginPathsEvent;
+use craft\redactor\Field;
 use vierbeuter\footnotes\models\FootnotesSettings;
 use vierbeuter\footnotes\services\FootnotesService;
 use vierbeuter\footnotes\twigextensions\FootnotesTwigExtension;
+use yii\base\Event;
 
 /**
  * The FootnotesPlugin class represents the Craft CMS plugin for enabling footnotes in rich-text fields.
@@ -24,8 +26,6 @@ class FootnotesPlugin extends Plugin
      * Initializes the plugin.
      *
      * If you override this method, please make sure you call the parent implementation.
-     *
-     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
@@ -43,10 +43,10 @@ class FootnotesPlugin extends Plugin
         //  register Twig extensions (usable in site templates as well as in CP templates like field templates or dashboard widgets etc.)
         Craft::$app->getView()->registerTwigExtension(new FootnotesTwigExtension());
 
-        //  load JS file to add the footnote plugin to Redactor
-        if (Craft::$app->getRequest()->getIsCpRequest() && !empty(Craft::$app->getUser()->getIdentity())) {
-            Craft::$app->getView()->registerAssetBundle(FootnotesRedactorBundle::class);
-        }
+        //  register new plugin source for Redactor using one of Redactor's events
+        Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function (RegisterPluginPathsEvent $event) {
+            $event->paths[] = Craft::getAlias('@vierbeuter/footnotes/resources/');
+        });
     }
 
     /**
