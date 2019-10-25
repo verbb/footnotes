@@ -4,6 +4,7 @@ namespace vierbeuter\footnotes\services;
 
 use craft\base\Component;
 use craft\redactor\FieldData;
+use InvalidArgumentException;
 use vierbeuter\footnotes\FootnotesPlugin;
 
 /**
@@ -70,7 +71,7 @@ class FootnotesService extends Component
 
         //  ensure the filter is used correctly
         if (!is_string($string)) {
-            throw new \InvalidArgumentException('expected value of type string or ' . FieldData::class . ', but ' . (is_object($string) ? get_class($string) : gettype($string)) . ' given');
+            throw new InvalidArgumentException('expected value of type string or ' . FieldData::class . ', but ' . (is_object($string) ? get_class($string) : gettype($string)) . ' given');
         }
 
         //  extract the contents of all occurences of <sup> tags
