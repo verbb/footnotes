@@ -155,7 +155,7 @@ class FootnotesService extends Component
      *
      * @see filter()
      */
-    public function get(): string
+    public function get(): array
     {
         $result = [];
 
