@@ -69,6 +69,11 @@ class FootnotesService extends Component
             $string = $string->getParsedContent();
         }
 
+        //  empty fields return NULL instead of an empty string --> nothing to do for us here, therefore just return an empty string
+        if (empty($string)) {
+            return '';
+        }
+
         //  ensure the filter is used correctly
         if (!is_string($string)) {
             throw new InvalidArgumentException('expected value of type string or ' . FieldData::class . ', but ' . (is_object($string) ? get_class($string) : gettype($string)) . ' given');
