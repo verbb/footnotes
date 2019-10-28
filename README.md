@@ -10,7 +10,7 @@ You can find here a footnotes plugin for Craft CMS 3.
 * [Disclaimer](#disclaimer)
 * [Install](#install)
 * [Usage](#usage)
-	* [TL;DR](#tl-dr)
+	* [TL;DR](#tldr)
 	* [Usage for Developers](#usage-for-developers)
 	* [Usage for editors](#usage-for-editors)
 * [License](#license)
