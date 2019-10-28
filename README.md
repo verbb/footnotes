@@ -1,12 +1,30 @@
 # Craft Footnotes
 
-This Craft plugin enables you to define footnotes for your website contents.
+You can find here a footnotes plugin for Craft CMS 3.
 
-The plugin adds a footnote button to RichText fields. Marked parts of your text content will be said to act as footnotes after clicking the button.
+*… Looking for the Craft CMS 2 footnotes plugin? – Get the [1.1.3 release](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.3).*
+
+## Contents
+
+* [About](#about)
+* [Disclaimer](#disclaimer)
+* [Install](#install)
+* [Usage](#usage)
+	* [TL;DR](#tl-dr)
+	* [Usage for Developers](#usage-for-developers)
+	* [Usage for editors](#usage-for-editors)
+* [License](#license)
+
+## About
+
+This Craft CMS plugin enables you to **define footnotes for your website** contents.
+
+![rich text field with footnote button](./README-pics/footnotes-demo.gif)
+
+The plugin adds a footnote button to Redactor fields (aka RichtText or WYSIWYG). Marked parts of your text content will be said to act as footnotes after clicking the button.
 Also, it adds new filters and functions to your Twig templates that help you handling with the footnotes.
 
-![rich text field with footnote button](./README-pics/01.png)
-![rich text field with text containing a footnote](./README-pics/05.png)
+⬆️ [back to top](#contents)
 
 ## Disclaimer
 
@@ -14,17 +32,25 @@ This plugin is by far not perfect. It's intentionally held simple. If you want a
 
 Also, lots of translations are missing (see TODO in [footnotebutton.js](./src/assetbundles/redactor/dist/footnotebutton.js) for details). Any pull requests are welcome.
 
+⬆️ [back to top](#contents)
+
 ## Install
 
-Just copy the whole _[footnotes](./footnotes/)_ folder to your Craft project's plugin directory (which is _./craft/plugins/_ by default).
+Just load the PHP package using Composer:
 
-Now, log in to your Craft project's admin panel, go to plugin settings and install/activate the **Footnotes** plugin.
+```bash
+composer require vierbeuter/craft-footnotes
+```
 
-That's it.
+Now, log in to your Craft project's admin panel, head to plugin settings (*&lt;yourdomain.tld&gt;/admin/settings/plugins*) and install/activate the Footnotes plugin.
+
+👍 That's it.
 
 You may now go to the plugin's settings page and activate the `enableAnchorLinks` option unless you want the plugin to just print non-clickable numbers for the footnotes.
 
 ![settings page with option to enable anchor links](./README-pics/setting-anchor-links.png)
+
+⬆️ [back to top](#contents)
 
 ## Usage
 
@@ -35,16 +61,17 @@ You may now go to the plugin's settings page and activate the `enableAnchorLinks
 3. use `footnotes` filter in Twig templates to collect all footnotes and replace them with sequential numbers
 4. iterate and output each footnote by calling `footnotes()` function in Twig template
 
+⬆️ [back to top](#contents)
 
 ### Usage for Developers
 
-#### Add the footnote button to the RichText field
+#### Add the footnote button to the Redactor field
 
-You need to edit the used redactor configs unless you want the content editor to manually type HTML tags when editing sections and creating entries.
+You need to edit the used Redactor configs unless you want the content editor to manually type HTML tags when editing sections and creating entries.
 
 Lucky us, this is pretty easy.
 
-Let's have a look at the `Standard` redactor config (which is located at _./craft/config/redactor/Standard.json_).
+Let's have a look at the `Standard` Redactor config (which is located at _./config/redactor/Standard.json_).
 
 ```json
 {
@@ -53,7 +80,7 @@ Let's have a look at the `Standard` redactor config (which is located at _./craf
 }
 ```
 
-You only have to add `footnotebutton` to redactor plugins. This is how the config file looks afterwards.
+You only have to add `footnotebutton` to Redactor plugins. This is how the config file looks afterwards.
 
 
 ```json
@@ -63,7 +90,7 @@ You only have to add `footnotebutton` to redactor plugins. This is how the confi
 }
 ```
 
-Here the same thing for the `Simple` redactor config (_./craft/config/redactor/Simple.json_) if you use that instead.
+Here the same thing for the `Simple` Redactor config (_./config/redactor/Simple.json_) if you use that instead.
 
 Before:
 
@@ -83,7 +110,7 @@ After:
 }
 ```
 
-Feel free to add the `footnotebutton` plugin to any other redactor config as well.
+Feel free to add the `footnotebutton` plugin to any other Redactor config as well.
 
 #### Collect all footnotes and replace with numbers
 
@@ -151,14 +178,30 @@ From there, you might want to add a link that jumps readers back to their positi
 {% endif %}
 ```
 
+⬆️ [back to top](#contents)
+
 ### Usage for editors
 
 Write your footnote text directly into the rich text field and mark it.
+
 ![mark text that has to become a footnote](./README-pics/02.png)
-Click the **Footnote<sup>123</sup>** button.
+
+Click the **Footnote** button [x<sup>2</sup>].
+
 ![click the footnote button](./README-pics/03.png)
+
 Here we go…
-![congrats, you created a footnote](./README-pics/04.png)
+
+![congrats, you created a footnote](./README-pics/05.png)
+
 Nothing more to do. You successfully created a footnote.
 
 Do not forget to save the entry. ;)
+
+⬆️ [back to top](#contents)
+
+## License
+
+This library is licensed under the terms of the **MIT license**. See also the project's [license file](./LICENSE).
+
+⬆️ [back to top](#contents)
