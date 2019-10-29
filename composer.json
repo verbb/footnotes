@@ -1,0 +1,41 @@
+{
+  "name": "vierbeuter/craft-footnotes",
+  "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
+  "version": "2.0.0",
+  "type": "craft-plugin",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "footnotes",
+    "redactor"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vierbeuter",
+      "homepage": "https://www.vierbeuter.de"
+    }
+  ],
+  "support": {
+    "docs": "https://github.com/Vierbeuter/craft-footnotes/blob/master/README.md",
+    "email": "info@vierbeuter.de",
+    "issues": "https://github.com/Vierbeuter/craft-footnotes/issues",
+    "source": "https://github.com/Vierbeuter/craft-footnotes"
+  },
+  "require": {
+    "craftcms/cms": "^3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "vierbeuter\\footnotes\\": "src/"
+    }
+  },
+  "extra": {
+    "class": "vierbeuter\\footnotes\\FootnotesPlugin",
+    "handle": "footnotes",
+    "hasSettings": true,
+    "name": "Footnotes"
+  }
+}
