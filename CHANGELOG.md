@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [2.0.0](https://github.com/Vierbeuter/craft-footnotes/tree/2.0.0) (2019-10-29)
+
 ### Changed
  - update sources for Craft CMS 3
 
