@@ -10,9 +10,9 @@ You can find here a footnotes plugin for Craft CMS 3.
 * [Disclaimer](#disclaimer)
 * [Install](#install)
 * [Usage](#usage)
-	* [TL;DR](#tldr)
 	* [Usage for Developers](#usage-for-developers)
 	* [Usage for editors](#usage-for-editors)
+	* [TL;DR](#tldr)
 * [License](#license)
 
 ## About
@@ -53,15 +53,6 @@ You may now go to the plugin's settings page and activate the `enableAnchorLinks
 ⬆️ [back to top](#contents)
 
 ## Usage
-
-### TL;DR
-
-1. add `footnotebutton` plugin to redactor config
-2. mark some of your text contents as footnotes by using the new button
-3. use `footnotes` filter in Twig templates to collect all footnotes and replace them with sequential numbers
-4. iterate and output each footnote by calling `footnotes()` function in Twig template
-
-⬆️ [back to top](#contents)
 
 ### Usage for Developers
 
@@ -197,6 +188,15 @@ Here we go…
 Nothing more to do. You successfully created a footnote.
 
 Do not forget to save the entry. ;)
+
+⬆️ [back to top](#contents)
+
+### TL;DR
+
+1. add `footnotebutton` plugin to redactor config
+2. mark some of your text contents as footnotes by using the new button
+3. use `footnotes` filter in Twig templates to collect all footnotes and replace them with sequential numbers
+4. iterate and output each footnote by calling `footnotes()` function in Twig template
 
 ⬆️ [back to top](#contents)
 
