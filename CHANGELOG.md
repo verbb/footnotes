@@ -1,7 +1,12 @@
 # Change Log
 
-## [master](https://github.com/Vierbeuter/craft-footnotes/tree/master) (2017-\*-\*)
-Minor improvement: Set icon for footnote button.
+## Unreleased
+
+### Changed
+ - update sources for Craft CMS 3
+
+### Added
+ - minor improvement: Set icon for footnote button
 
 ## [1.1.3](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.3) (2017-05-10)
 Minor improvement: Footnotes directly followed by other footnotes (either with or without whitespace characters between them) will now be comma-separated:  
