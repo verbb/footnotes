@@ -1,7 +1,7 @@
 {
   "name": "vierbeuter/craft-footnotes",
   "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "craft-plugin",
   "keywords": [
     "craft",
