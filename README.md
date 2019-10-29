@@ -202,6 +202,6 @@ Do not forget to save the entry. ;)
 
 ## License
 
-This library is licensed under the terms of the **MIT license**. See also the project's [license file](./LICENSE).
+This plugin is licensed under the terms of the **MIT license**. See also the project's [license file](./LICENSE).
 
 ⬆️ [back to top](#contents)
