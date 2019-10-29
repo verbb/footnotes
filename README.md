@@ -19,7 +19,7 @@ You can find here a footnotes plugin for Craft CMS 3.
 
 This Craft CMS plugin enables you to **define footnotes for your website** contents.
 
-![rich text field with footnote button](./README-pics/footnotes-demo.gif)
+![demo of how the Craft Footnotes plugin works](./README-pics/footnotes-demo.gif)
 
 The plugin adds a footnote button to Redactor fields (aka RichtText or WYSIWYG). Marked parts of your text content will be said to act as footnotes after clicking the button.
 Also, it adds new filters and functions to your Twig templates that help you handling with the footnotes.
@@ -117,8 +117,8 @@ Feel free to add the `footnotebutton` plugin to any other Redactor config as wel
 You have nothing more to do than invoking the `footnotes` filter that comes with this plugin.
 
 ```twig
-{# when accessing rich text fields in your twig template use the new filter #}
-{{ entry.handle_of_richtextfield | footnotes }}
+{# when accessing Redactor fields in your Twig template use the new filter #}
+{{ entry.handle_of_redactorfield | footnotes }}
 ```
 
 The filter also works on string values containing HTML.
@@ -182,7 +182,7 @@ From there, you might want to add a link that jumps readers back to their positi
 
 ### Usage for editors
 
-Write your footnote text directly into the rich text field and mark it.
+Write your footnote text directly into the Redactor field and mark it.
 
 ![mark text that has to become a footnote](./README-pics/02.png)
 
