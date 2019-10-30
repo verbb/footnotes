@@ -1,10 +1,13 @@
 # Changelog
 
-## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
+<!--## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)-->
+
+## [2.1.1](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.1) - 2019-10-30
 
 ### Fixed
  - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): fixed the footnote button whose icon always stayed black, also on hovering &rarr; now the icon color does change on hovering the button
- 
+ - fixed changelog format to be recognized by Craft Plugin Store
+
 ## [2.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.0) - 2019-10-30
 
 ### Changed
