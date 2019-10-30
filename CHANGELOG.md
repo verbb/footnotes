@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+ - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): changed icon of footnote button
+
 ## [2.0.0](https://github.com/Vierbeuter/craft-footnotes/tree/2.0.0) (2019-10-29)
 
 ### Changed
