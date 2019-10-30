@@ -5,7 +5,7 @@
 ### Fixed
  - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): fixed the footnote button whose icon always stayed black, also on hovering &rarr; now the icon color does change on hovering the button
  
-## [2.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.0) (2019-10-30)
+## [2.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.0) - 2019-10-30
 
 ### Changed
  - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): changed icon of footnote button and slightly changed the behaviour of the footnote button: footnotes don't only are tagged with `<sup>…</sup>` any longer, now they're tagged with `<sup class="footnote">…</sup>` to make footnotes coexist with regular super-scripted text
@@ -13,7 +13,7 @@
 ### Fixed
  - changelog format
 
-## [2.0.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.0.0) (2019-10-29)
+## [2.0.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.0.0) - 2019-10-29
 
 ### Added
  - minor improvement: set icon for footnote button
@@ -21,28 +21,28 @@
 ### Changed
  - update sources for Craft CMS 3
 
-## [1.1.3](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.3) (2017-05-10)
+## [1.1.3](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.3) - 2017-05-10
 
 ### Added
  - minor improvement: Footnotes directly followed by other footnotes (either with or without whitespace characters between them) will now be comma-separated:  
 *"your text<sup>2</sup> <sup>3</sup><sup>4</sup>"* will now be rendered as *"your text<sup>2, 3, 4</sup>"*
 
-## [1.1.2](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.2) (2017-03-31)
+## [1.1.2](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.2) - 2017-03-31
 
 ### Fixed
  - fixed anchor link replacement in "footnotes" filter
 
-## [1.1.1](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.1) (2016-07-19)
+## [1.1.1](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.1) - 2016-07-19
 
 ### Fixed
 - [#2](https://github.com/Vierbeuter/craft-footnotes/issues/2): fixed missing settings template
 
-## [1.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.0) (2016-07-05)
+## [1.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.0) - 2016-07-05
 
 ### Added
  - [#1](https://github.com/Vierbeuter/craft-footnotes/issues/1): anchor links can now be added to footnotes
 
-## [1.0.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.0.0) (2016-06-23)
+## [1.0.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.0.0) - 2016-06-23
 
 ### Added
 - First version of footnotes plugin released for Craft CMS 2
