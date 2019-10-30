@@ -2,7 +2,7 @@
 
 You can find here a footnotes plugin for Craft CMS 3.
 
-*… Looking for the Craft CMS 2 footnotes plugin? – Get the [1.1.3 release](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.3).*
+*… Looking for the Craft CMS 2 footnotes plugin? – Get the [1.1.3 release](https://github.com/Vierbeuter/craft-footnotes/releases/tag/1.1.3).*
 
 ## Contents
 
@@ -30,7 +30,7 @@ Also, it adds new filters and functions to your Twig templates that help you han
 
 This plugin is by far not perfect. It's intentionally held simple. If you want a more or less fail-safe, fancy, super-cool Swiss army Craft plugin feel free to fork it and make changes as you need them.
 
-Also, lots of translations are missing (see TODO in [footnotebutton.js](./src/assetbundles/redactor/dist/footnotebutton.js) for details). Any pull requests are welcome.
+Also, lots of translations are missing (see TODO in [footnotebutton.js](./src/resources/footnotebutton.js) for details). Any pull requests are welcome.
 
 ⬆️ [back to top](#contents)
 
