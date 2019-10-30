@@ -44,7 +44,7 @@
 
         //  on button toggle
         formatSup: function () {
-            this.inline.format('sup');
+            this.inline.format({ tag: 'sup', class: 'footnote' });
         }
 
     });
