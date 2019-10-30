@@ -1,27 +1,46 @@
-# Change Log
+# Changelog
 
-## Unreleased
+<!--## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)-->
+
+## [2.1.0](https://github.com/Vierbeuter/craft-footnotes/tree/2.1.0) (2019-10-30)
+
+### Changed
+ - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): changed icon of footnote button and slightly changed the behaviour of the footnote button: footnotes don't only are tagged with `<sup>…</sup>` any longer, now they're tagged with `<sup class="footnote">…</sup>` to make footnotes coexist with regular super-scripted text
+
+### Fixed
+ - changelog format
 
 ## [2.0.0](https://github.com/Vierbeuter/craft-footnotes/tree/2.0.0) (2019-10-29)
+
+### Added
+ - minor improvement: set icon for footnote button
 
 ### Changed
  - update sources for Craft CMS 3
 
-### Added
- - minor improvement: Set icon for footnote button
-
 ## [1.1.3](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.3) (2017-05-10)
-Minor improvement: Footnotes directly followed by other footnotes (either with or without whitespace characters between them) will now be comma-separated:  
-*your text<sup>2</sup> <sup>3</sup><sup>4</sup>* will now be rendered as *your text<sup>2, 3, 4</sup>*
+
+### Added
+ - minor improvement: Footnotes directly followed by other footnotes (either with or without whitespace characters between them) will now be comma-separated:  
+*"your text<sup>2</sup> <sup>3</sup><sup>4</sup>"* will now be rendered as *"your text<sup>2, 3, 4</sup>"*
 
 ## [1.1.2](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.2) (2017-03-31)
-Bugfix: Fixed anchor link replacement in "footnotes" filter.
+
+### Fixed
+ - fixed anchor link replacement in "footnotes" filter
 
 ## [1.1.1](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.1) (2016-07-19)
-Bugfix: Settings template has been missing. See [#2](https://github.com/Vierbeuter/craft-footnotes/issues/2).
+
+### Fixed
+- [#2](https://github.com/Vierbeuter/craft-footnotes/issues/2): fixed missing settings template
 
 ## [1.1.0](https://github.com/Vierbeuter/craft-footnotes/tree/1.1.0) (2016-07-05)
-New feature: Anchor links can now added to footnotes. See [#1](https://github.com/Vierbeuter/craft-footnotes/issues/1).
+
+### Added
+ - [#1](https://github.com/Vierbeuter/craft-footnotes/issues/1): anchor links can now be added to footnotes
 
 ## [1.0.0](https://github.com/Vierbeuter/craft-footnotes/tree/1.0.0) (2016-06-23)
-First version of Craft footnotes plugin released.
+
+### Added
+- First version of footnotes plugin released for Craft CMS 2
+

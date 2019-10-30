@@ -80,7 +80,7 @@ class FootnotesService extends Component
         }
 
         //  extract the contents of all occurences of <sup> tags
-        preg_match_all('#<sup.*?>(.*?)</sup>#', $string, $matches);
+        preg_match_all('#<sup class="footnote".*?>(.*?)</sup>#', $string, $matches);
 
         //  collect the footnotes and replace them with numbers
         $footnotesWithSup = reset($matches);
@@ -95,7 +95,7 @@ class FootnotesService extends Component
                 $replaceWith = '<a id="fnref:' . $number . '" href="#footnote-' . $number . '">' . $replaceWith . '</a>';
             }
 
-            $replaceWith = '<sup>' . $replaceWith . '</sup>';
+            $replaceWith = '<sup class="footnote">' . $replaceWith . '</sup>';
             $string = str_replace($footnote, $replaceWith, $string);
         }
 
@@ -103,7 +103,7 @@ class FootnotesService extends Component
         //  like "<sup>2, 3</sup>" instead of having "<sup>2</sup><sup>3</sup>"
 
         //  therefore find all closing </sup> followed by opening <sup> tags (eventually divided by whitespaces)
-        preg_match_all('#</sup>\s*<sup.*?>#', $string, $matches);
+        preg_match_all('#</sup>\s*<sup class="footnote".*?>#', $string, $matches);
         $footnotesCloseAndOpen = reset($matches);
 
         //  iterate all found "</sup><sup>" (including those with whitespaces such as "</sup> <sup>" or even "</sup>  	 <sup>")
