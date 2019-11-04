@@ -115,10 +115,10 @@ You have nothing more to do than invoking the `footnotes` filter that comes with
 The filter also works on string values containing HTML.
 
 ```twig
-{{ '<p>My awsome content is indeed awesome.<sup>How can\'t it be?</sup></p>' | footnotes }}
+{{ '<p>My awsome content is indeed awesome.<sup class="footnote">How can\'t it be?</sup></p>' | footnotes }}
 ```
 
-What happens here? Each substring surrounded by `<sup>` tags will be replaced with a number, the sequence begins with 1.
+What happens here? Each substring surrounded by `<sup>` tags having the `class` attribute set to `footnote` will be replaced with a number, the sequence begins with 1.
 
 Therefore the rendered string will be:
 

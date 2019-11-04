@@ -1,6 +1,9 @@
 # Changelog
 
-<!--## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)-->
+## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
+
+### Fixed
+ - minor fix of docs: added missing note to README about the `<sup>` tag's `footnote` class (which has been added with release 2.1.0)
 
 ## [2.1.1](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.1) - 2019-10-30
 
