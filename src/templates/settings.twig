@@ -6,7 +6,7 @@
     label: 'Enable anchor links' | t('footnotes'),
     id: 'enableAnchorLinks',
     name: 'enableAnchorLinks',
-    instructions: 'Activate this toggle to enable anchor links for footnotes.' | t('footnotes'),
+    instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),
     on: settings.enableAnchorLinks,
     first: true,
     errors: settings.getErrors('enableAnchorLinks')
