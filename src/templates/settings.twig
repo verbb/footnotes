@@ -13,10 +13,10 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label: 'Enable duplicate footnotes' | t,
+    label: 'Enable duplicate footnotes' | t('footnotes'),
     id: 'enableDuplicateFootnotes',
     name: 'enableDuplicateFootnotes',
-    instructions: 'When disabled, identical footnote texts will share the same footnote number and the texts will be combined into a single footnote. When enabled, each footnote text will be listed seperately (with its own footnote number) regardless of any equality to other footnotes.' | t,
+    instructions: 'When disabled, identical footnote texts will share the same footnote number and the texts will be combined into a single footnote. When enabled, each footnote text will be listed seperately (with its own footnote number) regardless of any equality to other footnotes.' | t('footnotes'),
     on: settings.enableDuplicateFootnotes,
     first: true,
     errors: settings.getErrors('enableDuplicateFootnotes')
