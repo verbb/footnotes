@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
 
+### Added
+ - German translations for settings page
+
 ### Fixed
  - minor fix of docs: added missing note to README about the `<sup>` tag's `footnote` class (which has been added with release 2.1.0)
 
@@ -52,4 +55,3 @@
 
 ### Added
 - First version of footnotes plugin released for Craft CMS 2
-

@@ -5,6 +5,7 @@ namespace vierbeuter\footnotes;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\i18n\PhpMessageSource;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field;
 use vierbeuter\footnotes\models\FootnotesSettings;
@@ -30,6 +31,20 @@ class FootnotesPlugin extends Plugin
     public function init()
     {
         parent::init();
+
+        Craft::setAlias('@modules/footnotes', $this->getBasePath());
+
+        // Translation category
+        $i18n = Craft::$app->getI18n();
+        if (!isset($i18n->translations[$this->id]) && !isset($i18n->translations[$this->id . '*'])) {
+            $i18n->translations[$this->id] = [
+                'class' => PhpMessageSource::class,
+                'sourceLanguage' => 'en-US',
+                'basePath' => '@modules/footnotes/translations',
+                'forceTranslation' => true,
+                'allowOverrides' => true,
+            ];
+        }
 
         //  we don't only have settings, we also have a settings page --> tell Craft CMS we wanna use the plugin settings page
         /** @see \vierbeuter\footnotes\FootnotesPlugin::settingsHtml() */
