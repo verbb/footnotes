@@ -16,4 +16,8 @@ class FootnotesSettings extends Model
      * @var bool
      */
     public $enableAnchorLinks = false;
+    /**
+     * @var bool
+     */
+    public $enableDuplicateFootnotes = false;
 }
