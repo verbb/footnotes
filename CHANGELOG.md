@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
 
+### Added
+ - German translations for settings page
+
 ### Fixed
  - minor fix of docs: added missing note to README about the `<sup>` tag's `footnote` class (which has been added with release 2.1.0)
 
@@ -14,7 +17,7 @@
 ## [2.1.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.1.0) - 2019-10-30
 
 ### Changed
- - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): changed icon of footnote button and slightly changed the behaviour of the footnote button: footnotes don't only are tagged with `<sup>…</sup>` any longer, now they're tagged with `<sup class="footnote">…</sup>` to make footnotes coexist with regular super-scripted text
+ - [#6](https://github.com/Vierbeuter/craft-footnotes/issues/6): changed icon of footnote button and slightly changed the behaviour of the footnote button: footnotes are not just tagged with `<sup>…</sup>` any longer, now they're tagged with `<sup class="footnote">…</sup>` to make footnotes coexist with regular superscript text
 
 ### Fixed
  - changelog format
@@ -52,4 +55,3 @@
 
 ### Added
 - First version of footnotes plugin released for Craft CMS 2
-
