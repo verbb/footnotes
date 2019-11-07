@@ -3,6 +3,7 @@
 ## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
 
 ### Added
+ - [#3](https://github.com/Vierbeuter/craft-footnotes/issues/3): new setting for changing how to deal with duplicate footnotes &rarr; either combine identical footnotes to one footnote (which is the behaviour of all previous releases and therefore the plugin's default) or list all footnotes seperately, even those that are equal (which is optional, of course)
  - German translations for settings page
 
 ### Fixed
