@@ -96,7 +96,15 @@ class FootnotesService extends Component
             }
 
             $replaceWith = '<sup class="footnote">' . $replaceWith . '</sup>';
-            $string = str_replace($footnote, $replaceWith, $string);
+
+            //  check if "duplicate footnotes" feature is enabled to search'n'replace differently
+            if ($this->settings->enableDuplicateFootnotes) {
+                //  replace first footnote only (ignore any other identical ones)
+                $string = substr_replace($string, $replaceWith, strpos($string, $footnote), strlen($footnote));
+            } else {
+                //  replace all footnotes of same text
+                $string = str_replace($footnote, $replaceWith, $string);
+            }
         }
 
         //  enable multiple, comma-separated footnotes
