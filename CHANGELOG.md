@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)
+<!--## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)-->
 
 ## [2.2.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.0.0) - 2019-11-08
 
