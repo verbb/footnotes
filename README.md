@@ -46,9 +46,9 @@ Now, log in to your Craft project's admin panel, head to plugin settings (*&lt;y
 
 👍 That's it.
 
-You may now go to the plugin's settings page and activate the `enableAnchorLinks` option unless you want the plugin to just print non-clickable numbers for the footnotes.
+You may now go to the plugin's settings page and activate the `enableAnchorLinks` or `enableDuplicateFootnotes` options.
 
-![settings page with option to enable anchor links](./README-pics/setting-anchor-links.png)
+![settings page with option to enable anchor links](README-pics/plugin-settings.png)
 
 ⬆️ [back to top](#contents)
 
