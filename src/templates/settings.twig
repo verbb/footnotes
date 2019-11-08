@@ -1,13 +1,23 @@
 {% import '_includes/forms' as forms %}
 
-<h2>Settings</h2>
+<h2>{{ 'Settings' | t('footnotes') }}</h2>
 
 {{ forms.lightswitchField({
-    label: 'Enable anchor links' | t,
+    label: 'Enable anchor links' | t('footnotes'),
     id: 'enableAnchorLinks',
     name: 'enableAnchorLinks',
-    instructions: 'Activate this toggle to enable anchor links for footnotes.' | t,
+    instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),
     on: settings.enableAnchorLinks,
     first: true,
     errors: settings.getErrors('enableAnchorLinks')
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Enable duplicate footnotes' | t('footnotes'),
+    id: 'enableDuplicateFootnotes',
+    name: 'enableDuplicateFootnotes',
+    instructions: 'When disabled, identical footnote texts will share the same footnote number and the texts will be combined into a single footnote. When enabled, each footnote text will be listed seperately (with its own footnote number) regardless of any equality to other footnotes.' | t('footnotes'),
+    on: settings.enableDuplicateFootnotes,
+    first: true,
+    errors: settings.getErrors('enableDuplicateFootnotes')
 }) }}

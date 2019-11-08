@@ -96,7 +96,15 @@ class FootnotesService extends Component
             }
 
             $replaceWith = '<sup class="footnote">' . $replaceWith . '</sup>';
-            $string = str_replace($footnote, $replaceWith, $string);
+
+            //  check if "duplicate footnotes" feature is enabled to search'n'replace differently
+            if ($this->settings->enableDuplicateFootnotes) {
+                //  replace first footnote only (ignore any other identical ones)
+                $string = substr_replace($string, $replaceWith, strpos($string, $footnote), strlen($footnote));
+            } else {
+                //  replace all footnotes of same text
+                $string = str_replace($footnote, $replaceWith, $string);
+            }
         }
 
         //  enable multiple, comma-separated footnotes
@@ -124,6 +132,12 @@ class FootnotesService extends Component
      */
     public function add($footnote): int
     {
+        //  just add the new footnote in case of "duplicate footnotes" feature is activated insteadof searching for any existing footnote of same content added before
+        if ($this->settings->enableDuplicateFootnotes) {
+            //  return array size after adding which is the last footnote's number (not the array index)
+            return array_push($this->footnotes, $footnote);
+        }
+
         //  check if given footnote already exists
         $key = array_search($footnote, $this->footnotes);
 

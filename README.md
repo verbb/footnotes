@@ -9,6 +9,7 @@ You can find here a footnotes plugin for Craft CMS 3.
 * [About](#about)
 * [Disclaimer](#disclaimer)
 * [Install](#install)
+	* [Settings](#settings)
 * [Usage](#usage)
 	* [Usage for Developers](#usage-for-developers)
 	* [Usage for editors](#usage-for-editors)
@@ -46,9 +47,28 @@ Now, log in to your Craft project's admin panel, head to plugin settings (*&lt;y
 
 👍 That's it.
 
-You may now go to the plugin's settings page and activate the `enableAnchorLinks` option unless you want the plugin to just print non-clickable numbers for the footnotes.
+⬆️ [back to top](#contents)
 
-![settings page with option to enable anchor links](./README-pics/setting-anchor-links.png)
+### Settings
+
+You may now go to the plugin's settings page and activate the described features.
+
+![settings page with option to enable anchor links](README-pics/plugin-settings.png)
+
+In the following you can get an impression of what happens when toggling these setting lightswitches.
+
+#### Enable anchor links
+
+![demo of anchor links setting](./README-pics/feature-demo-anchor-links.gif)
+
+If the plugin is already in use, please have in mind, that when toggling this setting you need to make some minor changes in your Twig templates as well to make the anchor links work. Unfortunately not everything is just magic.  
+&rarr; See the [Render all collected footnotes](#render-all-collected-footnotes) section below for how to implement your Twig templates.
+
+#### Enable duplicate footnotes
+
+![demo of duplicate footnotes setting](./README-pics/feature-demo-duplicate-footnotes.gif)
+
+Have a look at *"this is a footnote"* in particular to see what happens on activating the feature in the settings page.
 
 ⬆️ [back to top](#contents)
 
@@ -115,10 +135,10 @@ You have nothing more to do than invoking the `footnotes` filter that comes with
 The filter also works on string values containing HTML.
 
 ```twig
-{{ '<p>My awsome content is indeed awesome.<sup>How can\'t it be?</sup></p>' | footnotes }}
+{{ '<p>My awsome content is indeed awesome.<sup class="footnote">How can\'t it be?</sup></p>' | footnotes }}
 ```
 
-What happens here? Each substring surrounded by `<sup>` tags will be replaced with a number, the sequence begins with 1.
+What happens here? Each substring surrounded by `<sup>` tags having the `class` attribute set to `footnote` will be replaced with a number, the sequence begins with 1.
 
 Therefore the rendered string will be:
 
@@ -128,7 +148,7 @@ Therefore the rendered string will be:
 
 #### Render all collected footnotes
 
-The plugin provides you with the new Twig function `footnotes()`. It returns an array whose string entries (those that has been collected on usage of the `footnotes` filter mentioned above) are indexed by the number of the footnote.
+The plugin provides you with the new Twig function `footnotes()`. It returns an array of footnotes (those that have been collected using the `footnotes` filter mentioned above). Each footnote is indexed by its `number`.
 
 ```twig
 {% if footnotes_exist() %}
@@ -140,32 +160,38 @@ The plugin provides you with the new Twig function `footnotes()`. It returns an 
 {% endif %}
 ```
 
-When activating the `enableAnchorLinks` option on the plugin's settings page, you can get the footnote number without formatting via [Twig’s `loop` variable](https://twig.symfony.com/doc/2.x/tags/for.html):
+##### If anchor links are enabled
+
+When activating the [Enable anchor links](#enable-anchor-links) option on the plugin's settings page, the `number` variable will contain a link like `<a href="#footnote-1">1</a>`. You can get the plain footnote number with [Twig’s `loop` variable](https://twig.symfony.com/doc/2.x/tags/for.html) for usage in the `<li>` element's `id` attribute:
 
 ```twig
 {% if footnotes_exist() %}
-<ol>
+<ul>
 	{% for number, footnote in footnotes() %}
 		<li id="footnote-{{ loop.index }}">
-			{{ footnote }}
+			{{ number | raw }} {{ footnote }}
 		</li>
 	{% endfor %}
-</ol>
+</ul>
 {% endif %}
 ```
 
-From there, you might want to add a link that jumps readers back to their position, too. Each rendered string with `<sup>` has an ID prefix with `fnref:`, ex. `fnref:1`, so you can link back to that ID from your footnote.
+Don't forget to use the `raw` filter for printing the `number` because it contains some HTML now.
+
+##### Optionally add a back button
+
+From there, you might want to add a link that jumps readers back to their position they just came from. Each footnote reference in your text content already comes with an ID, e.g. `fnref:1`, so you can link back to that ID from your footnote.
 
 ```twig
 {% if footnotes_exist() %}
-<ol>
+<ul>
 	{% for number, footnote in footnotes() %}
 		<li id="footnote-{{ loop.index }}">
 			{{ number | raw }} {{ footnote }}
 			<a href="#fnref:{{ loop.index }}">back</a>
 		</li>
 	{% endfor %}
-</ol>
+</ul>
 {% endif %}
 ```
 
