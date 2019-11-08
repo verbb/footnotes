@@ -2,7 +2,17 @@
 
 <!--## [Unreleased](https://github.com/Vierbeuter/craft-footnotes/compare/master...develop)-->
 
-## [2.2.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.0.0) - 2019-11-08
+## [2.2.2](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.2.2) - 2019-11-08
+
+### Fixed
+ - yet another fix of changelog file … please, don't ask
+
+## [2.2.1](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.2.1) - 2019-11-08
+
+### Fixed
+ - fixed changelog format to be recognized by Craft Plugin Store … again 😪
+
+## [2.2.0](https://github.com/Vierbeuter/craft-footnotes/releases/tag/2.2.0) - 2019-11-08
 
 ### Added
  - [#3](https://github.com/Vierbeuter/craft-footnotes/issues/3): new setting for changing how to deal with duplicate footnotes &rarr; either combine identical footnotes to one footnote (which is the behaviour of all previous releases and therefore the plugin's default) or list all footnotes seperately, even those that are equal (which is optional, of course)
