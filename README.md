@@ -9,6 +9,7 @@ You can find here a footnotes plugin for Craft CMS 3.
 * [About](#about)
 * [Disclaimer](#disclaimer)
 * [Install](#install)
+	* [Settings](#settings)
 * [Usage](#usage)
 	* [Usage for Developers](#usage-for-developers)
 	* [Usage for editors](#usage-for-editors)
@@ -46,9 +47,28 @@ Now, log in to your Craft project's admin panel, head to plugin settings (*&lt;y
 
 👍 That's it.
 
-You may now go to the plugin's settings page and activate the `enableAnchorLinks` or `enableDuplicateFootnotes` options.
+⬆️ [back to top](#contents)
+
+### Settings
+
+You may now go to the plugin's settings page and activate the described features.
 
 ![settings page with option to enable anchor links](README-pics/plugin-settings.png)
+
+In the following you can get an impression of what happens when toggling these setting lightswitches.
+
+#### Enable anchor links
+
+![demo of anchor links setting](./README-pics/feature-demo-anchor-links.gif)
+
+If the plugin is already in use, please have in mind, that when toggling this setting you need to make some minor changes in your Twig templates as well to make the anchor links work. Unfortunately not everything is just magic.  
+&rarr; See the [Render all collected footnotes](#render-all-collected-footnotes) section below for how to implement your Twig templates.
+
+#### Enable duplicate footnotes
+
+![demo of duplicate footnotes setting](./README-pics/feature-demo-duplicate-footnotes.gif)
+
+Have a look at *"this is a footnote"* in particular to see what happens on activating the feature in the settings page.
 
 ⬆️ [back to top](#contents)
 
