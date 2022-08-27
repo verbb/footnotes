@@ -12,7 +12,7 @@ class Settings extends Model
      * @var bool
      */
     public $enableAnchorLinks = false;
-    
+
     /**
      * @var bool
      */

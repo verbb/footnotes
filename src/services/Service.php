@@ -4,6 +4,7 @@ namespace verbb\footnotes\services;
 use verbb\footnotes\Footnotes;
 
 use craft\base\Component;
+use craft\base\Model;
 
 use craft\redactor\FieldData;
 
@@ -20,7 +21,7 @@ class Service extends Component
     protected $footnotes;
 
     /**
-     * @var \craft\base\Model
+     * @var Model
      */
     protected $settings;
 
@@ -28,11 +29,11 @@ class Service extends Component
     // Public Methods
     // =========================================================================
 
-    public function init()
+    public function init(): void
     {
         // Reset footnotes array
         $this->set();
-        
+
         // Get plugin settings
         $this->settings = Footnotes::$plugin->getSettings();
     }
@@ -42,7 +43,7 @@ class Service extends Component
      *
      * @param string[] $footnotes
      */
-    public function set($footnotes = [])
+    public function set(array $footnotes = []): void
     {
         $this->footnotes = $footnotes;
     }
@@ -56,7 +57,7 @@ class Service extends Component
      * For getting the strings these footnote indexes refer to
      * use the get() method.
      *
-     * @param string|\craft\redactor\FieldData $string
+     * @param string|FieldData $string
      *
      * @return string
      *
@@ -79,7 +80,7 @@ class Service extends Component
             throw new InvalidArgumentException('expected value of type string or ' . FieldData::class . ', but ' . (is_object($string) ? get_class($string) : gettype($string)) . ' given');
         }
 
-        //  extract the contents of all occurences of <sup> tags
+        //  extract the contents of all occurrences of <sup> tags
         preg_match_all('#<sup class="footnote".*?>(.*?)</sup>#', $string, $matches);
 
         //  collect the footnotes and replace them with numbers
@@ -130,7 +131,7 @@ class Service extends Component
      *
      * @return int
      */
-    public function add($footnote): int
+    public function add(string $footnote): int
     {
         //  just add the new footnote in case of "duplicate footnotes" feature is activated insteadof searching for any existing footnote of same content added before
         if ($this->settings->enableDuplicateFootnotes) {
