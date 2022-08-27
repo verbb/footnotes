@@ -5,6 +5,7 @@ use verbb\footnotes\Footnotes;
 
 use craft\base\Component;
 use craft\base\Model;
+use craft\helpers\Html;
 
 use craft\redactor\FieldData;
 
@@ -63,7 +64,7 @@ class Service extends Component
      *
      * @see get()
      */
-    public function filter($string): string
+    public function filter($string, array $options = []): string
     {
         //  check if given value is a Redactor field's data (containing the markup )
         if ($string instanceof FieldData) {
@@ -93,10 +94,16 @@ class Service extends Component
 
             //  add anchor link
             if ($this->settings->enableAnchorLinks) {
-                $replaceWith = '<a id="fnref:' . $number . '" href="#footnote-' . $number . '">' . $replaceWith . '</a>';
+                $anchorAttributes = $options['anchorAttributes'] ?? [];
+                $anchorAttrs = array_merge_recursive($anchorAttributes, ['id' => 'fnref:' . $number, 'href' => '#footnote-' . $number]);
+                
+                $replaceWith = Html::tag('a', $replaceWith, $anchorAttributes);
             }
 
-            $replaceWith = '<sup class="footnote">' . $replaceWith . '</sup>';
+            $superscriptAttributes = $options['superscriptAttributes'] ?? [];
+            $superscriptAttrs = array_merge_recursive($superscriptAttributes, ['class' => 'footnote']);
+
+            $replaceWith = Html::tag('sup', $replaceWith, $superscriptAttrs);
 
             //  check if "duplicate footnotes" feature is enabled to search'n'replace differently
             if ($this->settings->enableDuplicateFootnotes) {
@@ -175,16 +182,18 @@ class Service extends Component
      *
      * @see filter()
      */
-    public function get(): array
+    public function get(array $options = []): array
     {
         $result = [];
 
         foreach ($this->footnotes as $key => $footnote) {
             $number = $key + 1;
 
-            //  add anchor
             if ($this->settings->enableAnchorLinks) {
-                $number = '<a name="footnote-' . $number . '">' . $number . '</a>';
+                $anchorAttributes = $options['anchorAttributes'] ?? [];
+                $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => 'footnote-' . $number]);
+
+                $number = Html::tag('a', $number, $anchorAttrs);
             }
 
             $result[$number] = $footnote;

@@ -49,9 +49,9 @@ class Extension extends AbstractExtension
      *
      * @return string
      */
-    public function filterFootnotes(string $value = null): string
+    public function filterFootnotes(string $value = null, array $options = []): string
     {
-        return Footnotes::$plugin->getService()->filter($value);
+        return Footnotes::$plugin->getService()->filter($value, $options);
     }
 
     /**
@@ -69,8 +69,8 @@ class Extension extends AbstractExtension
      *
      * @return string[]
      */
-    public function getFootnotes(): array
+    public function getFootnotes(array $options = []): array
     {
-        return Footnotes::$plugin->getService()->get();
+        return Footnotes::$plugin->getService()->get($options);
     }
 }
