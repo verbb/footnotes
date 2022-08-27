@@ -4,6 +4,11 @@
 
 > {note} The plugin’s package name has changed to `verbb/footnotes`. Footnotes will need be updated to 3.0 from a terminal, by running `composer require verbb/footnotes && composer remove vierbeuter/craft-footnotes`.
 
+### Added
+- Add the ability to pass `anchorAttributes` object to `footnotes` filter.
+- Add the ability to pass `superscriptAttributes` object to `footnotes` filter.
+- Add the ability to pass `anchorAttributes` object to `footnotes` function.
+
 ### Changed
 - Migration to `verbb/footnotes`.
 - Now requires Craft 3.7+.
