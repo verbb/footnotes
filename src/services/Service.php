@@ -2,6 +2,7 @@
 namespace verbb\footnotes\services;
 
 use verbb\footnotes\Footnotes;
+use verbb\footnotes\models\Settings;
 
 use craft\base\Component;
 use craft\base\Model;
@@ -16,15 +17,8 @@ class Service extends Component
     // Properties
     // =========================================================================
 
-    /**
-     * @var string[]
-     */
-    protected $footnotes;
-
-    /**
-     * @var Model
-     */
-    protected $settings;
+    protected array $footnotes = [];
+    protected Settings $settings;
 
 
     // Public Methods
@@ -64,7 +58,7 @@ class Service extends Component
      *
      * @see get()
      */
-    public function filter($string, array $options = []): string
+    public function filter(FieldData|string $string, array $options = []): string
     {
         //  check if given value is a Redactor field's data (containing the markup )
         if ($string instanceof FieldData) {

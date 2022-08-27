@@ -21,8 +21,8 @@ class Footnotes extends Plugin
     // Properties
     // =========================================================================
 
-    public $schemaVersion = '1.0.0';
-    public $hasCpSettings = true;
+    public string $schemaVersion = '1.0.0';
+    public bool $hasCpSettings = true;
 
 
     // Traits
@@ -47,9 +47,9 @@ class Footnotes extends Plugin
         $this->_registerRedactorPlugins();
     }
 
-    public function getSettingsResponse()
+    public function getSettingsResponse(): mixed
     {
-        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('footnotes/settings'));
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('footnotes/settings'));
     }
 
 

@@ -46,7 +46,7 @@ class Extension extends AbstractExtension
      * Filters the given string for footnotes and replaces them with a number.
      *
      * @param string|null $value
-     *
+     * @param array $options
      * @return string
      */
     public function filterFootnotes(string $value = null, array $options = []): string

@@ -8,13 +8,6 @@ class Settings extends Model
     // Properties
     // =========================================================================
 
-    /**
-     * @var bool
-     */
-    public $enableAnchorLinks = false;
-
-    /**
-     * @var bool
-     */
-    public $enableDuplicateFootnotes = false;
+    public bool $enableAnchorLinks = false;
+    public bool $enableDuplicateFootnotes = false;
 }

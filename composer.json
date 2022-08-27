@@ -2,7 +2,7 @@
     "name": "verbb/footnotes",
     "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
     "type": "craft-plugin",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "keywords": [
         "craft",
         "cms",
@@ -30,8 +30,9 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.7.0",
-        "verbb/base": "^1.0.2"
+        "php": "^8.0.2",
+        "craftcms/cms": "^4.0.0",
+        "verbb/base": "^2.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -41,7 +42,7 @@
     "extra": {
         "name": "Footnotes",
         "handle": "footnotes",
-        "changelogUrl": "https://raw.githubusercontent.com/verbb/footnotes/craft-3/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/verbb/footnotes/craft-4/CHANGELOG.md",
         "class": "verbb\\footnotes\\Footnotes"
     }
 }

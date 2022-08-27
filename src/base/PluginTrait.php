@@ -1,6 +1,7 @@
 <?php
 namespace verbb\footnotes\base;
 
+use verbb\footnotes\Footnotes;
 use verbb\footnotes\services\Service;
 
 use Craft;
@@ -14,7 +15,7 @@ trait PluginTrait
     // Static Properties
     // =========================================================================
 
-    public static $plugin;
+    public static Footnotes $plugin;
 
 
     // Public Methods
