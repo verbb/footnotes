@@ -51,7 +51,7 @@ class Extension extends AbstractExtension
      */
     public function filterFootnotes(string $value = null): string
     {
-        return Footnotes::$plugin->footnotes->filter($value);
+        return Footnotes::$plugin->getService()->filter($value);
     }
 
     /**
@@ -61,7 +61,7 @@ class Extension extends AbstractExtension
      */
     public function footnotesExist(): bool
     {
-        return Footnotes::$plugin->footnotes->exist();
+        return Footnotes::$plugin->getService()->exist();
     }
 
     /**
@@ -71,6 +71,6 @@ class Extension extends AbstractExtension
      */
     public function getFootnotes(): array
     {
-        return Footnotes::$plugin->footnotes->get();
+        return Footnotes::$plugin->getService()->get();
     }
 }
