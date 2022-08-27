@@ -59,7 +59,7 @@ class Service extends Component
      * use the get() method.
      *
      * @param string|FieldData $string
-     *
+     * @param array $options
      * @return string
      *
      * @see get()
@@ -97,7 +97,7 @@ class Service extends Component
                 $anchorAttributes = $options['anchorAttributes'] ?? [];
                 $anchorAttrs = array_merge_recursive($anchorAttributes, ['id' => 'fnref:' . $number, 'href' => '#footnote-' . $number]);
                 
-                $replaceWith = Html::tag('a', $replaceWith, $anchorAttributes);
+                $replaceWith = Html::tag('a', $replaceWith, $anchorAttrs);
             }
 
             $superscriptAttributes = $options['superscriptAttributes'] ?? [];
