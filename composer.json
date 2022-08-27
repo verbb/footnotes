@@ -1,41 +1,47 @@
 {
-  "name": "vierbeuter/craft-footnotes",
-  "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
-  "version": "2.2.2",
-  "type": "craft-plugin",
-  "keywords": [
-    "craft",
-    "cms",
-    "craftcms",
-    "craft-plugin",
-    "footnotes",
-    "redactor"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Vierbeuter",
-      "homepage": "https://www.vierbeuter.de"
+    "name": "verbb/footnotes",
+    "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
+    "type": "craft-plugin",
+    "version": "3.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "redactor",
+        "footnotes"
+    ],
+    "support": {
+        "email": "support@verbb.io",
+        "issues": "https://github.com/verbb/footnotes/issues?state=open",
+        "source": "https://github.com/verbb/footnotes",
+        "docs": "https://github.com/verbb/footnotes",
+        "rss": "https://github.com/verbb/footnotes/commits/v2.atom"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Verbb",
+            "homepage": "https://verbb.io"
+        },
+        {
+            "name": "Vierbeuter",
+            "homepage": "https://www.vierbeuter.de"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.7.0",
+        "verbb/base": "^1.0.2"
+    },
+    "autoload": {
+        "psr-4": {
+          "verbb\\footnotes\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Footnotes",
+        "handle": "footnotes",
+        "changelogUrl": "https://raw.githubusercontent.com/verbb/footnotes/craft-3/CHANGELOG.md",
+        "class": "verbb\\footnotes\\Footnotes"
     }
-  ],
-  "support": {
-    "docs": "https://github.com/Vierbeuter/craft-footnotes/blob/master/README.md",
-    "email": "info@vierbeuter.de",
-    "issues": "https://github.com/Vierbeuter/craft-footnotes/issues",
-    "source": "https://github.com/Vierbeuter/craft-footnotes"
-  },
-  "require": {
-    "craftcms/cms": "^3.0.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "vierbeuter\\footnotes\\": "src/"
-    }
-  },
-  "extra": {
-    "class": "vierbeuter\\footnotes\\FootnotesPlugin",
-    "handle": "footnotes",
-    "hasSettings": true,
-    "name": "Footnotes"
-  }
 }

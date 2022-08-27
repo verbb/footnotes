@@ -1,19 +1,21 @@
 <?php
+namespace verbb\footnotes\twigextensions;
 
-namespace vierbeuter\footnotes\twigextensions;
+use verbb\footnotes\Footnotes;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use vierbeuter\footnotes\FootnotesPlugin;
 
-/**
- * The FootnotesTwigExtension class extends all Twig templates with custom filters and functions.
- *
- * @package vierbeuter\footnotes\twigextensions
- */
-class FootnotesTwigExtension extends AbstractExtension
+class Extension extends AbstractExtension
 {
+    // Public Methods
+    // =========================================================================
+
+    public function getName(): string
+    {
+        return 'Footnotes';
+    }
 
     /**
      * Returns a list of filters to add to the existing list.
@@ -49,7 +51,7 @@ class FootnotesTwigExtension extends AbstractExtension
      */
     public function filterFootnotes($value = null): string
     {
-        $footnotes = FootnotesPlugin::getInstance()->footnotes;
+        $footnotes = Footnotes::$plugin->footnotes;
 
         return $footnotes->filter($value);
     }
@@ -61,7 +63,7 @@ class FootnotesTwigExtension extends AbstractExtension
      */
     public function footnotesExist(): bool
     {
-        $footnotes = FootnotesPlugin::getInstance()->footnotes;
+        $footnotes = Footnotes::$plugin->footnotes;
 
         return $footnotes->exist();
     }
@@ -73,7 +75,7 @@ class FootnotesTwigExtension extends AbstractExtension
      */
     public function getFootnotes(): array
     {
-        $footnotes = FootnotesPlugin::getInstance()->footnotes;
+        $footnotes = Footnotes::$plugin->footnotes;
 
         return $footnotes->get();
     }

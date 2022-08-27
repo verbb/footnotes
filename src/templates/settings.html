@@ -1,23 +1,38 @@
+{% extends 'footnotes/_layouts' %}
 {% import '_includes/forms' as forms %}
 
-<h2>{{ 'Settings' | t('footnotes') }}</h2>
+{% set crumbs = [
+    { label: 'Kint' | t('footnotes'), url: url('footnotes/settings') },
+    { label: 'Settings' | t('app'), url: url('footnotes/settings') }
+] %}
+
+{% set selectedTab = 'settings' %}
+{% set fullPageForm = true %}
+
+{% block blockContent %}
+
+<input type="hidden" name="action" value="plugins/save-plugin-settings">
+<input type="hidden" name="pluginHandle" value="footnotes">
+
+{% namespace 'settings' %}
 
 {{ forms.lightswitchField({
-    label: 'Enable anchor links' | t('footnotes'),
-    id: 'enableAnchorLinks',
-    name: 'enableAnchorLinks',
-    instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),
-    on: settings.enableAnchorLinks,
     first: true,
-    errors: settings.getErrors('enableAnchorLinks')
+    label: 'Enable anchor links' | t('footnotes'),
+    instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),
+    name: 'enableAnchorLinks',
+    on: settings.enableAnchorLinks,
+    errors: settings.getErrors('enableAnchorLinks'),
 }) }}
 
 {{ forms.lightswitchField({
     label: 'Enable duplicate footnotes' | t('footnotes'),
-    id: 'enableDuplicateFootnotes',
-    name: 'enableDuplicateFootnotes',
     instructions: 'When disabled, identical footnote texts will share the same footnote number and the texts will be combined into a single footnote. When enabled, each footnote text will be listed seperately (with its own footnote number) regardless of any equality to other footnotes.' | t('footnotes'),
+    name: 'enableDuplicateFootnotes',
     on: settings.enableDuplicateFootnotes,
-    first: true,
-    errors: settings.getErrors('enableDuplicateFootnotes')
+    errors: settings.getErrors('enableDuplicateFootnotes'),
 }) }}
+
+{% endnamespace %}
+
+{% endblock %}

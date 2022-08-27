@@ -1,40 +1,40 @@
 <?php
+namespace verbb\footnotes\services;
 
-namespace vierbeuter\footnotes\services;
+use verbb\footnotes\Footnotes;
 
 use craft\base\Component;
-use craft\redactor\FieldData;
-use InvalidArgumentException;
-use vierbeuter\footnotes\FootnotesPlugin;
 
-/**
- * The FootnotesService class provides methods for handling a set of footnotes.
- *
- * @package vierbeuter\footnotes\services
- */
-class FootnotesService extends Component
+use craft\redactor\FieldData;
+
+use InvalidArgumentException;
+
+class Service extends Component
 {
+    // Properties
+    // =========================================================================
 
     /**
      * @var string[]
      */
     protected $footnotes;
+
     /**
      * @var \craft\base\Model
      */
     protected $settings;
 
-    /**
-     * Initializes the object.
-     *
-     * This method is invoked at the end of the constructor after the object is initialized with the given configuration.
-     */
+
+    // Public Methods
+    // =========================================================================
+
     public function init()
     {
-        //  reset footnotes array
+        // Reset footnotes array
         $this->set();
-        //  get plugin settings
-        $this->settings = FootnotesPlugin::getInstance()->getSettings();
+        
+        // Get plugin settings
+        $this->settings = Footnotes::$plugin->getSettings();
     }
 
     /**
