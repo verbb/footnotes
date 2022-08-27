@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0 - 2022-08-27
+
+### Changed
+- Now requires PHP `8.0.2+`.
+- Now requires Craft `4.0.0+`.
+
 ## 3.0.0 - 2022-08-27
 
 > {note} The plugin’s package name has changed to `verbb/footnotes`. Footnotes will need be updated to 3.0 from a terminal, by running `composer require verbb/footnotes && composer remove vierbeuter/craft-footnotes`.
