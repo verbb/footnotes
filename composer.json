@@ -2,7 +2,7 @@
     "name": "verbb/footnotes",
     "description": "Adds a footnotes feature to Redactor fields and Twig templates.",
     "type": "craft-plugin",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "keywords": [
         "craft",
         "cms",

@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.1 - 2022-12-03
+
+### Fixed
+- Fix an error when viewing the field in Live Preview with no value.
+
 ## 4.0.0 - 2022-08-27
 
 ### Changed
