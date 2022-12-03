@@ -52,13 +52,13 @@ class Service extends Component
      * For getting the strings these footnote indexes refer to
      * use the get() method.
      *
-     * @param string|FieldData $string
+     * @param string|FieldData|null $string
      * @param array $options
      * @return string
      *
      * @see get()
      */
-    public function filter(FieldData|string $string, array $options = []): string
+    public function filter(FieldData|string|null $string, array $options = []): string
     {
         //  check if given value is a Redactor field's data (containing the markup )
         if ($string instanceof FieldData) {
