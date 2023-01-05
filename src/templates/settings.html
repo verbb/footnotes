@@ -1,6 +1,8 @@
 {% extends 'footnotes/_layouts' %}
 {% import '_includes/forms' as forms %}
 
+{% requireAdmin %}
+
 {% set crumbs = [
     { label: 'Footnotes' | t('footnotes'), url: url('footnotes/settings') },
     { label: 'Settings' | t('app'), url: url('footnotes/settings') }
