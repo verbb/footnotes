@@ -25,7 +25,7 @@
         },
 
         formatSup: function () {
-            this.inline.format({ tag: 'sup', class: 'footnote' });
+            this.inline.format({ tag: 'sup', class: 'footnote', attr: { tabindex: '0' } });
         },
     });
 })(Redactor);
