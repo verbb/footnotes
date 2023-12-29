@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.2 - 2023-10-25
+
+### Added
+- Add `tabindex=“0”` to `<sup>` footnotes.
+
+### Changed
+- Only admins are now allowed to access plugin settings.
+
 ## 4.0.1 - 2022-12-03
 
 ### Fixed
