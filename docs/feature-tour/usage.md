@@ -56,3 +56,10 @@ From here, you might want to add a link that jumps readers back to their positio
     {% endfor %}
 </ul>
 ```
+
+### Attributes
+You can also include a range of options to assist with rendering:
+
+```twig
+{{ entry.myRedactorHandle | footnotes({ anchorAttributes: { class: 'some-class' }, superscriptAttributes: { class: 'another-class' } }) }}
+```
