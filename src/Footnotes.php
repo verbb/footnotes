@@ -1,7 +1,9 @@
 <?php
 namespace verbb\footnotes;
 
+use verbb\footnotes\assetbundles\CkEditorAsset;
 use verbb\footnotes\base\PluginTrait;
+use verbb\footnotes\helpers\Plugin as PluginHelper;
 use verbb\footnotes\models\Settings;
 use verbb\footnotes\twigextensions\Extension;
 
@@ -15,6 +17,8 @@ use yii\base\Event;
 
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field;
+
+use craft\ckeditor\Plugin as CkEditor;
 
 class Footnotes extends Plugin
 {
@@ -81,8 +85,17 @@ class Footnotes extends Plugin
 
     private function _registerRedactorPlugins(): void
     {
-        Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function (RegisterPluginPathsEvent $event) {
-            $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/');
-        });
+        if (PluginHelper::isPluginInstalledAndEnabled('redactor')) {
+            Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function (RegisterPluginPathsEvent $event) {
+                $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/redactor/');
+            });
+        }
+    }
+
+    private function _registerCkEditorPlugins(): void
+    {
+        if (PluginHelper::isPluginInstalledAndEnabled('ckeditor')) {
+            CkEditor::registerCkeditorPackage(CkEditorAsset::class);
+        }
     }
 }
