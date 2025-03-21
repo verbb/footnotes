@@ -1,20 +1,13 @@
 # Usage
-Firstly, you'll need to add the Footnotes plugin to your Redactor config. These are located at `config/redactor/*.json`. Add a `footnotebutton` value to the `plugins` array in the config.
+Once Footnotes has been installed, in the Craft CMS control panel, navigate to any CKEditor field in your Craft settings (Settings > Fields).
 
-```json
-{
-    "buttons": ["format", "bold", "italic"],
-    "plugins": ["source", "fullscreen", "footnotebutton"]
-}
-```
-
-With this in place, a new button for adding footnotes should appear in Redactor fields (for the Redactor fields that use this config).
+For the **CKEditor Config** setting, either create a new config, or edit an existing one. You'll see a button with the Footnotes icon (an asterisk) as an available button to add to your toolbar. Drag and drop it to the appropriate position in your toolbar.
 
 ## Render your content
-When rendering the Redactor field containing footnotes, you'll need to use the `footnotes` Twig filter.
+When rendering the CKEditor field containing footnotes, you'll need to use the `footnotes` Twig filter.
 
 ```twig
-{{ entry.myRedactorHandle | footnotes }}
+{{ entry.myContentField | footnotes }}
 ```
 
 ## Render footnotes
@@ -55,4 +48,11 @@ From here, you might want to add a link that jumps readers back to their positio
         </li>
     {% endfor %}
 </ul>
+```
+
+### Attributes
+You can also include a range of options to assist with rendering:
+
+```twig
+{{ entry.myContentField | footnotes({ anchorAttributes: { class: 'some-class' }, superscriptAttributes: { class: 'another-class' } }) }}
 ```

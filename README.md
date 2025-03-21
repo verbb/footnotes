@@ -1,7 +1,7 @@
 <p align="center"><img src="https://verbb.imgix.net/plugins/footnotes/footnotes-icon.svg" width="100" height="100" alt="Footnotes icon"></p>
 <h1 align="center">Footnotes for Craft CMS</h1>
 
-Footnotes is a Craft CMS plugin to add a footnote button to Redactor fields.
+Footnotes is a Craft CMS plugin to add a footnote button to [CKEditor](https://plugins.craftcms.com/ckeditor) fields.
 
 ## Documentation
 Visit the [Footnotes Plugin page](https://verbb.io/craft-plugins/footnotes) for all documentation, guides, pricing and developer resources.
