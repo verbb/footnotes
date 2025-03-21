@@ -32,7 +32,6 @@
     "require": {
         "php": "^8.2",
         "craftcms/cms": "^5.0.0",
-        "craftcms/redactor": "^4.0.0-alpha.1",
         "verbb/base": "^3.0.0"
     },
     "autoload": {
