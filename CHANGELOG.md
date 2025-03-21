@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.1.0 - 2025-03-21
+
+### Added
+- Add support for [CKEditor](https://plugins.craftcms.com/ckeditor).
+
+### Deprecated
+- Deprecate [Redactor](https://plugins.craftcms.com/redactor) support.
+
 ## 5.0.0 - 2024-05-13
 
 ### Changed
