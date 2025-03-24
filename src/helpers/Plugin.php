@@ -1,9 +1,16 @@
 <?php
 namespace verbb\footnotes\helpers;
 
-use verbb\base\helpers\Plugin as BasePlugin;
+use Craft;
 
-class Plugin extends BasePlugin
+class Plugin
 {
+    public static function isPluginInstalledAndEnabled(string $plugin): bool
+    {
+        $pluginsService = Craft::$app->getPlugins();
 
+        // Ensure that we check if initialized, installed and enabled. 
+        // The plugin might be installed but disabled, or installed and enabled, but missing plugin files.
+        return $pluginsService->isPluginInstalled($plugin) && $pluginsService->isPluginEnabled($plugin) && $pluginsService->getPlugin($plugin);
+    }
 }

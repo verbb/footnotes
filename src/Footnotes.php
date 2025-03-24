@@ -48,7 +48,12 @@ class Footnotes extends Plugin
         $this->_setLogging();
         $this->_registerTwigExtensions();
         $this->_registerCpRoutes();
-        $this->_registerRedactorPlugins();
+
+        // Defer most setup tasks until Craft is fully initialized:
+        Craft::$app->onInit(function() {
+            $this->_registerRedactorPlugins();
+            $this->_registerCkEditorPlugins();
+        });
     }
 
     public function getSettingsResponse(): mixed
