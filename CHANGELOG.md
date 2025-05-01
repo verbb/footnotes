@@ -6,7 +6,7 @@
 - Add support for [CKEditor](https://plugins.craftcms.com/ckeditor).
 
 ### Deprecated
-- Deprecate [Redactor](https://plugins.craftcms.com/redactor) support.
+- Deprecated [Redactor](https://plugins.craftcms.com/redactor) support.
 
 ## 5.0.0 - 2024-05-13
 
