@@ -2,7 +2,7 @@
     "name": "verbb/footnotes",
     "description": "Adds a footnotes feature to CKEditor fields and Twig templates.",
     "type": "craft-plugin",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "keywords": [
         "craft",
         "cms",
