@@ -2,7 +2,7 @@
     "name": "verbb/footnotes",
     "description": "Adds a footnotes feature to CKEditor fields and Twig templates.",
     "type": "craft-plugin",
-    "version": "5.1.1",
+    "version": "6.0.0-alpha.1",
     "keywords": [
         "craft",
         "cms",
@@ -31,9 +31,9 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "craftcms/cms": "^5.0.0",
-        "verbb/base": "^3.0.0"
+        "php": "^8.4",
+        "craftcms/cms": "6.x-dev",
+        "verbb/base": "dev-craft-6"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +43,9 @@
     "extra": {
         "name": "Footnotes",
         "handle": "footnotes",
-        "changelogUrl": "https://raw.githubusercontent.com/verbb/footnotes/craft-5/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/verbb/footnotes/craft-6/CHANGELOG.md",
         "class": "verbb\\footnotes\\Footnotes"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
