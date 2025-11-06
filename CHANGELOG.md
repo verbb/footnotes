@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.2 - 2025-11-06
+
+### Changed
+- Update English translations.
+
 ## 5.1.0 - 2025-03-21
 
 ### Added
