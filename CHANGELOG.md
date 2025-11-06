@@ -14,6 +14,19 @@
 - Now requires PHP `8.2.0+`.
 - Now requires Craft `5.0.0+`.
 
+## 4.1.1 - 2025-07-18
+
+### Changed
+- Update English translations.
+
+## 4.1.0 - 2025-03-24
+
+### Added
+- Add support for [CKEditor](https://plugins.craftcms.com/ckeditor).
+
+### Deprecated
+- Deprecated [Redactor](https://plugins.craftcms.com/redactor) support.
+
 ## 4.0.2 - 2023-10-25
 
 ### Added
@@ -51,7 +64,7 @@
 ### Fixed
  - yet another fix of changelog file … please, don't ask
 
-## 2.2.1- 2019-11-08
+## 2.2.1 - 2019-11-08
 
 ### Fixed
  - fixed changelog format to be recognized by Craft Plugin Store … again 😪
