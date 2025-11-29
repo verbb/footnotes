@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.3 - 2025-11-29
+
+### Added
+- Add `footnotes_set` Twig function.
+
 ## 5.1.2 - 2025-11-06
 
 ### Changed
