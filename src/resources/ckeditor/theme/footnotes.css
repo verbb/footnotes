@@ -1,16 +1,43 @@
 .ck-content .footnote {
-    display: inline-block;
-    margin-inline: 2px;
-    padding-block: 1px 2px;
-    padding-inline: 4px;
-    font-size: 0.8em;
-    top: -4px;
+    font-size: 0.72em;
+    vertical-align: super;
     line-height: 1;
-    vertical-align: 0;
-    background-color: var(--gray-100);
-    border-radius: var(small);
 }
 
-.ck.ck-editor__editable .footnote-selected {
-    outline: 2px solid var(--dark-focus-color);
+.ck.ck-footnotes-actions {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 260px;
+    padding: 0.45rem;
+}
+
+.ck.ck-footnotes-actions .ck-footnotes-actions-input {
+    width: 100%;
+}
+
+.ck-footnotes-actions-buttons {
+    display: flex;
+    gap: 0.35rem;
+    justify-content: flex-end;
+}
+
+.ck-content .footnote-marker {
+    color: var(--ck-color-link-default);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.ck-content .footnote-marker .footnote-marker__number {
+    display: inline;
+}
+
+.ck-content .footnote-marker.ck-widget_selected {
+    outline: 2px solid var(--ck-color-focus-border);
+    border-radius: 2px;
+}
+
+.ck.ck-editor__editable .ck-fake-selection-container {
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
 }

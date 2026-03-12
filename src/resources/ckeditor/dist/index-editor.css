@@ -1,3 +1,22 @@
-.ck.ck-editor__editable .footnote-selected{
-    outline:2px solid var(--dark-focus-color);
+.ck.ck-footnotes-actions{
+    display:grid;
+    gap:0.4rem;
+    min-width:260px;
+    padding:0.45rem;
+}
+
+.ck.ck-footnotes-actions .ck-footnotes-actions-input{
+    width:100%;
+}
+
+.ck-footnotes-actions-buttons{
+    display:flex;
+    gap:0.35rem;
+    justify-content:flex-end;
+}
+
+.ck.ck-editor__editable .ck-fake-selection-container{
+    height:0 !important;
+    overflow:hidden !important;
+    pointer-events:none !important;
 }
