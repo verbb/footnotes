@@ -1,43 +1,42 @@
 {
-    "name": "@verbb/ckeditor5-footnotes",
-    "version": "0.0.1",
-    "description": "A plugin for CKEditor 5.",
-    "type": "module",
-    "main": "src/index.js",
-    "exports": {
-        ".": "./src/index.js",
-        "./dist/index.js": "./dist/index.js",
-        "./*": "./dist/*",
-        "./browser/*": null,
-        "./build/*": "./build/*",
-        "./src/*": "./src/*",
-        "./package.json": "./package.json"
-    },
-    "license": "MIT",
-    "files": [
-        "dist",
-        "lang",
-        "src",
-        "theme",
-        "build",
-        "ckeditor5-metadata.json"
-    ],
-    "devDependencies": {
-        "@ckeditor/ckeditor5-dev-build-tools": "43.0.1",
-        "@ckeditor/ckeditor5-inspector": ">=4.1.0",
-        "@ckeditor/ckeditor5-package-tools": "^3.0.1",
-        "ckeditor5": "latest",
-        "http-server": "^14.1.0",
-        "webdriverio": "^9.0.7"
-    },
-    "peerDependencies": {
-        "ckeditor5": ">=42.0.0 || ^0.0.0-nightly"
-    },
-    "scripts": {
-        "build:dist": "node ./scripts/build-dist.mjs",
-        "dll:build": "ckeditor5-package-tools dll:build",
-        "dll:serve": "http-server ./ -o sample/dll.html",
-        "dev": "ckeditor5-package-tools start",
-        "build": "npm run dll:build && npm run build:dist"
-    }
+  "name": "@verbb/ckeditor5-footnotes",
+  "version": "0.0.1",
+  "description": "A plugin for CKEditor 5.",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./dist/index.js": "./dist/index.js",
+    "./*": "./dist/*",
+    "./browser/*": null,
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "lang",
+    "src",
+    "theme",
+    "ckeditor5-metadata.json"
+  ],
+  "devDependencies": {
+    "@ckeditor/ckeditor5-dev-build-tools": "43.0.1",
+    "@ckeditor/ckeditor5-inspector": ">=4.1.0",
+    "@ckeditor/ckeditor5-package-tools": "^4.1.1",
+    "ckeditor5": "^47.5.0",
+    "http-server": "^14.1.0",
+    "webdriverio": "^9.0.7"
+  },
+  "peerDependencies": {
+    "ckeditor5": "^47.5.0 || ^0.0.0-nightly"
+  },
+  "scripts": {
+    "build:dist": "node ./scripts/build-dist.mjs",
+    "build": "npm run build:dist",
+    "prepare": "npm run build",
+    "dev": "ckeditor5-package-tools start",
+    "dev:no-open": "npm run dev -- --no-open",
+    "start": "npm run dev"
+  }
 }

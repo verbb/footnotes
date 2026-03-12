@@ -96,8 +96,15 @@ class Footnotes extends Plugin
 
     private function _registerCkEditorPlugins(): void
     {
-        if (PluginHelper::isPluginInstalledAndEnabled('ckeditor')) {
-            CkEditor::registerCkeditorPackage(CkEditorAsset::class);
+        if (PluginHelper::isPluginInstalledAndEnabled('ckeditor') && Craft::$app->getRequest()->getIsCpRequest()) {
+            CkEditor::registerCkeditorPackage(CkEditorAsset::class, 'index.js');
+
+            $view = Craft::$app->getView();
+            $assetManager = $view->getAssetManager();
+            $bundle = $assetManager->getBundle(CkEditorAsset::class);
+
+            // Ensure the package alias exists in the import map, regardless of plugin init order.
+            $view->registerJsImport($bundle->namespace, $assetManager->getAssetUrl($bundle, 'index.js', false));
         }
     }
 }

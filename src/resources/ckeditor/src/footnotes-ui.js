@@ -1,5 +1,4 @@
-import { Plugin } from 'ckeditor5/src/core.js';
-import { ButtonView } from 'ckeditor5/src/ui.js';
+import { ButtonView, Plugin } from 'ckeditor5';
 
 import icon from '../theme/icon.svg';
 

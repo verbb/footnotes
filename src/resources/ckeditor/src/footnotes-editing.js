@@ -1,6 +1,4 @@
-import AttributeCommand from '@ckeditor/ckeditor5-basic-styles/src/attributecommand.js';
-import { Plugin } from 'ckeditor5/src/core.js';
-import { TwoStepCaretMovement, inlineHighlight } from 'ckeditor5/src/typing.js';
+import { AttributeCommand, Plugin, TwoStepCaretMovement, inlineHighlight } from 'ckeditor5';
 
 export default class FootnotesEditing extends Plugin {
     static get pluginName() {

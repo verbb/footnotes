@@ -1,0 +1,12 @@
+.ck-content .footnote{
+    display:inline-block;
+    margin-inline:2px;
+    padding-block:1px 2px;
+    padding-inline:4px;
+    font-size:0.8em;
+    top:-4px;
+    line-height:1;
+    vertical-align:0;
+    background-color:var(--gray-100);
+    border-radius:var(small);
+}
