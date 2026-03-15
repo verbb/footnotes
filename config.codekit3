@@ -299,17 +299,6 @@
       "oAP" : "\/src\/resources\/ckeditor\/.gitignore",
       "oF" : 0
     },
-    "\/src\/resources\/ckeditor\/build\/footnotes.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 1,
-      "mi" : 1,
-      "oA" : 0,
-      "oAP" : "\/src\/resources\/dist\/js\/footnotes.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
     "\/src\/resources\/ckeditor\/dist\/browser\/index-content.css" : {
       "aP" : 1,
       "bl" : 0,
@@ -477,31 +466,12 @@
       "oO" : 1,
       "oS" : 1
     },
-    "\/src\/resources\/ckeditor\/sample\/ckeditor.js" : {
-      "bF" : 0,
-      "ft" : 64,
-      "ma" : 1,
-      "mi" : 1,
-      "oA" : 0,
-      "oAP" : "\/src\/resources\/dist\/js\/ckeditor.js",
-      "oF" : 0,
-      "sC" : 0,
-      "tS" : 0
-    },
-    "\/src\/resources\/ckeditor\/sample\/dll.html" : {
+    "\/src\/resources\/ckeditor\/scripts\/build-dist.mjs" : {
       "cB" : 0,
       "ft" : 8192,
       "hM" : 0,
       "oA" : 0,
-      "oAP" : "\/src\/resources\/ckeditor\/sample\/dll.html",
-      "oF" : 0
-    },
-    "\/src\/resources\/ckeditor\/sample\/index.html" : {
-      "cB" : 0,
-      "ft" : 8192,
-      "hM" : 0,
-      "oA" : 0,
-      "oAP" : "\/src\/resources\/ckeditor\/sample\/index.html",
+      "oAP" : "\/src\/resources\/ckeditor\/scripts\/build-dist.mjs",
       "oF" : 0
     },
     "\/src\/resources\/ckeditor\/src\/footnotes-editing.js" : {
