@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.0 - 2026-03-15
+## 6.0.0 - 2026-03-16
 
 ### Added
 - Add revamped UI for managing footnotes in the control panel.
