@@ -6,6 +6,17 @@
 - Add revamped UI for managing footnotes in the control panel.
 - Add support for `craftcms/ckeditor:^5.0`.
 
+## 5.2.1 - 2026-03-16
+
+### Changed
+- Revert CKEditor 5.0+ support and new editor, in favour of pinning to CKEditor 4.x.
+
+## 5.2.0 - 2026-03-15
+
+### Added
+- Add revamped UI for managing footnotes in the control panel.
+- Add support for `craftcms/ckeditor:^5.0`.
+
 ## 5.1.3 - 2025-11-29
 
 ### Added
