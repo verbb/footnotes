@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.1 - 2026-03-24
+
+### Added
+- Add GraphQL support for footnotes.
+
 ## 6.0.0 - 2026-03-16
 
 ### Added
