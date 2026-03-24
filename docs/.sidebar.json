@@ -14,5 +14,12 @@
         "children": [
             "feature-tour/usage"
         ]
+    },
+    {
+        "title": "Developers",
+        "collapsable": false,
+        "children": [
+            "developers/graphql"
+        ]
     }
 ]

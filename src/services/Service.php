@@ -5,9 +5,9 @@ use verbb\footnotes\Footnotes;
 use verbb\footnotes\models\Settings;
 
 use craft\base\Component;
-use craft\base\Model;
 use craft\helpers\Html;
 
+use craft\htmlfield\HtmlFieldData;
 use craft\redactor\FieldData;
 
 use InvalidArgumentException;
@@ -52,45 +52,100 @@ class Service extends Component
      * For getting the strings these footnote indexes refer to
      * use the get() method.
      *
-     * @param string|FieldData|null $string
+     * @param string|FieldData|HtmlFieldData|null $string
      * @param array $options
      * @return string
      *
      * @see get()
      */
-    public function filter(FieldData|string|null $string, array $options = []): string
+    public function filter(FieldData|HtmlFieldData|string|null $string, array $options = []): string
     {
-        //  check if given value is a Redactor field's data (containing the markup )
-        if ($string instanceof FieldData) {
-            $string = $string->getParsedContent();
-        }
+        $string = $this->normalizeRichTextString($string);
 
         //  empty fields return NULL instead of an empty string --> nothing to do for us here, therefore just return an empty string
-        if (empty($string)) {
+        if ($string === '') {
             return '';
         }
 
-        //  ensure the filter is used correctly
-        if (!is_string($string)) {
-            throw new InvalidArgumentException('expected value of type string or ' . FieldData::class . ', but ' . (is_object($string) ? get_class($string) : gettype($string)) . ' given');
+        return $this->transformFootnoteHtml($string, $this->footnotes, $options);
+    }
+
+    /**
+     * Parses footnote markup in isolation (does not use or mutate the shared Twig request footnote list).
+     *
+     * @return array{html: string, items: array<int, array{number: int, text: string, referenceAnchorId: string, listAnchorId: string, numberMarkup: ?string}>}
+     */
+    public function parseForGraphql(string $html, array $options = []): array
+    {
+        if ($html === '') {
+            return [
+                'html' => '',
+                'items' => [],
+            ];
         }
 
+        $footnotes = [];
+        $html = $this->transformFootnoteHtml($html, $footnotes, $options);
+
+        $items = [];
+        foreach ($footnotes as $key => $footnote) {
+            $number = $key + 1;
+            $items[] = [
+                'number' => $number,
+                'text' => $footnote,
+                'referenceAnchorId' => 'fnref:' . $number,
+                'listAnchorId' => 'footnote-' . $number,
+                'numberMarkup' => $this->footnoteListNumberMarkup($number, $options),
+            ];
+        }
+
+        return [
+            'html' => $html,
+            'items' => $items,
+        ];
+    }
+
+    /**
+     * @param string|FieldData|HtmlFieldData|null $value
+     */
+    private function normalizeRichTextString(mixed $value): string
+    {
+        if ($value instanceof FieldData || $value instanceof HtmlFieldData) {
+            $value = $value->getParsedContent();
+        }
+
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        if (!is_string($value)) {
+            throw new InvalidArgumentException('expected value of type string, ' . FieldData::class . ', or ' . HtmlFieldData::class . ', but ' . (is_object($value) ? get_class($value) : gettype($value)) . ' given');
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array<int, string> $footnotes
+     */
+    private function transformFootnoteHtml(string $string, array &$footnotes, array $options = []): string
+    {
         //  extract the contents of all occurrences of <sup> tags
         preg_match_all('#<sup class="footnote".*?>(.*?)</sup>#', $string, $matches);
 
         //  collect the footnotes and replace them with numbers
         $footnotesWithSup = reset($matches);
-        $footnotes = next($matches);
+        $footnoteTexts = next($matches);
 
         foreach ($footnotesWithSup as $key => $footnote) {
-            $number = $this->add($footnotes[$key]);
+            $number = $this->addFootnoteTo($footnotes, $footnoteTexts[$key]);
             $replaceWith = $number;
 
             //  add anchor link
             if ($this->settings->enableAnchorLinks) {
                 $anchorAttributes = $options['anchorAttributes'] ?? [];
                 $anchorAttrs = array_merge_recursive($anchorAttributes, ['id' => 'fnref:' . $number, 'href' => '#footnote-' . $number]);
-                
+
                 $replaceWith = Html::tag('a', $replaceWith, $anchorAttrs);
             }
 
@@ -125,6 +180,37 @@ class Service extends Component
         return $string;
     }
 
+    private function footnoteListNumberMarkup(int $number, array $options): ?string
+    {
+        if (!$this->settings->enableAnchorLinks) {
+            return null;
+        }
+
+        $anchorAttributes = $options['anchorAttributes'] ?? [];
+        $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => 'footnote-' . $number]);
+
+        return Html::tag('a', (string)$number, $anchorAttrs);
+    }
+
+    /**
+     * @param array<int, string> $footnotes
+     */
+    private function addFootnoteTo(array &$footnotes, string $footnote): int
+    {
+        if ($this->settings->enableDuplicateFootnotes) {
+            return array_push($footnotes, $footnote);
+        }
+
+        $key = array_search($footnote, $footnotes);
+
+        if ($key === false) {
+            $footnotes[] = $footnote;
+            $key = array_search($footnote, $footnotes);
+        }
+
+        return $key + 1;
+    }
+
     /**
      * Adds the given footnote text and returns its number.
      *
@@ -134,23 +220,7 @@ class Service extends Component
      */
     public function add(string $footnote): int
     {
-        //  just add the new footnote in case of "duplicate footnotes" feature is activated insteadof searching for any existing footnote of same content added before
-        if ($this->settings->enableDuplicateFootnotes) {
-            //  return array size after adding which is the last footnote's number (not the array index)
-            return array_push($this->footnotes, $footnote);
-        }
-
-        //  check if given footnote already exists
-        $key = array_search($footnote, $this->footnotes);
-
-        //  add the new footnote
-        if ($key === false) {
-            $this->footnotes[] = $footnote;
-            $key = array_search($footnote, $this->footnotes);
-        }
-
-        //  return the footnote's number (not the array index)
-        return $key + 1;
+        return $this->addFootnoteTo($this->footnotes, $footnote);
     }
 
     /**

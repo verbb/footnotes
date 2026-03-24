@@ -1,6 +1,7 @@
 <?php
 
 return [
+  'Process footnotes via GraphQL (root query and CKEditor fields)' => 'Fußnoten per GraphQL verarbeiten (Root-Query und CKEditor-Felder)',
   'Enable anchor links' => 'Sprungmarken aktivieren',
   'Enable duplicate footnotes' => 'Doppelte Fußnoten aktivieren',
   'Footnotes' => 'Footnotes',
