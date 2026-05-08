@@ -131,11 +131,20 @@ class Footnotes extends Plugin
             $event->fields['footnotesProcessed'] = [
                 'name' => 'footnotesProcessed',
                 'type' => Type::nonNull(FootnotesProcessedType::getType()),
+                'args' => [
+                    'anchorScope' => [
+                        'name' => 'anchorScope',
+                        'type' => Type::string(),
+                        'description' => 'Optional stable anchor prefix for this field (same as the Twig filter `anchorScope` option). Omit to generate a scoped token per resolve. Pass an empty string for legacy `footnote-1` / `fnref:1` fragments.',
+                    ],
+                ],
                 'description' => 'Body HTML and footnote list, equivalent to the Twig `footnotes` filter plus `footnotes()` function.',
-                'resolve' => function(mixed $source): array {
+                'resolve' => function(mixed $source, array $arguments): array {
                     $html = $source instanceof CkeditorFieldData ? $source->getParsedContent() : '';
 
-                    return Footnotes::$plugin->getService()->parseForGraphql($html);
+                    $options = $this->_graphqlAnchorScopeOptions($arguments);
+
+                    return Footnotes::$plugin->getService()->parseForGraphql($html, $options);
                 },
             ];
         });
@@ -153,9 +162,18 @@ class Footnotes extends Plugin
                         'type' => Type::nonNull(Type::string()),
                         'description' => 'Raw or parsed rich text HTML containing `<sup class="footnote">` markers.',
                     ],
+                    'anchorScope' => [
+                        'name' => 'anchorScope',
+                        'type' => Type::string(),
+                        'description' => 'Optional stable anchor prefix for this HTML block. Omit to generate a scoped token per resolve; pass an empty string for legacy `footnote-1` / `fnref:1` fragments.',
+                    ],
                 ],
                 'description' => 'Process arbitrary HTML for footnotes (useful when the field is exposed as a plain string in GraphQL).',
-                'resolve' => fn(mixed $_root, array $args): array => Footnotes::$plugin->getService()->parseForGraphql($args['html']),
+                'resolve' => function(mixed $_root, array $args): array {
+                    $options = $this->_graphqlAnchorScopeOptions($args);
+
+                    return Footnotes::$plugin->getService()->parseForGraphql($args['html'], $options);
+                },
             ];
         });
 
@@ -173,5 +191,18 @@ class Footnotes extends Plugin
     private function _isCkeditorFieldGqlType(string $typeName): bool
     {
         return str_ends_with($typeName, '_CkeditorField');
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     * @return array<string, string>
+     */
+    private function _graphqlAnchorScopeOptions(array $arguments): array
+    {
+        if (!array_key_exists('anchorScope', $arguments) || $arguments['anchorScope'] === null) {
+            return [];
+        }
+
+        return ['anchorScope' => (string) $arguments['anchorScope']];
     }
 }

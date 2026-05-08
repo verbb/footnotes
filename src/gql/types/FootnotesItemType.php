@@ -34,11 +34,11 @@ final class FootnotesItemType extends ObjectType
                 ],
                 'referenceAnchorId' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'ID used on the in-article reference link when anchor links are enabled (e.g. `fnref:1`).',
+                    'description' => 'ID on the in-text reference when anchor links are enabled (e.g. `fnref:1` or `fnref:entry-12.1` when scoped).',
                 ],
                 'listAnchorId' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'Suggested fragment / list item anchor for this footnote (e.g. `footnote-1`).',
+                    'description' => 'Fragment id for the list row / target (e.g. `footnote-1` or `footnote-a1b2c3d4e5f6g7h8.1`).',
                 ],
                 'numberMarkup' => [
                     'type' => Type::string(),
