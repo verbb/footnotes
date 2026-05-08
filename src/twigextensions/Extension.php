@@ -40,6 +40,7 @@ class Extension extends AbstractExtension
             new TwigFunction('footnotes_exist', [$this, 'footnotesExist']),
             new TwigFunction('footnotes_set', [$this, 'setFootnotes']),
             new TwigFunction('footnotes', [$this, 'getFootnotes'], ['is_safe' => ['html']]),
+            new TwigFunction('footnotes_items', [$this, 'getFootnotesItems']),
         ];
     }
 
@@ -73,6 +74,14 @@ class Extension extends AbstractExtension
     public function getFootnotes(array $options = []): array
     {
         return Footnotes::$plugin->getService()->get($options);
+    }
+
+    /**
+     * @return list<array{number: int, text: string, numberHtml: string, listAnchorId: string, referenceAnchorId: string}>
+     */
+    public function getFootnotesItems(array $options = []): array
+    {
+        return Footnotes::$plugin->getService()->getItems($options);
     }
 
     public function setFootnotes(array $footnotes = []): void

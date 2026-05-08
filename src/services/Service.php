@@ -106,6 +106,43 @@ class Service extends Component
     }
 
     /**
+     * Structured footnotes for templates (anchor IDs, list targets).
+     *
+     * @param array<string, mixed> $options
+     * @return list<array{number: int, text: string, numberHtml: string, listAnchorId: string, referenceAnchorId: string}>
+     */
+    public function getItems(array $options = []): array
+    {
+        $items = [];
+
+        foreach ($this->footnotes as $key => $footnote) {
+            $number = $key + 1;
+            $scope = $footnote['scope'];
+            $text = $footnote['text'];
+
+            if ($this->settings->enableAnchorLinks) {
+                $anchorAttributes = $options['anchorAttributes'] ?? [];
+                $listId = $this->listAnchorId($scope, $number);
+                $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => $listId]);
+
+                $numberHtml = Html::tag('a', (string) $number, $anchorAttrs);
+            } else {
+                $numberHtml = (string) $number;
+            }
+
+            $items[] = [
+                'number' => $number,
+                'text' => $text,
+                'numberHtml' => $numberHtml,
+                'listAnchorId' => $this->listAnchorId($scope, $number),
+                'referenceAnchorId' => $this->referenceAnchorId($scope, $number),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
      * @param string|FieldData|HtmlFieldData|null $value
      */
     private function normalizeRichTextString(mixed $value): string
