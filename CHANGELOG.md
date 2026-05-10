@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.2 - 2026-05-10
+
+### Added
+- Add support for scoped footnote items/anchors when rendering multiple times.
+- Add `footnotes_items()`.
+
 ## 6.0.1 - 2026-03-24
 
 ### Added
