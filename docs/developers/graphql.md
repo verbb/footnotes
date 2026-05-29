@@ -23,7 +23,7 @@ Each `FootnotesItem` includes:
 | ------------- | ------- |
 | `number` | Integer footnote number (1-based). |
 | `text` | Footnote text from the editor. |
-| `referenceAnchorId` | e.g. `fnref:1` or scoped `fnref:entry-12.1` — matches `id` on the in-text reference when [anchor links](../feature-tour/usage.md#anchor-links) are enabled. |
+| `referenceAnchorId` | e.g. `fnref:1` or scoped `fnref:entry-12.1` — matches `id` on the in-text reference when [anchor links](docs:feature-tour/usage#anchor-links) are enabled. |
 | `listAnchorId` | e.g. `footnote-1` or `footnote-a1b2c3d4e5f6g7h8.1` — use as `id` on your list row for `#` links from the reference. |
 | `numberMarkup` | When anchor links are enabled, HTML for the marker in the list (like Twig’s `number` with `raw`). Otherwise `null` — use `number`. |
 
