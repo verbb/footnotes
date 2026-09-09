@@ -1,25 +1,16 @@
-{% extends 'footnotes/_layouts' %}
+{% extends 'footnotes/_layouts/settings' %}
+
 {% import '_includes/forms' as forms %}
+{% import 'verbb-base/_macros' as macros %}
 
-{% requireAdmin %}
-
-{% set crumbs = [
-    { label: 'Footnotes' | t('footnotes'), url: url('footnotes/settings') },
-    { label: 'Settings' | t('app'), url: url('footnotes/settings') }
-] %}
-
-{% set selectedTab = 'settings' %}
 {% set fullPageForm = true %}
+{% set selectedTab = 'general' %}
+{% set pageTitle = 'General Settings' | t('footnotes') %}
+{% set pageAction = 'plugins/save-plugin-settings' %}
+{% set pageUrl = 'footnotes/settings' %}
 
-{% block blockContent %}
-
-<input type="hidden" name="action" value="plugins/save-plugin-settings">
-<input type="hidden" name="pluginHandle" value="footnotes">
-
-{% namespace 'settings' %}
-
+{% block settingsContent %}
 {{ forms.lightswitchField({
-    first: true,
     label: 'Enable anchor links' | t('footnotes'),
     instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),
     name: 'enableAnchorLinks',
@@ -34,7 +25,4 @@
     on: settings.enableDuplicateFootnotes,
     errors: settings.getErrors('enableDuplicateFootnotes'),
 }) }}
-
-{% endnamespace %}
-
 {% endblock %}
