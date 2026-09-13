@@ -1,22 +1,37 @@
 # Configuration
-Create a `footnotes.php` file under your `/config` directory with the following options available to you. You can also use multi-environment options to change these per environment.
 
-The below shows the defaults already used by Footnotes, so you don't need to add these options unless you want to modify the values.
+You can customise Footnotes’s settings using a PHP configuration file. This is optional: each setting has a default, so you only need to include the values you want to change.
+
+To override a setting, create `footnotes.php` in your Craft project’s `/config` directory and return an array of setting names and values. For example, the following will enable footnote anchor links:
 
 ```php
 <?php
 
 return [
-    '*' => [
-        'enableAnchorLinks' => false,
-        'enableDuplicateFootnotes' => false,
-    ],
+    'enableAnchorLinks' => true,
 ];
 ```
 
-## Configuration options
-- `enableAnchorLinks` - Whether to enable `<a>` tags for footnotes.
-- `enableDuplicateFootnotes` - Whether duplicate footnotes should combine, or keep separate.
+All other settings keep their defaults. Add any further settings you want to change to the same array. The options below explain the available settings and their defaults.
+
+## Configuration Options
+
+::: reference
+### `enableAnchorLinks`
+
+**Type:** `bool` · **Default:** `false`
+
+Whether to enable `<a>` tags for footnotes.
+:::
+
+::: reference
+### `enableDuplicateFootnotes`
+
+**Type:** `bool` · **Default:** `false`
+
+Whether duplicate footnotes should combine, or keep separate.
+:::
+
 
 ## Control Panel
 You can also manage configuration settings through the Control Panel by visiting Settings → Footnotes.
