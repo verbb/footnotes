@@ -3,11 +3,13 @@
 
 Footnotes is a Craft CMS plugin to add a footnote button to [CKEditor](https://plugins.craftcms.com/ckeditor) fields.
 
+Render ordered, linked footnotes through Twig or GraphQL, with scoped anchors for pages containing multiple footnote-enabled content bodies and configurable handling for duplicate notes.
+
 ## Documentation
 Visit the [Footnotes Plugin page](https://verbb.io/craft-plugins/footnotes) for all documentation, guides, pricing and developer resources.
 
 ## Credit & Thanks
-Originally created by the team at [Vierbeuter](http://www.vierbeuter.de/).
+Originally created by the team at Vierbeuter.
 
 ## Support
 Get in touch with us via the [Footnotes Support page](https://verbb.io/craft-plugins/footnotes/support) or by [creating a Github issue](https://github.com/verbb/footnotes/issues)
