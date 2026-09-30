@@ -7,7 +7,7 @@ Footnotes gives CKEditor authors a deliberate way to add supporting notes withou
 
 Authors can identify text as a footnote from the CKEditor toolbar instead of hand-writing anchors or HTML. The content remains part of the rich-text workflow while the published page can separate supporting detail from the main passage.
 
-![A numbered footnote and its editing controls inside a Craft CKEditor field.](../screenshots/output/feature-tour/footnotes-editor.png)
+![A numbered footnote and its editing controls inside a Craft CKEditor field.](../screenshots/footnotes-editor.png)
 
 <!-- feature-section-end -->
 

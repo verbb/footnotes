@@ -3,6 +3,8 @@ Once Footnotes has been installed, in the Craft CMS control panel, navigate to a
 
 For the **CKEditor Config** setting, either create a new config, or edit an existing one. You'll see a button with the Footnotes icon (an asterisk) as an available button to add to your toolbar. Drag and drop it to the appropriate position in your toolbar.
 
+![Adding a footnote in the CKEditor field editor](../../screenshots/footnotes-editor.png)
+
 ## Render Your Content
 When rendering the CKEditor field containing footnotes, you'll need to use the `footnotes` Twig filter.
 
