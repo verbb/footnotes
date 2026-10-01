@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Fixed a moderate-severity denial-of-service vulnerability.
+
 ## 6.0.5 - 2026-09-30
 
 ### Changed

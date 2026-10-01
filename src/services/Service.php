@@ -11,9 +11,18 @@ use craft\htmlfield\HtmlFieldData;
 use craft\redactor\FieldData;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 class Service extends Component
 {
+    // Constants
+    // =========================================================================
+
+    private const ADJACENT_FOOTNOTE_PATTERN = '#</sup>\s*+<sup class="footnote"[^>\n]*+>#';
+    private const FOOTNOTE_CLOSING = '</sup>';
+    private const FOOTNOTE_OPENING = '<sup class="footnote"';
+
+
     // Properties
     // =========================================================================
 
@@ -220,58 +229,134 @@ class Service extends Component
      */
     private function transformFootnoteHtml(string $string, array &$footnotes, array $options, string $scope): string
     {
-        //  extract the contents of all occurrences of <sup> tags
-        preg_match_all('#<sup class="footnote".*?>(.*?)</sup>#', $string, $matches);
+        $footnoteNumbers = [];
 
-        //  collect the footnotes and replace them with numbers
-        $footnotesWithSup = reset($matches);
-        $footnoteTexts = next($matches);
+        if (!$this->settings->enableDuplicateFootnotes) {
+            // Twig can pre-seed this collection or call the filter several times. Index the existing
+            // rows once, retaining the first number and its original scope exactly as addFootnoteTo().
+            foreach ($footnotes as $key => $footnote) {
+                $lookupKey = 's:' . $footnote['text'];
 
-        foreach ($footnotesWithSup as $key => $footnote) {
-            $resolved = $this->addFootnoteTo($footnotes, $footnoteTexts[$key], $scope);
-            $number = $resolved['number'];
-            $resolvedScope = $resolved['scope'];
-            $replaceWith = $number;
+                if (!isset($footnoteNumbers[$lookupKey])) {
+                    $footnoteNumbers[$lookupKey] = [
+                        'number' => $key + 1,
+                        'scope' => $footnote['scope'],
+                    ];
+                }
+            }
+        }
 
-            //  add anchor link
-            if ($this->settings->enableAnchorLinks) {
-                $anchorAttributes = $options['anchorAttributes'] ?? [];
-                $refId = $this->referenceAnchorId($resolvedScope, $number);
-                $listFragment = $this->listAnchorId($resolvedScope, $number);
-                $anchorAttrs = array_merge_recursive($anchorAttributes, ['id' => $refId, 'href' => '#' . $listFragment]);
+        $transformed = '';
+        $lineStart = 0;
 
-                $replaceWith = Html::tag('a', $replaceWith, $anchorAttrs);
+        // Split on line feeds once before looking for delimiters. The historical regex did not
+        // recognise a marker across a line feed, and bounding every search to one line prevents a
+        // series of malformed lines from repeatedly scanning the document's shrinking tail.
+        while (($lineBreak = strpos($string, "\n", $lineStart)) !== false) {
+            $line = substr($string, $lineStart, $lineBreak - $lineStart);
+            $transformed .= $this->_transformFootnoteLine($line, $footnotes, $footnoteNumbers, $options, $scope) . "\n";
+            $lineStart = $lineBreak + 1;
+        }
+
+        $transformed .= $this->_transformFootnoteLine(substr($string, $lineStart), $footnotes, $footnoteNumbers, $options, $scope);
+
+        // This bounded expression only joins already-rendered adjacent markers; it does not parse
+        // their contents. The possessive ranges prevent malformed suffixes from triggering retries.
+        $transformed = preg_replace(self::ADJACENT_FOOTNOTE_PATTERN, ', ', $transformed);
+
+        if ($transformed === null) {
+            throw new RuntimeException('Unable to combine adjacent footnote markers: ' . preg_last_error_msg());
+        }
+
+        return $transformed;
+    }
+
+    /**
+     * @param list<array{text: string, scope: string}> $footnotes
+     * @param array<string, array{number: int, scope: string}> $footnoteNumbers
+     * @param array<string, mixed> $options
+     */
+    private function _transformFootnoteLine(string $line, array &$footnotes, array &$footnoteNumbers, array $options, string $scope): string
+    {
+        $output = '';
+        $copyOffset = 0;
+        $searchOffset = 0;
+        $openingLength = strlen(self::FOOTNOTE_OPENING);
+        $closingLength = strlen(self::FOOTNOTE_CLOSING);
+
+        // Walk left to right and copy each unchanged range once. If the first candidate cannot find
+        // its opening bracket or closing tag, no later candidate on this line can complete either,
+        // so the scan stops instead of retrying each suffix of malformed input.
+        while (($openingStart = strpos($line, self::FOOTNOTE_OPENING, $searchOffset)) !== false) {
+            $openingEnd = strpos($line, '>', $openingStart + $openingLength);
+
+            if ($openingEnd === false) {
+                break;
             }
 
-            $superscriptAttributes = $options['superscriptAttributes'] ?? [];
-            $superscriptAttrs = array_merge_recursive($superscriptAttributes, ['class' => 'footnote']);
+            $contentStart = $openingEnd + 1;
+            $closingStart = strpos($line, self::FOOTNOTE_CLOSING, $contentStart);
 
-            $replaceWith = Html::tag('sup', $replaceWith, $superscriptAttrs);
+            if ($closingStart === false) {
+                break;
+            }
 
-            //  check if "duplicate footnotes" feature is enabled to search'n'replace differently
+            $footnote = substr($line, $contentStart, $closingStart - $contentStart);
+
             if ($this->settings->enableDuplicateFootnotes) {
-                //  replace first footnote only (ignore any other identical ones)
-                $string = substr_replace($string, $replaceWith, strpos($string, $footnote), strlen($footnote));
+                $footnotes[] = ['text' => $footnote, 'scope' => $scope];
+                $number = count($footnotes);
+                $resolvedScope = $scope;
             } else {
-                //  replace all footnotes of same text
-                $string = str_replace($footnote, $replaceWith, $string);
+                // Prefixing the text prevents PHP from coercing numeric footnotes into integer keys.
+                $lookupKey = 's:' . $footnote;
+                $resolved = $footnoteNumbers[$lookupKey] ?? null;
+
+                if ($resolved === null) {
+                    $footnotes[] = ['text' => $footnote, 'scope' => $scope];
+                    $resolved = [
+                        'number' => count($footnotes),
+                        'scope' => $scope,
+                    ];
+                    $footnoteNumbers[$lookupKey] = $resolved;
+                }
+
+                $number = $resolved['number'];
+                $resolvedScope = $resolved['scope'];
             }
+
+            // Write by original offsets so generated markup is never fed back into marker parsing.
+            // This is what keeps nested or incomplete input from restarting the replacement work.
+            $output .= substr($line, $copyOffset, $openingStart - $copyOffset);
+            $output .= $this->_renderFootnoteMarker($number, $resolvedScope, $options);
+
+            $copyOffset = $closingStart + $closingLength;
+            $searchOffset = $copyOffset;
         }
 
-        //  enable multiple, comma-separated footnotes
-        //  like "<sup>2, 3</sup>" instead of having "<sup>2</sup><sup>3</sup>"
+        return $output . substr($line, $copyOffset);
+    }
 
-        //  therefore find all closing </sup> followed by opening <sup> tags (eventually divided by whitespaces)
-        preg_match_all('#</sup>\s*<sup class="footnote".*?>#', $string, $matches);
-        $footnotesCloseAndOpen = reset($matches);
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function _renderFootnoteMarker(int $number, string $scope, array $options): string
+    {
+        $replaceWith = (string) $number;
 
-        //  iterate all found "</sup><sup>" (including those with whitespaces such as "</sup> <sup>" or even "</sup>  	 <sup>")
-        foreach ($footnotesCloseAndOpen as $footnoteCloseAndOpen) {
-            //  replace with just a comma
-            $string = str_replace($footnoteCloseAndOpen, ', ', $string);
+        if ($this->settings->enableAnchorLinks) {
+            $anchorAttributes = $options['anchorAttributes'] ?? [];
+            $refId = $this->referenceAnchorId($scope, $number);
+            $listFragment = $this->listAnchorId($scope, $number);
+            $anchorAttrs = array_merge_recursive($anchorAttributes, ['id' => $refId, 'href' => '#' . $listFragment]);
+
+            $replaceWith = Html::tag('a', $replaceWith, $anchorAttrs);
         }
 
-        return $string;
+        $superscriptAttributes = $options['superscriptAttributes'] ?? [];
+        $superscriptAttrs = array_merge_recursive($superscriptAttributes, ['class' => 'footnote']);
+
+        return Html::tag('sup', $replaceWith, $superscriptAttrs);
     }
 
     /**

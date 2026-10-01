@@ -24,17 +24,31 @@ use craft\redactor\Field;
 use craft\services\Gql;
 use craft\web\UrlManager;
 
+use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\Type;
 
+use yii\base\Application;
 use yii\base\Event;
 
 class Footnotes extends Plugin
 {
+    // Constants
+    // =========================================================================
+
+    private const MAX_GRAPHQL_ANCHOR_SCOPE_BYTES = 255;
+    private const MAX_GRAPHQL_FOOTNOTE_MARKERS = 1000;
+    private const MAX_GRAPHQL_HTML_BYTES = 1048576;
+
+
     // Properties
     // =========================================================================
 
     public bool $hasCpSettings = true;
     public string $schemaVersion = '1.0.0';
+
+    private bool $graphqlBudgetExceeded = false;
+    private int $graphqlFootnoteMarkersProcessed = 0;
+    private int $graphqlHtmlBytesProcessed = 0;
 
 
     // Traits
@@ -51,6 +65,12 @@ class Footnotes extends Plugin
         parent::init();
 
         self::$plugin = $this;
+
+        // A normal PHP-FPM process creates one application per request, but this also keeps the
+        // counters request-scoped on supported long-running hosts that reuse the plugin instance.
+        Event::on(Application::class, Application::EVENT_BEFORE_REQUEST, function(): void {
+            $this->_resetGraphqlProcessingBudget();
+        });
 
         $this->_registerTwigExtensions();
         $this->_registerRedactorPlugins();
@@ -171,6 +191,7 @@ class Footnotes extends Plugin
                 'description' => 'Process arbitrary HTML for footnotes (useful when the field is exposed as a plain string in GraphQL).',
                 'resolve' => function(mixed $_root, array $args): array {
                     $options = $this->_graphqlAnchorScopeOptions($args);
+                    $this->_claimGraphqlProcessingBudget($args['html']);
 
                     return Footnotes::$plugin->getService()->parseForGraphql($args['html'], $options);
                 },
@@ -193,6 +214,48 @@ class Footnotes extends Plugin
         return str_ends_with($typeName, '_CkeditorField');
     }
 
+    private function _claimGraphqlProcessingBudget(string $html): void
+    {
+        if ($this->graphqlBudgetExceeded) {
+            throw $this->_graphqlProcessingLimitError();
+        }
+
+        $htmlBytes = strlen($html);
+
+        // The budget is cumulative for the whole request. GraphQL aliases and batched operations
+        // otherwise turn a safe per-resolver limit into an effectively unbounded amount of work.
+        if ($htmlBytes > self::MAX_GRAPHQL_HTML_BYTES - $this->graphqlHtmlBytesProcessed) {
+            $this->graphqlBudgetExceeded = true;
+
+            throw $this->_graphqlProcessingLimitError();
+        }
+
+        // Count the parser's exact, case-sensitive opening token instead of running a second regex.
+        // This includes incomplete markers, so malformed input cannot bypass the work budget.
+        $footnoteMarkers = substr_count($html, '<sup class="footnote"');
+
+        if ($footnoteMarkers > self::MAX_GRAPHQL_FOOTNOTE_MARKERS - $this->graphqlFootnoteMarkersProcessed) {
+            $this->graphqlBudgetExceeded = true;
+
+            throw $this->_graphqlProcessingLimitError();
+        }
+
+        $this->graphqlHtmlBytesProcessed += $htmlBytes;
+        $this->graphqlFootnoteMarkersProcessed += $footnoteMarkers;
+    }
+
+    private function _graphqlProcessingLimitError(): UserError
+    {
+        return new UserError('The Footnotes GraphQL processing limit has been exceeded (1 MiB of HTML or 1,000 footnote markers per request).');
+    }
+
+    private function _resetGraphqlProcessingBudget(): void
+    {
+        $this->graphqlBudgetExceeded = false;
+        $this->graphqlFootnoteMarkersProcessed = 0;
+        $this->graphqlHtmlBytesProcessed = 0;
+    }
+
     /**
      * @param array<string, mixed> $arguments
      * @return array<string, string>
@@ -203,6 +266,14 @@ class Footnotes extends Plugin
             return [];
         }
 
-        return ['anchorScope' => (string) $arguments['anchorScope']];
+        $anchorScope = (string) $arguments['anchorScope'];
+
+        // The scope is repeated in every generated reference and list ID. Bounding it prevents a
+        // small marker document from expanding into a disproportionately large GraphQL response.
+        if (strlen($anchorScope) > self::MAX_GRAPHQL_ANCHOR_SCOPE_BYTES) {
+            throw new UserError('The Footnotes GraphQL anchorScope argument must not exceed 255 bytes.');
+        }
+
+        return ['anchorScope' => $anchorScope];
     }
 }
