@@ -103,6 +103,7 @@ class Service extends Component
         $html = $this->transformFootnoteHtml($html, $footnotes, $options, $scope);
 
         $items = [];
+
         foreach ($footnotes as $key => $footnote) {
             $number = $key + 1;
             $itemScope = $footnote['scope'];

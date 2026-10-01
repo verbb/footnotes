@@ -91,13 +91,13 @@ class Footnotes extends Plugin
 
     private function _registerTwigExtensions(): void
     {
-        Craft::$app->getView()->registerTwigExtension(new Extension);
+        Craft::$app->getView()->registerTwigExtension(new Extension());
     }
 
     private function _registerRedactorPlugins(): void
     {
         if (PluginHelper::isPluginInstalledAndEnabled('redactor')) {
-            Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function (RegisterPluginPathsEvent $event) {
+            Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function(RegisterPluginPathsEvent $event) {
                 $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/redactor/');
             });
         }
@@ -179,7 +179,7 @@ class Footnotes extends Plugin
 
         Event::on(Gql::class, Gql::EVENT_REGISTER_GQL_SCHEMA_COMPONENTS, function(RegisterGqlSchemaComponentsEvent $event): void {
             $label = Craft::t('footnotes', 'Footnotes');
-            
+
             $event->queries[$label] = ($event->queries[$label] ?? []) + [
                 'footnotes:read' => [
                     'label' => Craft::t('footnotes', 'Process footnotes via GraphQL (root query and CKEditor fields)'),
