@@ -1,5 +1,5 @@
 <?php
-namespace verbb\footnotes\assetbundles;
+namespace verbb\footnotes\web\assets\ckeditor;
 
 use craft\web\AssetBundle;
 

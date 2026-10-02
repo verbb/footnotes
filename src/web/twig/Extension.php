@@ -1,5 +1,5 @@
 <?php
-namespace verbb\footnotes\twigextensions;
+namespace verbb\footnotes\web\twig;
 
 use verbb\footnotes\Footnotes;
 

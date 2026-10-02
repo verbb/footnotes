@@ -1,12 +1,12 @@
 <?php
 namespace verbb\footnotes;
 
-use verbb\footnotes\assetbundles\CkEditorAsset;
+use verbb\footnotes\web\assets\ckeditor\CkEditorAsset;
 use verbb\footnotes\base\PluginTrait;
 use verbb\footnotes\helpers\Plugin as PluginHelper;
 use verbb\footnotes\models\Settings;
 use verbb\footnotes\gql\types\FootnotesProcessedType;
-use verbb\footnotes\twigextensions\Extension;
+use verbb\footnotes\web\twig\Extension;
 
 use Craft;
 use craft\base\Plugin;

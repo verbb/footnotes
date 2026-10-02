@@ -1,6 +1,6 @@
 {% extends parentLayout ?? '_layouts/cp' %}
 
-{% do view.registerAssetBundle('verbb\\footnotes\\assetbundles\\FootnotesAsset') %}
+{% do view.registerAssetBundle('verbb\\footnotes\\web\\assets\\cp\\FootnotesAsset') %}
 
 {% if title is not defined %}
     {% set title = 'Footnotes' | t('footnotes') %}
