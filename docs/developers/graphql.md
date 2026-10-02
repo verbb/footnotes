@@ -64,7 +64,7 @@ If you query `chunks { ... on CkeditorMarkup { ... } }` instead of the root `htm
 ## Root Query
 When a rich text field is exposed as a **plain string** in GraphQL, you can still process footnotes server-side. The query accepts an optional **`anchorScope`** argument with the same rules as `footnotesProcessed`.
 
-Footnotes accepts up to 1 MiB of HTML and 1,000 footnote markers through `parseFootnotesFromHtml` in one HTTP request. These totals apply across aliases and batched GraphQL operations, so split queries share the same processing budget. The `anchorScope` argument is limited to 255 bytes on both GraphQL entry points. Stored CKEditor field content is not part of the HTML or marker budget.
+Footnotes accepts up to 1 MiB of HTML and 1,000 footnote markers across `footnotesProcessed` and `parseFootnotesFromHtml` in one HTTP request. These totals apply cumulatively across aliases and batched GraphQL operations, so split queries share the same processing budget. The `anchorScope` argument is limited to 255 bytes on both GraphQL entry points. When a request reaches the processing limit, omit `footnotesProcessed` and query the original CKEditor field value instead.
 
 ```graphql
 query Footnotes($html: String!) {

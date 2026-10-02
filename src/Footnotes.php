@@ -163,6 +163,7 @@ class Footnotes extends Plugin
                     $html = $source instanceof CkeditorFieldData ? $source->getParsedContent() : '';
 
                     $options = $this->_graphqlAnchorScopeOptions($arguments);
+                    $this->_claimGraphqlProcessingBudget($html);
 
                     return Footnotes::$plugin->getService()->parseForGraphql($html, $options);
                 },
