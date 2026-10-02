@@ -1,5 +1,7 @@
 import { Command, Plugin, toWidget, Widget } from 'ckeditor5';
 
+const FOOTNOTE_UPCAST_ID_STORE_KEY = 'verbbFootnotesUpcastId';
+
 class InsertFootnoteCommand extends Command {
     refresh() {
         const model = this.editor.model;
@@ -226,9 +228,18 @@ export default class FootnotesEditing extends Plugin {
                     return;
                 }
 
+                // Upcast builds a detached fragment, so every marker in this conversion sees the
+                // same document state. Reuse its provisional ID and repair duplicates in one pass.
+                let footnoteId = conversionApi.store[FOOTNOTE_UPCAST_ID_STORE_KEY];
+
+                if (!footnoteId) {
+                    footnoteId = getNextFootnoteId(editor.model);
+                    conversionApi.store[FOOTNOTE_UPCAST_ID_STORE_KEY] = footnoteId;
+                }
+
                 const footnote = conversionApi.writer.createElement('footnote', {
                     footnoteText: extractViewText(viewElement).trim(),
-                    footnoteId: getNextFootnoteId(editor.model),
+                    footnoteId,
                 });
 
                 if (!conversionApi.safeInsert(footnote, data.modelCursor)) {
@@ -295,8 +306,10 @@ export default class FootnotesEditing extends Plugin {
             let changed = false;
             let number = 1;
             const usedIds = new Set();
+            const footnotes = getAllFootnotes(editor.model);
+            const allocateFootnoteId = createFootnoteIdAllocator(footnotes);
 
-            for (const footnote of getAllFootnotes(editor.model)) {
+            for (const footnote of footnotes) {
                 const expected = `${number++}`;
 
                 if (footnote.getAttribute('footnoteNumber') !== expected) {
@@ -308,7 +321,7 @@ export default class FootnotesEditing extends Plugin {
                 const hasValidAndUniqueId = currentId && !usedIds.has(currentId);
 
                 if (!hasValidAndUniqueId) {
-                    const nextId = getNextFootnoteId(editor.model, usedIds);
+                    const nextId = allocateFootnoteId();
                     writer.setAttribute('footnoteId', nextId, footnote);
                     usedIds.add(nextId);
                     changed = true;
@@ -322,16 +335,25 @@ export default class FootnotesEditing extends Plugin {
     }
 }
 
-function getNextFootnoteId(model, reservedIds = new Set()) {
-    const usedIds = getAllFootnoteIds(model);
+function getNextFootnoteId(model) {
+    return createFootnoteIdAllocator(getAllFootnotes(model))();
+}
 
-    for (const id of reservedIds) {
-        usedIds.add(id);
-    }
-
+function createFootnoteIdAllocator(footnotes) {
+    const usedIds = new Set();
     let max = 0;
 
-    for (const id of usedIds) {
+    // Reserve every existing ID before allocating so replacements never displace an ID that
+    // appears later in model traversal order.
+    for (const footnote of footnotes) {
+        const id = `${footnote.getAttribute('footnoteId') || ''}`.trim();
+
+        if (!id) {
+            continue;
+        }
+
+        usedIds.add(id);
+
         const match = /^fn-(\d+)$/.exec(id);
 
         if (match) {
@@ -339,26 +361,17 @@ function getNextFootnoteId(model, reservedIds = new Set()) {
         }
     }
 
-    let candidate = `fn-${max + 1}`;
+    return () => {
+        let candidate = `fn-${max + 1}`;
 
-    while (usedIds.has(candidate)) {
-        max += 1;
-        candidate = `fn-${max + 1}`;
-    }
-
-    return candidate;
-}
-
-function getAllFootnoteIds(model) {
-    const ids = new Set();
-
-    for (const footnote of getAllFootnotes(model)) {
-        const id = `${footnote.getAttribute('footnoteId') || ''}`.trim();
-
-        if (id) {
-            ids.add(id);
+        while (usedIds.has(candidate)) {
+            max += 1;
+            candidate = `fn-${max + 1}`;
         }
-    }
 
-    return ids;
+        max += 1;
+        usedIds.add(candidate);
+
+        return candidate;
+    };
 }

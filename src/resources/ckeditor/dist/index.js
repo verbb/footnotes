@@ -1,5 +1,6 @@
 import { Plugin, Widget, toWidget, Command, ContextualBalloon, ButtonView, clickOutsideHandler, View } from 'ckeditor5';
 
+const FOOTNOTE_UPCAST_ID_STORE_KEY = 'verbbFootnotesUpcastId';
 class InsertFootnoteCommand extends Command {
     refresh() {
         const model = this.editor.model;
@@ -185,9 +186,16 @@ class FootnotesEditing extends Plugin {
                 })) {
                     return;
                 }
+                // Upcast builds a detached fragment, so every marker in this conversion sees the
+                // same document state. Reuse its provisional ID and repair duplicates in one pass.
+                let footnoteId = conversionApi.store[FOOTNOTE_UPCAST_ID_STORE_KEY];
+                if (!footnoteId) {
+                    footnoteId = getNextFootnoteId(editor.model);
+                    conversionApi.store[FOOTNOTE_UPCAST_ID_STORE_KEY] = footnoteId;
+                }
                 const footnote = conversionApi.writer.createElement('footnote', {
                     footnoteText: extractViewText(viewElement).trim(),
-                    footnoteId: getNextFootnoteId(editor.model)
+                    footnoteId
                 });
                 if (!conversionApi.safeInsert(footnote, data.modelCursor)) {
                     return;
@@ -259,7 +267,9 @@ class FootnotesEditing extends Plugin {
             let changed = false;
             let number = 1;
             const usedIds = new Set();
-            for (const footnote of getAllFootnotes(editor.model)){
+            const footnotes = getAllFootnotes(editor.model);
+            const allocateFootnoteId = createFootnoteIdAllocator(footnotes);
+            for (const footnote of footnotes){
                 const expected = `${number++}`;
                 if (footnote.getAttribute('footnoteNumber') !== expected) {
                     writer.setAttribute('footnoteNumber', expected, footnote);
@@ -268,7 +278,7 @@ class FootnotesEditing extends Plugin {
                 const currentId = `${footnote.getAttribute('footnoteId') || ''}`.trim();
                 const hasValidAndUniqueId = currentId && !usedIds.has(currentId);
                 if (!hasValidAndUniqueId) {
-                    const nextId = getNextFootnoteId(editor.model, usedIds);
+                    const nextId = allocateFootnoteId();
                     writer.setAttribute('footnoteId', nextId, footnote);
                     usedIds.add(nextId);
                     changed = true;
@@ -280,34 +290,35 @@ class FootnotesEditing extends Plugin {
         });
     }
 }
-function getNextFootnoteId(model, reservedIds = new Set()) {
-    const usedIds = getAllFootnoteIds(model);
-    for (const id of reservedIds){
-        usedIds.add(id);
-    }
+function getNextFootnoteId(model) {
+    return createFootnoteIdAllocator(getAllFootnotes(model))();
+}
+function createFootnoteIdAllocator(footnotes) {
+    const usedIds = new Set();
     let max = 0;
-    for (const id of usedIds){
+    // Reserve every existing ID before allocating so replacements never displace an ID that
+    // appears later in model traversal order.
+    for (const footnote of footnotes){
+        const id = `${footnote.getAttribute('footnoteId') || ''}`.trim();
+        if (!id) {
+            continue;
+        }
+        usedIds.add(id);
         const match = /^fn-(\d+)$/.exec(id);
         if (match) {
             max = Math.max(max, parseInt(match[1], 10));
         }
     }
-    let candidate = `fn-${max + 1}`;
-    while(usedIds.has(candidate)){
-        max += 1;
-        candidate = `fn-${max + 1}`;
-    }
-    return candidate;
-}
-function getAllFootnoteIds(model) {
-    const ids = new Set();
-    for (const footnote of getAllFootnotes(model)){
-        const id = `${footnote.getAttribute('footnoteId') || ''}`.trim();
-        if (id) {
-            ids.add(id);
+    return ()=>{
+        let candidate = `fn-${max + 1}`;
+        while(usedIds.has(candidate)){
+            max += 1;
+            candidate = `fn-${max + 1}`;
         }
-    }
-    return ids;
+        max += 1;
+        usedIds.add(candidate);
+        return candidate;
+    };
 }
 
 var icon = "<?xml version=\"1.0\" encoding=\"utf-8\"?><svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 20 20\" style=\"enable-background:new 0 0 20 20;\" xml:space=\"preserve\"><path d=\"M8.8,7.9v-2C8.8,5,9.3,4.4,10,4.4s1.3,0.6,1.3,1.5v1.9c0.6-0.3,1.1-0.6,1.5-0.9c0.8-0.5,1.5-0.3,1.9,0.3C15.1,7.9,14.8,8.5,14,9c-0.4,0.4-0.9,0.7-1.5,1c0.6,0.4,1.2,0.7,1.8,1.1c0.7,0.4,0.9,1.2,0.5,1.8s-1,0.7-1.8,0.3c-0.5-0.3-1-0.6-1.7-1v1.8c0,0.9-0.5,1.4-1.2,1.4c-0.8,0-1.2-0.5-1.3-1.4v-1.9c-0.7,0.4-1.2,0.7-1.8,1c-0.7,0.5-1.5,0.3-1.8-0.3C4.8,12.2,5,11.5,5.8,11c0.5-0.3,1-0.6,1.7-1C6.9,9.7,6.4,9.4,5.9,9.1C5.1,8.6,4.9,8,5.2,7.3C5.5,6.7,6.3,6.5,7,6.9C7.6,7.2,8.1,7.5,8.8,7.9z\"/></svg>\n";

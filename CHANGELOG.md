@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fixed a moderate-severity denial-of-service vulnerability.
+- Fixed a low-severity denial-of-service vulnerability.
 
 ## 6.0.6 - 2026-10-02
 
