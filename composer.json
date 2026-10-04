@@ -36,10 +36,29 @@
         "craftcms/ckeditor": "^5.0.0",
         "verbb/base": "^3.0.19"
     },
+    "require-dev": {
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin": "^3.0"
+    },
     "autoload": {
         "psr-4": {
             "verbb\\footnotes\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "craftcms/plugin-installer": true,
+            "pestphp/pest-plugin": true,
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "scripts": {
+        "test": "pest -c phpunit.xml"
     },
     "extra": {
         "name": "Footnotes",

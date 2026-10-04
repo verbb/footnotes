@@ -7,6 +7,7 @@ use verbb\footnotes\helpers\Plugin as PluginHelper;
 use verbb\footnotes\models\Settings;
 use verbb\footnotes\gql\types\FootnotesProcessedType;
 use verbb\footnotes\web\twig\Extension;
+use verbb\footnotes\web\twig\variables\FootnotesVariable;
 
 use Craft;
 use craft\base\Plugin;
@@ -23,6 +24,7 @@ use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field;
 use craft\services\Gql;
 use craft\web\UrlManager;
+use craft\web\twig\variables\CraftVariable;
 
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\Type;
@@ -73,6 +75,7 @@ class Footnotes extends Plugin
         });
 
         $this->_registerTwigExtensions();
+        $this->_registerVariables();
         $this->_registerRedactorPlugins();
         $this->_registerCkEditorPlugins();
         $this->_registerGraphql();
@@ -112,6 +115,13 @@ class Footnotes extends Plugin
     private function _registerTwigExtensions(): void
     {
         Craft::$app->getView()->registerTwigExtension(new Extension());
+    }
+
+    private function _registerVariables(): void
+    {
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event): void {
+            $event->sender->set('footnotes', FootnotesVariable::class);
+        });
     }
 
     private function _registerRedactorPlugins(): void

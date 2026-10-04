@@ -89,6 +89,10 @@ class Service extends Component
 
         $scope = $this->resolveAnchorScope($options);
 
+        if (str_contains($string, 'data-footnote-reference')) {
+            return $this->_filterCanonical($string, $options, $scope);
+        }
+
         return $this->transformFootnoteHtml($string, $this->footnotes, $options, $scope);
     }
 
@@ -105,6 +109,10 @@ class Service extends Component
                 'html' => '',
                 'items' => [],
             ];
+        }
+
+        if (str_contains($html, 'data-footnote-reference')) {
+            return $this->_parseCanonicalForGraphql($html, $options);
         }
 
         $footnotes = [];
@@ -335,6 +343,63 @@ class Service extends Component
         }
 
         return $output . substr($line, $copyOffset);
+    }
+
+    private function _filterCanonical(string $html, array $options, string $scope): string
+    {
+        $fragment = Footnotes::$plugin->getDocuments()->split($html);
+        $references = Footnotes::$plugin->getDocuments()->findReferences($fragment['body']);
+        $output = '';
+        $offset = 0;
+
+        foreach ($references as $reference) {
+            $attributes = $reference['attributes'];
+            $noteId = (string)($attributes['data-footnote-id'] ?? '');
+            $definition = $fragment['definitions'][$noteId] ?? [];
+            $text = (string)($definition['html'] ?? $attributes['data-footnote-text'] ?? '');
+            $resolved = $this->addFootnoteTo($this->footnotes, $text, $scope);
+
+            $output .= substr($fragment['body'], $offset, $reference['start'] - $offset);
+            $output .= $this->_renderFootnoteMarker($resolved['number'], $resolved['scope'], $options);
+            $offset = $reference['start'] + $reference['length'];
+        }
+
+        return $output . substr($fragment['body'], $offset);
+    }
+
+    private function _parseCanonicalForGraphql(string $html, array $options): array
+    {
+        $collectionOptions = [];
+
+        if (array_key_exists('anchorScope', $options)) {
+            $collectionOptions['scope'] = (string)$options['anchorScope'];
+        }
+
+        $collection = Footnotes::$plugin->getDocuments()->collection($collectionOptions);
+        $body = $collection->add($html);
+        $items = [];
+
+        foreach ($collection as $footnote) {
+            $references = $footnote->getReferences();
+            $firstReference = $references[0] ?? null;
+            $items[] = [
+                'number' => $footnote->number,
+                'text' => (string)$footnote->html,
+                'html' => (string)$footnote->html,
+                'id' => $footnote->id,
+                'referenceAnchorId' => $firstReference?->anchorId ?? '',
+                'referenceAnchorIds' => array_map(fn($reference) => $reference->anchorId, $references),
+                'listAnchorId' => $footnote->anchorId,
+                'numberMarkup' => $this->settings->enableAnchorLinks
+                    ? Html::tag('a', (string)$footnote->number, ['name' => $footnote->anchorId])
+                    : null,
+            ];
+        }
+
+        return [
+            'html' => (string)$body,
+            'items' => $items,
+        ];
     }
 
     /**

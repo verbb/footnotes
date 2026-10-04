@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Added
+- Added document-native rich footnote editing and a local `craft.footnotes.collection()` Twig API for single-body, multi-body, and custom rendering workflows.
+
+### Changed
+- Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
+
+### Deprecated
+- Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of local collections. Existing templates remain supported.
+
 ### Fixed
 - Fixed a moderate-severity denial-of-service vulnerability.
 - Fixed a low-severity denial-of-service vulnerability.

@@ -2,6 +2,7 @@
 namespace verbb\footnotes\base;
 
 use verbb\footnotes\Footnotes;
+use verbb\footnotes\services\Documents;
 use verbb\footnotes\services\Service;
 
 use verbb\base\LogTrait;
@@ -30,6 +31,7 @@ trait PluginTrait
 
         return [
             'components' => [
+                'documents' => Documents::class,
                 'service' => Service::class,
             ],
         ];
@@ -42,6 +44,11 @@ trait PluginTrait
     public function getService(): Service
     {
         return $this->get('service');
+    }
+
+    public function getDocuments(): Documents
+    {
+        return $this->get('documents');
     }
 
 }

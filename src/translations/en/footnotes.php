@@ -1,6 +1,8 @@
 <?php
 
 return [
+  'Back to footnote {number}' => 'Back to footnote {number}',
+  'Back to footnote {number}, reference {reference}' => 'Back to footnote {number}, reference {reference}',
   'Process footnotes via GraphQL (root query and CKEditor fields)' => 'Process footnotes via GraphQL (root query and CKEditor fields)',
   'Enable anchor links' => 'Enable anchor links',
   'Enable duplicate footnotes' => 'Enable duplicate footnotes',

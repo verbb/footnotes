@@ -32,9 +32,21 @@ final class FootnotesItemType extends ObjectType
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'Footnote text from the editor (may include HTML entities).',
                 ],
+                'html' => [
+                    'type' => Type::string(),
+                    'description' => 'Rich definition HTML when the field uses canonical document-native footnotes.',
+                ],
+                'id' => [
+                    'type' => Type::string(),
+                    'description' => 'Stable definition identity when the field uses canonical document-native footnotes.',
+                ],
                 'referenceAnchorId' => [
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'ID on the in-text reference when anchor links are enabled (e.g. `fnref:1` or `fnref:entry-12.1` when scoped).',
+                ],
+                'referenceAnchorIds' => [
+                    'type' => Type::listOf(Type::nonNull(Type::string())),
+                    'description' => 'Every in-text reference ID for a definition. Canonical repeated references contain more than one value.',
                 ],
                 'listAnchorId' => [
                     'type' => Type::nonNull(Type::string()),

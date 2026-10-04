@@ -1,14 +1,18 @@
 <?php
 namespace verbb\footnotes\web\twig;
 
-use verbb\footnotes\Footnotes;
-
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class Extension extends AbstractExtension
 {
+    // Traits
+    // =========================================================================
+
+    use LegacyFootnotesTrait;
+
+
     // Public Methods
     // =========================================================================
 
@@ -44,48 +48,4 @@ class Extension extends AbstractExtension
         ];
     }
 
-    /**
-     * Filters the given string for footnotes and replaces them with a number.
-     *
-     * @param string|null $value
-     * @param array $options
-     * @return string
-     */
-    public function filterFootnotes(string $value = null, array $options = []): string
-    {
-        return Footnotes::$plugin->getService()->filter($value, $options);
-    }
-
-    /**
-     * Checks if any footnotes exist.
-     *
-     * @return bool
-     */
-    public function footnotesExist(): bool
-    {
-        return Footnotes::$plugin->getService()->exist();
-    }
-
-    /**
-     * Returns all footnotes.
-     *
-     * @return string[]
-     */
-    public function getFootnotes(array $options = []): array
-    {
-        return Footnotes::$plugin->getService()->get($options);
-    }
-
-    /**
-     * @return list<array{number: int, text: string, numberHtml: string, listAnchorId: string, referenceAnchorId: string}>
-     */
-    public function getFootnotesItems(array $options = []): array
-    {
-        return Footnotes::$plugin->getService()->getItems($options);
-    }
-
-    public function setFootnotes(array $footnotes = []): void
-    {
-        Footnotes::$plugin->getService()->set($footnotes);
-    }
 }
