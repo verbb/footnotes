@@ -16,24 +16,27 @@
 }
 
 .ck-content .ck-footnotes{
+    --footnotes-marker-gutter:1.5rem;
+
     border-top:1px solid var(--ck-color-base-border);
     font-size:calc(1em - 2px);
     margin-block-start:2em;
     padding-block-start:1em;
-    padding-inline-start:0;
+    padding-inline-start:var(--footnotes-marker-gutter);
 }
 
 .ck-content .ck-footnotes::before{
     background:var(--ck-color-base-border);
-    border-radius:999px;
+    border-radius:3px;
     color:var(--ck-color-text);
-    content:attr(aria-label) ' · ' attr(data-editor-only-label);
+    content:attr(aria-label) ' ' attr(data-editor-only-label);
     display:table;
-    font-size:11px;
+    font-size:10px;
     font-weight:600;
     letter-spacing:0.02em;
     line-height:1;
     margin-block-end:1em;
+    margin-inline-start:calc(-1 * var(--footnotes-marker-gutter));
     padding:0.45em 0.7em;
     text-transform:uppercase;
 }
