@@ -12,6 +12,7 @@
 - Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of local collections. Existing templates remain supported.
 
 ### Fixed
+- Fixed Redactor button registration when Footnotes initialises before Redactor.
 - Fixed a moderate-severity denial-of-service vulnerability.
 - Fixed a low-severity denial-of-service vulnerability.
 

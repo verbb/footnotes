@@ -30,7 +30,7 @@ final class FootnotesItemType extends ObjectType
                 ],
                 'text' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'Footnote text from the editor (may include HTML entities).',
+                    'description' => 'Plain definition text for canonical notes. Legacy inline content retains its historical HTML string.',
                 ],
                 'html' => [
                     'type' => Type::string(),

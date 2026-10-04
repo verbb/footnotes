@@ -1,48 +1,52 @@
 # GraphQL
-Footnotes adds GraphQL support so you can render the same body + footnote list you would build in Twig with the `footnotes` filter and `footnotes()` function.
+
+Footnotes stores document-native references and definitions inside the CKEditor field's HTML. A client can request that complete HTML directly, or use Footnotes' processed fields when it needs the body and structured definitions separately.
 
 ## Requirements
-- Craft’s GraphQL API must be enabled (`enableGql` in [general config](https://craftcms.com/docs/5.x/reference/config/general.html#enablegql)).
-- The field must be a **CKEditor** field whose GraphQL mode is set to **full data** (not “as plain text”). In the field settings, open the CKEditor field layout and set **GraphQL mode** to **Full data** so the field exposes the structured `{handle}_CkeditorField` type instead of a plain `String`.
 
-## CKEditor Field
-On every generated CKEditor GraphQL type (names like `body_CkeditorField`), you get an extra non-null field:
+Craft's GraphQL API must be enabled through the [`enableGql` general configuration setting](https://craftcms.com/docs/5.x/reference/config/general.html#enablegql). To use `footnotesProcessed`, edit the CKEditor field and set its **GraphQL Mode** to **Full data** so Craft exposes the generated `{handle}_CkeditorField` object instead of a plain `String`.
 
-- **`footnotesProcessed`** (`FootnotesProcessed!`) — optional argument **`anchorScope`** (`String`): same meaning as the Twig filter option; omit to generate a scoped token per resolve, or pass `""` for legacy `footnote-1` / `fnref:1` fragments.
+The schema or token must already have permission to read the entry and field. The root `parseFootnotesFromHtml` query also requires the **Footnotes → Process footnotes via GraphQL (root query and CKEditor fields)** permission (`footnotes:read`) under **GraphQL → Schemas**.
 
-It bundles:
+## Request Complete Field HTML
 
-| Field | Twig equivalent |
-| ----- | ---------------- |
-| `html` | `{{ entry.body \| footnotes }}` |
-| `items` | The list you would loop in `{% for number, text in footnotes() %}` |
+When the client can render the stored document as one unit, request the CKEditor field's `html` value. It contains the body, linked references, definitions, and backlinks:
 
-Each `FootnotesItem` includes:
-
-| GraphQL field | Purpose |
-| ------------- | ------- |
-| `number` | Integer footnote number (1-based). |
-| `text` | Footnote text from the editor. |
-| `referenceAnchorId` | e.g. `fnref:1` or scoped `fnref:entry-12.1` — matches `id` on the in-text reference when [anchor links](docs:feature-tour/usage#anchor-links) are enabled. |
-| `listAnchorId` | e.g. `footnote-1` or `footnote-a1b2c3d4e5f6g7h8.1` — use as `id` on your list row for `#` links from the reference. |
-| `numberMarkup` | When anchor links are enabled, HTML for the marker in the list (like Twig’s `number` with `raw`). Otherwise `null` — use `number`. |
-
-### Example Query
 ```graphql
 query Article($slug: [String]) {
   entries(section: "news", slug: $slug) {
     ... on newsArticle_Entry {
       title
-      fieldHandle {
+      body {
         html
-        footnotesProcessed {
+      }
+    }
+  }
+}
+```
+
+No Footnotes-specific query is required for this path.
+
+## Request Body and Structured Definitions
+
+Every generated CKEditor field type also exposes `footnotesProcessed`. Its `html` value contains the body with linked references but without the definitions region. Its `items` array contains the ordered definitions for a client-rendered list:
+
+```graphql
+query Article($slug: [String]) {
+  entries(section: "news", slug: $slug) {
+    ... on newsArticle_Entry {
+      title
+      body {
+        footnotesProcessed(anchorScope: "article-detail") {
           html
           items {
+            id
             number
             text
-            referenceAnchorId
+            html
             listAnchorId
-            numberMarkup
+            referenceAnchorId
+            referenceAnchorIds
           }
         }
       }
@@ -51,37 +55,45 @@ query Article($slug: [String]) {
 }
 ```
 
-Add `footnotesProcessed(anchorScope: "entry-123")` when you want a stable prefix (for example concatenate your entry id on the client). Omit the argument to generate a scoped token per resolve.
+Use each item's `listAnchorId` on the definition wrapper. `referenceAnchorIds` contains every in-text occurrence for a repeated note, so the client can render one backlink per value. `referenceAnchorId` remains the first occurrence for clients written against the earlier shape.
 
-**Note:** Numbering is computed **per field** for each GraphQL resolve. Unlike Twig, where multiple `| footnotes` filters on one request share one global counter, each `footnotesProcessed` (and each `parseFootnotesFromHtml` call) starts numbering at 1. That matches typical headless usage (one field = one article body).
+The optional `anchorScope` argument makes the generated IDs deterministic and prevents collisions when one view processes several fields. Omit it to generate a scoped token for that resolve, or pass an empty string for the classic unscoped fragment format.
 
-### Chunks
-If you query `chunks { ... on CkeditorMarkup { ... } }` instead of the root `html`, Craft does not run this plugin’s type hook on `CkeditorMarkup`. For markup-only chunks, either:
+Each item exposes the following fields:
 
-- Use the root field’s `footnotesProcessed` (it uses full parsed HTML including nested entries), or
-- Pass the chunk’s `html` through the helper query below.
+| Field | Result |
+| --- | --- |
+| `id` | Stable definition identity for document-native notes, or `null` for classic inline content. |
+| `number` | One-based display number derived from reference order. |
+| `text` | Plain definition text for document-native notes. Classic inline content retains its historical HTML string for compatibility. |
+| `html` | Rich definition HTML for document-native notes, or `null` for classic inline content. |
+| `listAnchorId` | Fragment target for the rendered definition. |
+| `referenceAnchorId` | First in-text reference ID. |
+| `referenceAnchorIds` | Every in-text reference ID in occurrence order, or `null` for classic inline content. |
+| `numberMarkup` | Compatibility marker markup when `enableAnchorLinks` is enabled, otherwise `null`. |
 
-## Root Query
-When a rich text field is exposed as a **plain string** in GraphQL, you can still process footnotes server-side. The query accepts an optional **`anchorScope`** argument with the same rules as `footnotesProcessed`.
+Numbering starts at 1 for each `footnotesProcessed` resolve. If several fields should share one numbered list, collect their results on the client in query order and assign the combined presentation numbers there.
 
-Footnotes accepts up to 1 MiB of HTML and 1,000 footnote markers across `footnotesProcessed` and `parseFootnotesFromHtml` in one HTTP request. These totals apply cumulatively across aliases and batched GraphQL operations, so split queries share the same processing budget. The `anchorScope` argument is limited to 255 bytes on both GraphQL entry points. When a request reaches the processing limit, omit `footnotesProcessed` and query the original CKEditor field value instead.
+## Process an HTML String
+
+Use `parseFootnotesFromHtml` when a rich-text value is exposed as a plain string or when processing a markup-only CKEditor chunk. Supply the HTML through a GraphQL variable rather than interpolating it into the query:
 
 ```graphql
 query Footnotes($html: String!) {
-  parseFootnotesFromHtml(html: $html) {
+  parseFootnotesFromHtml(html: $html, anchorScope: "article-detail") {
     html
     items {
+      id
       number
       text
-      referenceAnchorId
+      html
       listAnchorId
-      numberMarkup
+      referenceAnchorIds
     }
   }
 }
 ```
 
-### Schema Permission
-The `parseFootnotesFromHtml` query is only registered when the active GraphQL schema includes the **Footnotes** permission **Process footnotes via GraphQL (root query and CKEditor fields)** (`footnotes:read`). Enable it under **GraphQL → Schemas** for the token or schema you use.
+Footnotes accepts up to 1 MiB of HTML, 1,000 footnote markers, and a 255-byte `anchorScope` across the Footnotes fields resolved in one HTTP request. Aliases and batched GraphQL operations share those limits. If a request exceeds the budget, request the original CKEditor value and process or divide the content in the client instead.
 
-The **`footnotesProcessed`** field on CKEditor types does **not** require this extra permission; if you can read the entry field, you can read `footnotesProcessed`.
+When querying `chunks`, the Footnotes field extension does not appear on individual `CkeditorMarkup` chunks. Use the parent field's `footnotesProcessed` value, which includes parsed nested-entry content, or pass a markup chunk's `html` to `parseFootnotesFromHtml`.

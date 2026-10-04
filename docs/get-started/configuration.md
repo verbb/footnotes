@@ -22,6 +22,8 @@ All other settings keep their defaults. Add any further settings you want to cha
 **Type:** `bool` · **Default:** `false`
 
 Whether to enable `<a>` tags for footnotes.
+
+This setting applies to the classic `footnotes` Twig filter and GraphQL's `numberMarkup` value. Document-native content and the collection API always produce linked, accessible references and backlinks.
 :::
 
 ::: reference
@@ -29,9 +31,9 @@ Whether to enable `<a>` tags for footnotes.
 
 **Type:** `bool` · **Default:** `false`
 
-Whether duplicate footnotes should combine, or keep separate.
+Whether classic Twig processing combines footnotes with identical content. Document-native footnotes use identity instead: two separately created notes remain separate even when their content matches, while copied references can point to the same definition.
 :::
 
-
 ## Control Panel
-You can also manage configuration settings through the Control Panel by visiting Settings → Footnotes.
+
+You can also manage configuration settings through the control panel by visiting **Settings → Footnotes**. Values in `config/footnotes.php` take precedence over control-panel settings.
