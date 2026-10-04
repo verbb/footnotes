@@ -60,7 +60,7 @@ class Documents extends Component
             }
 
             if ($id !== '') {
-                $content = preg_replace('/<a\b(?=[^>]*(?:\bdata-footnote-backlink(?:\s|=|>)|\bclass\s*=\s*(["\'])[^"\']*\bfootnote-backlink\b[^"\']*\1))[^>]*>.*?<\/a>/is', '', $item['inner']) ?? $item['inner'];
+                $content = $this->_stripBacklinks($item['inner']);
                 $definitions[$id] = [
                     'html' => trim($content),
                     'text' => $this->_plainText($content),
@@ -230,5 +230,13 @@ class Documents extends Component
         $text = preg_replace('/\s+/u', ' ', strip_tags($spaced)) ?? strip_tags($spaced);
 
         return trim(html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    }
+
+    private function _stripBacklinks(string $html): string
+    {
+        $content = preg_replace('/<(span|div)\b(?=[^>]*\bdata-footnote-backlinks(?:\s|=|>))[^>]*>.*?<\/\1>/is', '', $html) ?? $html;
+        $content = preg_replace('/<(span|div)\b(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bfootnote-backlinks\b[^"\']*\2)[^>]*>.*?<\/\1>/is', '', $content) ?? $content;
+
+        return preg_replace('/<a\b(?=[^>]*(?:\bdata-footnote-backlink(?:\s|=|>)|\bclass\s*=\s*(["\'])[^"\']*\bfootnote-backlink\b[^"\']*\1))[^>]*>.*?<\/a>/is', '', $content) ?? $content;
     }
 }

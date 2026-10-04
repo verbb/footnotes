@@ -161,6 +161,7 @@ class Footnotes extends Plugin
                 'sup' => ['data-footnote-reference', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-text'],
                 'ol' => ['data-footnotes', 'role', 'aria-label'],
                 'li' => ['data-footnote-id', 'data-footnote-number', 'data-footnote-reference-ids', 'role'],
+                'div' => ['data-footnote-backlinks'],
                 'a' => ['data-footnote-backlink', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-text', 'role', 'aria-label'],
             ] as $element => $attributes) {
                 foreach ($attributes as $attribute) {

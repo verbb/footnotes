@@ -65,7 +65,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
         $items = '';
 
         foreach ($this->items as $footnote) {
-            $backlinks = '';
+            $backlinks = [];
             $references = $footnote->getReferences();
 
             foreach ($references as $key => $reference) {
@@ -82,8 +82,14 @@ class FootnoteCollection implements Countable, IteratorAggregate
                     'role' => 'doc-backlink',
                     'aria-label' => $label,
                 ], $backlinkAttributes);
-                $backlinks .= Html::tag('a', '↩', $attributes);
+                $indicator = count($references) > 1 ? '↑' . ($key + 1) : '↑';
+                $backlinks[] = Html::tag('a', $indicator, $attributes);
             }
+
+            $backlinkGroup = Html::tag('div', implode(' ', $backlinks), [
+                'class' => ['footnote-backlinks'],
+                'data-footnote-backlinks' => true,
+            ]);
 
             $attributes = $this->_mergeAttributes([
                 'class' => ['footnote-item'],
@@ -91,7 +97,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
                 'id' => $footnote->anchorId,
                 'role' => 'doc-endnote',
             ], $itemAttributes);
-            $items .= Html::tag('li', (string)$footnote->html . $backlinks, $attributes);
+            $items .= Html::tag('li', $backlinkGroup . (string)$footnote->html, $attributes);
         }
 
         $list = Html::tag('ol', $items, $listAttributes);

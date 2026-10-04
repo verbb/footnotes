@@ -7,7 +7,7 @@ use verbb\footnotes\services\Documents;
 function canonicalDocument(string $body = 'Body'): string
 {
     return '<p>' . $body . '<sup class="footnote footnote-reference" data-footnote-reference data-footnote-id="note-a" data-footnote-reference-id="reference-a"><a href="#fn-note-a">1</a></sup></p>'
-        . '<section class="footnotes" data-footnotes role="doc-endnotes"><ol><li class="footnote-item" data-footnote-id="note-a"><p><em>Rich</em> definition</p><ul><li>Nested item</li></ul><a data-footnote-backlink href="#fnref-reference-a">↩</a></li></ol></section>';
+        . '<section class="footnotes" data-footnotes role="doc-endnotes"><ol><li class="footnote-item" data-footnote-id="note-a"><p><em>Rich</em> definition</p><ul><li>Nested item</li></ul><div class="footnote-backlinks" data-footnote-backlinks><a data-footnote-backlink href="#fnref-reference-a">↑</a></div></li></ol></section>';
 }
 
 it('collects legacy inline footnotes', function() {
@@ -32,15 +32,19 @@ it('splits canonical definitions without flattening nested lists', function() {
         ->toContain('<p>Body')
         ->not->toContain('data-footnotes')
         ->and($rendered)
+        ->toContain('<div class="footnote-backlinks" data-footnote-backlinks>')
+        ->toContain('>↑</a>')
         ->toContain('<p><em>Rich</em> definition</p>')
         ->toContain('<ul><li>Nested item</li></ul>')
+        ->and((string)$collection->getIterator()->current()->html)
+        ->not->toContain('footnote-backlinks')
         ->and($collection->getIterator()->current()->text)
         ->toBe('Rich definition Nested item');
 });
 
 it('recognizes canonical content after restrictive purifier settings remove data attributes', function() {
     $html = '<p>Body<sup class="footnote footnote-reference"><a id="fnref-reference-a" href="#fn-note-a">1</a></sup></p>'
-        . '<ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p><em>Rich</em> definition</p><a class="footnote-backlink" href="#fnref-reference-a">↩</a></li></ol>';
+        . '<ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p><em>Rich</em> definition</p><div class="footnote-backlinks"><a class="footnote-backlink" href="#fnref-reference-a">↑</a></div></li></ol>';
     $collection = (new Documents())->collection(['scope' => 'article']);
     $body = $collection->add($html);
     $rendered = $collection->render();
@@ -85,7 +89,9 @@ it('keeps repeated canonical references attached to one definition', function() 
         ->and($footnote->getReferences())->toHaveCount(2)
         ->and((string)$collection->render())
         ->toContain('reference 1')
-        ->toContain('reference 2');
+        ->toContain('reference 2')
+        ->toContain('>↑1</a>')
+        ->toContain('>↑2</a>');
 });
 
 it('keeps matching identities from separate bodies independent', function() {

@@ -256,11 +256,12 @@
                     const noteId = modelItem.getAttribute('footnoteId') || '';
                     const number = modelItem.getAttribute('footnoteNumber') || '';
                     const referenceIds = parseReferenceIds(modelItem.getAttribute('footnoteReferenceIds'));
-                    const children = [
-                        writer.createSlot()
-                    ];
+                    const backlinkChildren = [];
                     referenceIds.forEach((referenceId, index)=>{
-                        children.push(writer.createContainerElement('a', {
+                        if (index > 0) {
+                            backlinkChildren.push(writer.createText(' '));
+                        }
+                        backlinkChildren.push(writer.createContainerElement('a', {
                             class: 'footnote-backlink',
                             'data-footnote-backlink': '',
                             href: `#fnref-${referenceId}`,
@@ -270,9 +271,16 @@
                                 index + 1
                             ]) : editor.t('Back to footnote %0', number)
                         }, [
-                            writer.createText('↩')
+                            writer.createText(referenceIds.length > 1 ? `↑${index + 1}` : '↑')
                         ]));
                     });
+                    const children = [
+                        writer.createSlot(),
+                        writer.createContainerElement('div', {
+                            class: 'footnote-backlinks',
+                            'data-footnote-backlinks': ''
+                        }, backlinkChildren)
+                    ];
                     return writer.createContainerElement('li', {
                         class: 'footnote-item',
                         'data-footnote-id': noteId,

@@ -112,11 +112,12 @@ The collection is iterable when the design needs complete control over the defin
         {% for note in footnotes %}
             <li id="{{ note.anchorId }}">
                 <span class="source-notes__number">{{ note.number }}</span>
+                <span class="source-notes__backlinks">
+                    {% for reference in note.references %}
+                        <a href="#{{ reference.anchorId }}" aria-label="Return to reference {{ loop.index }}">{{ note.references|length > 1 ? '↑' ~ loop.index : '↑' }}</a>
+                    {% endfor %}
+                </span>
                 <div class="source-notes__definition">{{ note.html }}</div>
-
-                {% for reference in note.references %}
-                    <a href="#{{ reference.anchorId }}" aria-label="Return to reference {{ loop.index }}">↩</a>
-                {% endfor %}
             </li>
         {% endfor %}
     </ol>
@@ -124,6 +125,30 @@ The collection is iterable when the design needs complete control over the defin
 ```
 
 `note.html` is safe rich-definition markup. It doesn't need Twig's `raw` filter. The other values are plain strings or numbers and remain escaped through normal Twig output.
+
+The default renderer follows the familiar Wikipedia backlink placement: a compact `.footnote-backlinks` group appears before each rich definition, using `↑` for one reference or numbered `↑1`, `↑2` links when several references share the note. The links retain `role="doc-backlink"` and descriptive accessible labels.
+
+Footnotes doesn't add frontend styles. A minimal treatment can keep the backlink group beside the first line while allowing the rest of a rich, multi-block definition to flow normally:
+
+```css
+.footnote-item {
+    padding-inline-start: 3em;
+    position: relative;
+}
+
+.footnote-backlinks {
+    font-size: 0.75em;
+    font-weight: 700;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    position: absolute;
+    white-space: nowrap;
+}
+
+.footnote-backlink {
+    text-decoration: none;
+}
+```
 
 ## Collection API
 

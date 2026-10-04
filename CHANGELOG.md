@@ -7,6 +7,7 @@
 
 ### Changed
 - Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
+- Changed footnote backlinks to compact Wikipedia-style indicators before each rich definition, including distinct numbered targets for repeated references.
 - Updated the control-panel definitions region to distinguish editor-only UI and use a more compact layout.
 
 ### Deprecated
