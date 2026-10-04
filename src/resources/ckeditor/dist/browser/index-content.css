@@ -29,7 +29,7 @@
     background:var(--ck-color-base-border);
     border-radius:3px;
     color:var(--ck-color-text);
-    content:attr(aria-label) ' ' attr(data-editor-only-label);
+    content:attr(aria-label);
     display:table;
     font-size:10px;
     font-weight:600;

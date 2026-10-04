@@ -332,7 +332,6 @@ class FootnotesEditing extends Plugin {
             view: (_modelItem, { writer })=>writer.createContainerElement('ol', {
                     class: 'footnotes ck-footnotes',
                     'data-footnotes': '',
-                    'data-editor-only-label': editor.t('Editor only'),
                     'aria-label': editor.t('Footnotes')
                 })
         });
