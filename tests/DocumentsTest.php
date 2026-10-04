@@ -92,8 +92,11 @@ it('keeps repeated canonical references attached to one definition', function() 
         ->and((string)$collection->render())
         ->toContain('reference 1')
         ->toContain('reference 2')
-        ->toContain('>↑a</a>')
-        ->toContain('>↑b</a>');
+        ->toContain('>↑ <a')
+        ->toContain('>a</a>')
+        ->toContain('>b</a>')
+        ->not->toContain('>↑a</a>')
+        ->not->toContain('>↑b</a>');
 });
 
 it('keeps repeated reference labels compact beyond one alphabet', function() {

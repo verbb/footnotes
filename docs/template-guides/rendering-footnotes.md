@@ -113,8 +113,9 @@ The collection is iterable when the design needs complete control over the defin
             <li id="{{ note.anchorId }}">
                 <span class="source-notes__number">{{ note.number }}</span>
                 <span class="source-notes__backlinks">
+                    {% if note.references|length > 1 %}↑{% endif %}
                     {% for reference in note.references %}
-                        <a href="#{{ reference.anchorId }}" aria-label="Return to reference {{ loop.index }}">{{ note.references|length > 1 ? '↑' ~ reference.label : '↑' }}</a>
+                        <a href="#{{ reference.anchorId }}" aria-label="Return to reference {{ loop.index }}">{{ note.references|length > 1 ? reference.label : '↑' }}</a>
                     {% endfor %}
                 </span>
                 <div class="source-notes__definition">{{ note.html }}</div>
@@ -126,7 +127,7 @@ The collection is iterable when the design needs complete control over the defin
 
 `note.html` is safe rich-definition markup. It doesn't need Twig's `raw` filter. The other values are plain strings or numbers and remain escaped through normal Twig output.
 
-The default renderer follows the familiar Wikipedia backlink placement: a compact `.footnote-backlinks` group appears before each rich definition, using `↑` for one reference or lettered `↑a`, `↑b` links when several references share the note. The ordered-list marker remains the note's only visible number, while the letters distinguish the places a reader can return to. The links retain `role="doc-backlink"` and descriptive accessible labels.
+The default renderer follows the familiar Wikipedia backlink placement: a compact `.footnote-backlinks` group appears before each rich definition, using a linked `↑` for one reference or a shared arrow followed by lettered return links (`↑ a b`) when several references share the note. The ordered-list marker remains the note's only visible number, while the letters distinguish the places a reader can return to. The links retain `role="doc-backlink"` and descriptive accessible labels.
 
 Footnotes doesn't add frontend styles. A minimal treatment can keep the backlink group beside the first line while allowing the rest of a rich, multi-block definition to flow normally:
 

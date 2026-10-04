@@ -257,6 +257,10 @@
                     const number = modelItem.getAttribute('footnoteNumber') || '';
                     const referenceIds = parseReferenceIds(modelItem.getAttribute('footnoteReferenceIds'));
                     const backlinkChildren = [];
+                    const hasRepeatedReferences = referenceIds.length > 1;
+                    if (hasRepeatedReferences) {
+                        backlinkChildren.push(writer.createText('↑ '));
+                    }
                     referenceIds.forEach((referenceId, index)=>{
                         if (index > 0) {
                             backlinkChildren.push(writer.createText(' '));
@@ -271,7 +275,7 @@
                                 index + 1
                             ]) : editor.t('Back to footnote %0', number)
                         }, [
-                            writer.createText(referenceIds.length > 1 ? `↑${referenceLabel(index + 1)}` : '↑')
+                            writer.createText(hasRepeatedReferences ? referenceLabel(index + 1) : '↑')
                         ]));
                     });
                     const children = [

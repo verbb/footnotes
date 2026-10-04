@@ -67,9 +67,10 @@ class FootnoteCollection implements Countable, IteratorAggregate
         foreach ($this->items as $footnote) {
             $backlinks = [];
             $references = $footnote->getReferences();
+            $hasRepeatedReferences = count($references) > 1;
 
             foreach ($references as $key => $reference) {
-                $label = count($references) > 1
+                $label = $hasRepeatedReferences
                     ? Craft::t('footnotes', 'Back to footnote {number}, reference {reference}', [
                         'number' => $footnote->number,
                         'reference' => $key + 1,
@@ -82,11 +83,12 @@ class FootnoteCollection implements Countable, IteratorAggregate
                     'role' => 'doc-backlink',
                     'aria-label' => $label,
                 ], $backlinkAttributes);
-                $indicator = count($references) > 1 ? '↑' . $reference->label : '↑';
+                $indicator = $hasRepeatedReferences ? $reference->label : '↑';
                 $backlinks[] = Html::tag('a', $indicator, $attributes);
             }
 
-            $backlinkGroup = Html::tag('div', implode(' ', $backlinks), [
+            $backlinkContent = ($hasRepeatedReferences ? '↑ ' : '') . implode(' ', $backlinks);
+            $backlinkGroup = Html::tag('div', $backlinkContent, [
                 'class' => ['footnote-backlinks'],
                 'data-footnote-backlinks' => true,
             ]);
