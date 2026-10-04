@@ -264,7 +264,7 @@ class FootnotesEditing extends Plugin {
                     backlinkChildren.push(writer.createContainerElement('a', {
                         class: 'footnote-backlink',
                         'data-footnote-backlink': '',
-                        href: `#fnref-${referenceId}`,
+                        href: `#fnref-${publicAnchorToken(referenceId)}`,
                         role: 'doc-backlink',
                         'aria-label': referenceIds.length > 1 ? editor.t('Back to footnote %0, reference %1', [
                             number,
@@ -286,7 +286,7 @@ class FootnotesEditing extends Plugin {
                     'data-footnote-id': noteId,
                     'data-footnote-number': number,
                     'data-footnote-reference-ids': JSON.stringify(referenceIds),
-                    id: `fn-${noteId}`,
+                    id: `fn-${publicAnchorToken(noteId)}`,
                     role: 'doc-endnote'
                 }, children);
             }
@@ -307,8 +307,8 @@ class FootnotesEditing extends Plugin {
                 const number = modelItem.getAttribute('footnoteNumber') || '';
                 const text = modelItem.getAttribute('footnoteText') || '';
                 const anchor = writer.createContainerElement('a', {
-                    id: `fnref-${referenceId}`,
-                    href: `#fn-${noteId}`,
+                    id: `fnref-${publicAnchorToken(referenceId)}`,
+                    href: `#fn-${publicAnchorToken(noteId)}`,
                     'data-footnote-id': noteId,
                     'data-footnote-reference-id': referenceId,
                     'data-footnote-text': text,
@@ -393,7 +393,7 @@ class FootnotesEditing extends Plugin {
                 ...new Set(noteIds)
             ].slice(0, MAX_CLIPBOARD_DEFINITIONS)){
                 const item = Array.from(document.querySelectorAll('li.footnote-item')).find((candidate)=>{
-                    return candidate.getAttribute('data-footnote-id') === noteId || candidate.id === `fn-${noteId}`;
+                    return candidate.getAttribute('data-footnote-id') === noteId || candidate.id === `fn-${publicAnchorToken(noteId)}` || candidate.id === `fn-${noteId}`;
                 });
                 if (item) {
                     definitions.push({
@@ -720,6 +720,11 @@ function findViewAnchor(viewElement) {
 function idFromFragment(value, prefix) {
     const match = `${value || ''}`.match(new RegExp(`^#?${prefix}-(.+)$`));
     return match?.[1] || '';
+}
+function publicAnchorToken(value) {
+    const id = `${value || ''}`;
+    // Full UUIDs remain in data attributes; public fragments only need a stable page-local token.
+    return UUID_PATTERN.test(id) ? id.replace(/-/g, '').slice(-10).toLowerCase() : id;
 }
 function getReferenceIdsFromDocument(document) {
     return new Set(Array.from(document.querySelectorAll('sup.footnote-reference')).map((reference)=>{

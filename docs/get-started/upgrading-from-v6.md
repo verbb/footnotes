@@ -12,6 +12,8 @@ Opening a field with inline Footnotes content presents each marker as a numbered
 
 Review an existing entry by opening its CKEditor field, selecting a reference, and confirming that the caret moves to the expected definition. Save and reload the entry, then check that the ordinary field output still contains the reference, definition, and return link.
 
+Canonical notes keep their full UUIDs in `data-footnote-id` and `data-footnote-reference-id`, but generated public fragment IDs use a compact stable token such as `#fn-0000000001`. Existing Footnotes 6 content and non-UUID fragment identities remain readable. If pre-release 6.1 templates or scripts were written against full UUID-shaped fragments, target the semantic classes or data attributes instead of the fragment format.
+
 ## Deprecated Twig Helpers
 
 The request-global Twig API still works but records Craft deprecation warnings when called. There is no scheduled removal date. New and revised templates should either render the complete field value directly or use `craft.footnotes.collection()` for relocated or combined output.

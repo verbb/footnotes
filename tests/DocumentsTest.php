@@ -43,6 +43,26 @@ it('splits canonical definitions without flattening nested lists', function() {
         ->toBe('Rich definition Nested item');
 });
 
+it('uses compact public anchors while retaining full UUID identities', function() {
+    $noteId = '10000000-0000-4000-8000-000000000001';
+    $referenceId = '11000000-0000-4000-8000-000000000002';
+    $html = '<p>Body<sup class="footnote footnote-reference" data-footnote-reference data-footnote-id="' . $noteId . '" data-footnote-reference-id="' . $referenceId . '"><a id="fnref-' . $referenceId . '" href="#fn-' . $noteId . '">1</a></sup></p>'
+        . '<ol class="footnotes" data-footnotes><li class="footnote-item" data-footnote-id="' . $noteId . '" id="fn-' . $noteId . '"><p>Definition</p></li></ol>';
+    $collection = (new Documents())->collection(['scope' => 'article-42']);
+    $body = (string)$collection->add($html);
+    $rendered = (string)$collection->render();
+
+    expect($body)
+        ->toContain('data-footnote-id="' . $noteId . '"')
+        ->toContain('data-footnote-reference-id="' . $referenceId . '"')
+        ->toContain('id="fnref-article-42-0000000002"')
+        ->toContain('href="#fn-article-42-0000000001"')
+        ->and($rendered)
+        ->toContain('data-footnote-id="' . $noteId . '"')
+        ->toContain('id="fn-article-42-0000000001"')
+        ->toContain('href="#fnref-article-42-0000000002"');
+});
+
 it('recognizes canonical content after restrictive purifier settings remove data attributes', function() {
     $html = '<p>Body<sup class="footnote footnote-reference"><a id="fnref-reference-a" href="#fn-note-a">1</a></sup></p>'
         . '<ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p><em>Rich</em> definition</p><div class="footnote-backlinks"><a class="footnote-backlink" href="#fnref-reference-a">↑</a></div></li></ol>';

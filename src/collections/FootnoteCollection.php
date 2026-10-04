@@ -219,10 +219,21 @@ class FootnoteCollection implements Countable, IteratorAggregate
     private function _anchorId(string $prefix, string $id): string
     {
         $scope = trim((string)($this->options['scope'] ?? ''));
-        $value = $scope !== '' ? $scope . '-' . $id : $id;
+        $token = $this->_publicAnchorToken($id);
+        $value = $scope !== '' ? $scope . '-' . $token : $token;
         $value = preg_replace('/[^a-zA-Z0-9_.:-]+/', '-', $value) ?? '';
 
         return $prefix . '-' . trim($value, '-');
+    }
+
+    private function _publicAnchorToken(string $id): string
+    {
+        // Preserve the full UUID as stored identity while keeping public fragment URLs readable.
+        if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $id) === 1) {
+            return strtolower(substr(str_replace('-', '', $id), -10));
+        }
+
+        return $id;
     }
 
     private function _uniqueAnchorId(string $anchorId): string
