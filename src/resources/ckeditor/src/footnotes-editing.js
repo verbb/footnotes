@@ -299,11 +299,11 @@ export default class FootnotesEditing extends Plugin {
                 });
 
                 const children = [
-                    writer.createSlot(),
                     writer.createContainerElement('div', {
                         class: 'footnote-backlinks',
                         'data-footnote-backlinks': '',
                     }, backlinkChildren),
+                    writer.createSlot(),
                 ];
 
                 return writer.createContainerElement('li', {

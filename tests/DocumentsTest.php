@@ -33,6 +33,7 @@ it('splits canonical definitions without flattening nested lists', function() {
         ->not->toContain('data-footnotes')
         ->and($rendered)
         ->toContain('<div class="footnote-backlinks" data-footnote-backlinks>')
+        ->toMatch('/<li[^>]*><div class="footnote-backlinks"[^>]*>.*?<\/div><p><em>Rich<\/em> definition<\/p>/')
         ->toContain('>↑</a>')
         ->toContain('<p><em>Rich</em> definition</p>')
         ->toContain('<ul><li>Nested item</li></ul>')

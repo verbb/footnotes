@@ -133,16 +133,20 @@ Footnotes doesn't add frontend styles. A minimal treatment can keep the backlink
 
 ```css
 .footnote-item {
-    padding-inline-start: 3em;
-    position: relative;
+    padding-inline-start: 1em;
+}
+
+.footnote-item::after {
+    clear: both;
+    content: '';
+    display: block;
 }
 
 .footnote-backlinks {
+    float: inline-start;
     font-size: 0.75em;
     font-weight: 700;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    position: absolute;
+    margin-inline-end: 0.5em;
     white-space: nowrap;
 }
 

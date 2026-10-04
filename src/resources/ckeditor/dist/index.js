@@ -275,11 +275,11 @@ class FootnotesEditing extends Plugin {
                     ]));
                 });
                 const children = [
-                    writer.createSlot(),
                     writer.createContainerElement('div', {
                         class: 'footnote-backlinks',
                         'data-footnote-backlinks': ''
-                    }, backlinkChildren)
+                    }, backlinkChildren),
+                    writer.createSlot()
                 ];
                 return writer.createContainerElement('li', {
                     class: 'footnote-item',
