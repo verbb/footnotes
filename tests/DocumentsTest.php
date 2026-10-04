@@ -87,11 +87,28 @@ it('keeps repeated canonical references attached to one definition', function() 
 
     expect($collection)->toHaveCount(1)
         ->and($footnote->getReferences())->toHaveCount(2)
+        ->and($footnote->getReferences()[0]->label)->toBe('a')
+        ->and($footnote->getReferences()[1]->label)->toBe('b')
         ->and((string)$collection->render())
         ->toContain('reference 1')
         ->toContain('reference 2')
-        ->toContain('>↑1</a>')
-        ->toContain('>↑2</a>');
+        ->toContain('>↑a</a>')
+        ->toContain('>↑b</a>');
+});
+
+it('keeps repeated reference labels compact beyond one alphabet', function() {
+    $references = implode('', array_map(
+        fn(int $number) => '<sup class="footnote footnote-reference"><a id="fnref-reference-' . $number . '" href="#fn-note-a">1</a></sup>',
+        range(1, 27),
+    ));
+    $html = '<p>' . $references . '</p><ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p>Shared definition</p></li></ol>';
+    $collection = (new Documents())->collection();
+    $collection->add($html);
+    $referenceModels = $collection->getIterator()->current()->getReferences();
+
+    expect($referenceModels)->toHaveCount(27)
+        ->and($referenceModels[25]->label)->toBe('z')
+        ->and($referenceModels[26]->label)->toBe('aa');
 });
 
 it('keeps matching identities from separate bodies independent', function() {

@@ -271,7 +271,7 @@
                                 index + 1
                             ]) : editor.t('Back to footnote %0', number)
                         }, [
-                            writer.createText(referenceIds.length > 1 ? `↑${index + 1}` : '↑')
+                            writer.createText(referenceIds.length > 1 ? `↑${referenceLabel(index + 1)}` : '↑')
                         ]));
                     });
                     const children = [
@@ -684,6 +684,15 @@
             text += extractViewText(child);
         }
         return text;
+    }
+    function referenceLabel(number) {
+        let label = '';
+        while(number > 0){
+            number--;
+            label = String.fromCharCode(97 + number % 26) + label;
+            number = Math.floor(number / 26);
+        }
+        return label;
     }
     function parseReferenceIds(value) {
         try {

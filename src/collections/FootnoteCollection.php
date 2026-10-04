@@ -82,7 +82,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
                     'role' => 'doc-backlink',
                     'aria-label' => $label,
                 ], $backlinkAttributes);
-                $indicator = count($references) > 1 ? '↑' . ($key + 1) : '↑';
+                $indicator = count($references) > 1 ? '↑' . $reference->label : '↑';
                 $backlinks[] = Html::tag('a', $indicator, $attributes);
             }
 
@@ -163,7 +163,12 @@ class FootnoteCollection implements Countable, IteratorAggregate
             ];
             $footnote = $this->_footnote($itemKey, $noteId, $definition);
             $referenceAnchorId = $this->_uniqueAnchorId($this->_anchorId('fnref', $referenceId));
-            $referenceModel = new FootnoteReference($referenceId, $referenceAnchorId, $footnote->anchorId);
+            $referenceModel = new FootnoteReference(
+                $referenceId,
+                $referenceAnchorId,
+                $footnote->anchorId,
+                $this->_referenceLabel(count($footnote->getReferences()) + 1),
+            );
             $footnote->addReference($referenceModel);
 
             $superscriptAttributes = $this->_mergeAttributes($attributes, [
@@ -230,6 +235,19 @@ class FootnoteCollection implements Countable, IteratorAggregate
         $this->usedAnchorIds[$candidate] = true;
 
         return $candidate;
+    }
+
+    private function _referenceLabel(int $number): string
+    {
+        $label = '';
+
+        while ($number > 0) {
+            $number--;
+            $label = chr(97 + ($number % 26)) . $label;
+            $number = intdiv($number, 26);
+        }
+
+        return $label;
     }
 
     private function _mergeAttributes(array $base, mixed $custom): array
