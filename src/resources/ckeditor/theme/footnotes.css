@@ -1,24 +1,7 @@
-.ck-content .footnote {
+.ck-content .footnote-reference {
     font-size: 0.72em;
-    vertical-align: super;
     line-height: 1;
-}
-
-.ck.ck-footnotes-actions {
-    display: grid;
-    gap: 0.4rem;
-    min-width: 260px;
-    padding: 0.45rem;
-}
-
-.ck.ck-footnotes-actions .ck-footnotes-actions-input {
-    width: 100%;
-}
-
-.ck-footnotes-actions-buttons {
-    display: flex;
-    gap: 0.35rem;
-    justify-content: flex-end;
+    vertical-align: super;
 }
 
 .ck-content .footnote-marker {
@@ -27,17 +10,38 @@
     font-weight: 600;
 }
 
-.ck-content .footnote-marker .footnote-marker__number {
-    display: inline;
-}
-
 .ck-content .footnote-marker.ck-widget_selected {
-    outline: 2px solid var(--ck-color-focus-border);
     border-radius: 2px;
+    outline: 2px solid var(--ck-color-focus-border);
 }
 
-.ck.ck-editor__editable .ck-fake-selection-container {
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
+.ck-content .ck-footnotes {
+    border-top: 1px solid var(--ck-color-base-border);
+    margin-block-start: 2em;
+    padding-block-start: 1em;
+}
+
+.ck-content .ck-footnotes::before {
+    color: var(--ck-color-text);
+    content: attr(aria-label);
+    display: block;
+    font-weight: 600;
+    margin-block-end: 0.75em;
+}
+
+.ck-content .ck-footnote-item {
+    padding-inline-start: 0.25em;
+}
+
+.ck-content .ck-footnote-item:focus-within {
+    outline: 2px solid var(--ck-color-focus-border);
+    outline-offset: 3px;
+}
+
+.ck-content .ck-footnote-item > :first-child {
+    margin-block-start: 0;
+}
+
+.ck-content .ck-footnote-item > :last-child {
+    margin-block-end: 0;
 }
