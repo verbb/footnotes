@@ -63,6 +63,23 @@ it('uses compact public anchors while retaining full UUID identities', function(
         ->toContain('href="#fnref-article-42-0000000002"');
 });
 
+it('keeps full identities when purifier retains them only on reference anchors', function() {
+    $noteId = '40000000-0000-4000-8000-000000000001';
+    $referenceId = '41000000-0000-4000-8000-000000000001';
+    $html = '<p>Body<sup class="footnote footnote-reference"><a id="fnref-0000000001" href="#fn-0000000001" data-footnote-id="' . $noteId . '" data-footnote-reference-id="' . $referenceId . '">1</a></sup></p>'
+        . '<ol class="footnotes" data-footnotes><li class="footnote-item" data-footnote-id="' . $noteId . '" id="fn-0000000001"><div class="footnote-backlinks" data-footnote-backlinks><a class="footnote-backlink" href="#fnref-0000000001">↑</a></div><p>Preserved definition</p></li></ol>';
+    $collection = (new Documents())->collection(['scope' => 'article']);
+    $body = (string)$collection->add($html);
+    $rendered = (string)$collection->render();
+
+    expect($body)
+        ->toContain('data-footnote-id="' . $noteId . '"')
+        ->toContain('data-footnote-reference-id="' . $referenceId . '"')
+        ->and($rendered)
+        ->toContain('data-footnote-id="' . $noteId . '"')
+        ->toContain('<p>Preserved definition</p>');
+});
+
 it('recognizes canonical content after restrictive purifier settings remove data attributes', function() {
     $html = '<p>Body<sup class="footnote footnote-reference"><a id="fnref-reference-a" href="#fn-note-a">1</a></sup></p>'
         . '<ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p><em>Rich</em> definition</p><div class="footnote-backlinks"><a class="footnote-backlink" href="#fnref-reference-a">↑</a></div></li></ol>';

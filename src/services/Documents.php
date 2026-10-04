@@ -90,12 +90,20 @@ class Documents extends Component
             if (preg_match('/<a\b[^>]*>/i', $reference['inner'], $anchorMatch)) {
                 $anchorAttributes = $this->_parseAttributes($anchorMatch[0]);
 
-                if (empty($attributes['data-footnote-id']) && preg_match('/^#fn-(.+)$/', (string)($anchorAttributes['href'] ?? ''), $idMatch)) {
-                    $attributes['data-footnote-id'] = $idMatch[1];
+                if (empty($attributes['data-footnote-id'])) {
+                    $attributes['data-footnote-id'] = $anchorAttributes['data-footnote-id'] ?? '';
+
+                    if ($attributes['data-footnote-id'] === '' && preg_match('/^#fn-(.+)$/', (string)($anchorAttributes['href'] ?? ''), $idMatch)) {
+                        $attributes['data-footnote-id'] = $idMatch[1];
+                    }
                 }
 
-                if (empty($attributes['data-footnote-reference-id']) && preg_match('/^fnref-(.+)$/', (string)($anchorAttributes['id'] ?? ''), $referenceIdMatch)) {
-                    $attributes['data-footnote-reference-id'] = $referenceIdMatch[1];
+                if (empty($attributes['data-footnote-reference-id'])) {
+                    $attributes['data-footnote-reference-id'] = $anchorAttributes['data-footnote-reference-id'] ?? '';
+
+                    if ($attributes['data-footnote-reference-id'] === '' && preg_match('/^fnref-(.+)$/', (string)($anchorAttributes['id'] ?? ''), $referenceIdMatch)) {
+                        $attributes['data-footnote-reference-id'] = $referenceIdMatch[1];
+                    }
                 }
 
                 if (empty($attributes['data-footnote-text']) && isset($anchorAttributes['data-footnote-text'])) {
