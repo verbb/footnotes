@@ -12,6 +12,7 @@ use verbb\footnotes\web\twig\variables\FootnotesVariable;
 use Craft;
 use craft\base\Plugin;
 use craft\ckeditor\data\FieldData as CkeditorFieldData;
+use craft\ckeditor\Field as CkeditorField;
 use craft\ckeditor\Plugin as CkEditor;
 use craft\events\DefineGqlTypeFieldsEvent;
 use craft\events\RegisterGqlQueriesEvent;
@@ -20,6 +21,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\gql\TypeManager;
 use craft\helpers\Gql as GqlHelper;
 use craft\helpers\UrlHelper;
+use craft\htmlfield\events\ModifyPurifierConfigEvent;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field;
 use craft\services\Gql;
@@ -78,6 +80,7 @@ class Footnotes extends Plugin
         $this->_registerVariables();
         $this->_registerRedactorPlugins();
         $this->_registerCkEditorPlugins();
+        $this->_registerCkEditorPurifierConfig();
         $this->_registerGraphql();
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -126,11 +129,9 @@ class Footnotes extends Plugin
 
     private function _registerRedactorPlugins(): void
     {
-        if (PluginHelper::isPluginInstalledAndEnabled('redactor')) {
-            Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function(RegisterPluginPathsEvent $event) {
-                $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/redactor/');
-            });
-        }
+        Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function(RegisterPluginPathsEvent $event) {
+            $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/redactor/');
+        });
     }
 
     private function _registerCkEditorPlugins(): void
@@ -145,6 +146,28 @@ class Footnotes extends Plugin
             // Ensure the package alias exists in the import map, regardless of plugin init order.
             $view->registerJsImport($bundle->namespace, $assetManager->getAssetUrl($bundle, 'index.js', false));
         }
+    }
+
+    private function _registerCkEditorPurifierConfig(): void
+    {
+        if (!PluginHelper::isPluginInstalledAndEnabled('ckeditor')) {
+            return;
+        }
+
+        Event::on(CkeditorField::class, CkeditorField::EVENT_MODIFY_PURIFIER_CONFIG, function(ModifyPurifierConfigEvent $event): void {
+            $definition = $event->config->getHTMLDefinition(true);
+
+            foreach ([
+                'sup' => ['data-footnote-reference', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-text'],
+                'ol' => ['data-footnotes', 'role', 'aria-label'],
+                'li' => ['data-footnote-id', 'data-footnote-number', 'data-footnote-reference-ids', 'role'],
+                'a' => ['data-footnote-backlink', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-text', 'role', 'aria-label'],
+            ] as $element => $attributes) {
+                foreach ($attributes as $attribute) {
+                    $definition->addAttribute($element, $attribute, 'CDATA');
+                }
+            }
+        });
     }
 
     private function _registerGraphql(): void

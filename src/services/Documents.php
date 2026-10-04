@@ -39,7 +39,9 @@ class Documents extends Component
     public function split(string $html): array
     {
         $section = $this->_findElement($html, 'ol', 'data-footnotes')
-            ?? $this->_findElement($html, 'section', 'data-footnotes');
+            ?? $this->_findElement($html, 'section', 'data-footnotes')
+            ?? $this->_findElement($html, 'ol', 'class', 0, 'footnotes')
+            ?? $this->_findElement($html, 'section', 'class', 0, 'footnotes');
 
         if (!$section) {
             return $this->_splitLegacy($html);
@@ -48,12 +50,17 @@ class Documents extends Component
         $definitions = [];
         $offset = 0;
 
-        while ($item = $this->_findElement($section['html'], 'li', 'data-footnote-id', $offset)) {
+        while ($item = $this->_findElement($section['html'], 'li', 'data-footnote-id', $offset)
+            ?? $this->_findElement($section['html'], 'li', 'class', $offset, 'footnote-item')) {
             $attributes = $this->_parseAttributes($item['opening']);
             $id = trim((string)($attributes['data-footnote-id'] ?? ''));
 
+            if ($id === '' && preg_match('/^fn-(.+)$/', (string)($attributes['id'] ?? ''), $idMatch)) {
+                $id = $idMatch[1];
+            }
+
             if ($id !== '') {
-                $content = preg_replace('/<a\b(?=[^>]*\bdata-footnote-backlink(?:\s|=|>))[^>]*>.*?<\/a>/is', '', $item['inner']) ?? $item['inner'];
+                $content = preg_replace('/<a\b(?=[^>]*(?:\bdata-footnote-backlink(?:\s|=|>)|\bclass\s*=\s*(["\'])[^"\']*\bfootnote-backlink\b[^"\']*\1))[^>]*>.*?<\/a>/is', '', $item['inner']) ?? $item['inner'];
                 $definitions[$id] = [
                     'html' => trim($content),
                     'text' => $this->_plainText($content),
@@ -76,8 +83,27 @@ class Documents extends Component
         $references = [];
         $offset = 0;
 
-        while ($reference = $this->_findElement($html, 'sup', 'data-footnote-reference', $offset)) {
-            $reference['attributes'] = $this->_parseAttributes($reference['opening']);
+        while ($reference = $this->_findElement($html, 'sup', 'data-footnote-reference', $offset)
+            ?? $this->_findElement($html, 'sup', 'class', $offset, 'footnote-reference')) {
+            $attributes = $this->_parseAttributes($reference['opening']);
+
+            if (preg_match('/<a\b[^>]*>/i', $reference['inner'], $anchorMatch)) {
+                $anchorAttributes = $this->_parseAttributes($anchorMatch[0]);
+
+                if (empty($attributes['data-footnote-id']) && preg_match('/^#fn-(.+)$/', (string)($anchorAttributes['href'] ?? ''), $idMatch)) {
+                    $attributes['data-footnote-id'] = $idMatch[1];
+                }
+
+                if (empty($attributes['data-footnote-reference-id']) && preg_match('/^fnref-(.+)$/', (string)($anchorAttributes['id'] ?? ''), $referenceIdMatch)) {
+                    $attributes['data-footnote-reference-id'] = $referenceIdMatch[1];
+                }
+
+                if (empty($attributes['data-footnote-text']) && isset($anchorAttributes['data-footnote-text'])) {
+                    $attributes['data-footnote-text'] = $anchorAttributes['data-footnote-text'];
+                }
+            }
+
+            $reference['attributes'] = $attributes;
             $references[] = $reference;
             $offset = $reference['start'] + $reference['length'];
         }
@@ -99,8 +125,9 @@ class Documents extends Component
 
         while ($footnote = $this->_findElement($html, 'sup', 'class', $searchOffset, 'footnote')) {
             $attributes = $this->_parseAttributes($footnote['opening']);
+            $classes = preg_split('/\s+/', trim((string)($attributes['class'] ?? ''))) ?: [];
 
-            if (array_key_exists('data-footnote-reference', $attributes)) {
+            if (array_key_exists('data-footnote-reference', $attributes) || in_array('footnote-reference', $classes, true)) {
                 $searchOffset = $footnote['start'] + $footnote['length'];
                 continue;
             }
@@ -199,7 +226,8 @@ class Documents extends Component
 
     private function _plainText(string $html): string
     {
-        $text = preg_replace('/\s+/u', ' ', strip_tags($html)) ?? strip_tags($html);
+        $spaced = preg_replace('/<(?:br\s*\/?|\/(?:p|div|li|h[1-6]|blockquote|pre|tr|section|article))\s*>/i', ' ', $html) ?? $html;
+        $text = preg_replace('/\s+/u', ' ', strip_tags($spaced)) ?? strip_tags($spaced);
 
         return trim(html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }

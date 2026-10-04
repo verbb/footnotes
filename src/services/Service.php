@@ -89,7 +89,7 @@ class Service extends Component
 
         $scope = $this->resolveAnchorScope($options);
 
-        if (str_contains($string, 'data-footnote-reference')) {
+        if ($this->_isCanonical($string)) {
             return $this->_filterCanonical($string, $options, $scope);
         }
 
@@ -111,7 +111,7 @@ class Service extends Component
             ];
         }
 
-        if (str_contains($html, 'data-footnote-reference')) {
+        if ($this->_isCanonical($html)) {
             return $this->_parseCanonicalForGraphql($html, $options);
         }
 
@@ -384,7 +384,7 @@ class Service extends Component
             $firstReference = $references[0] ?? null;
             $items[] = [
                 'number' => $footnote->number,
-                'text' => (string)$footnote->html,
+                'text' => $footnote->text,
                 'html' => (string)$footnote->html,
                 'id' => $footnote->id,
                 'referenceAnchorId' => $firstReference?->anchorId ?? '',
@@ -422,6 +422,12 @@ class Service extends Component
         $superscriptAttrs = array_merge_recursive($superscriptAttributes, ['class' => 'footnote']);
 
         return Html::tag('sup', $replaceWith, $superscriptAttrs);
+    }
+
+    private function _isCanonical(string $html): bool
+    {
+        return str_contains($html, 'data-footnote-reference')
+            || preg_match('/<sup\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bfootnote-reference\b[^"\']*\1/i', $html) === 1;
     }
 
     /**
