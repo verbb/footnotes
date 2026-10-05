@@ -9,7 +9,7 @@
 - Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
 - Changed UUID-backed public fragment IDs to use compact stable tokens while retaining full UUIDs as internal note and reference identities.
 - Changed footnote backlinks to flow-safe, compact Wikipedia-style indicators before each rich definition, including a single shared arrow and distinct lettered targets for repeated references.
-- Updated the control-panel definitions region with a compact Footnotes badge, smaller definition text, and an aligned ordered-list gutter.
+- Updated the control-panel definitions region with a compact Footnotes badge, smaller definition text, an aligned ordered-list gutter, and clean editable definitions without rendered backlinks.
 
 ### Deprecated
 - Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of local collections. Existing templates remain supported.

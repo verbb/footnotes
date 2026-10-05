@@ -181,6 +181,23 @@ class FootnotesEditing extends Plugin {
             converterPriority: 'high'
         });
         editor.conversion.for('upcast').add((dispatcher)=>{
+            dispatcher.on('element:div', (evt, data, conversionApi)=>{
+                const viewElement = data.viewItem;
+                if (!viewElement.hasAttribute('data-footnote-backlinks') && !viewElement.hasClass('footnote-backlinks')) {
+                    return;
+                }
+                // Backlinks are regenerated from reference identities. Keeping any part of the serialized group would
+                // create an empty or arrow-only paragraph before the editable definition.
+                if (!conversionApi.consumable.consume(viewElement, {
+                    name: true
+                })) {
+                    return;
+                }
+                data.modelRange = conversionApi.writer.createRange(data.modelCursor);
+                evt.stop();
+            }, {
+                priority: 'highest'
+            });
             dispatcher.on('element:sup', (evt, data, conversionApi)=>{
                 const viewElement = data.viewItem;
                 const anchor = findViewAnchor(viewElement);
