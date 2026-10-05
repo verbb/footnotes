@@ -9,12 +9,23 @@ To override a setting, create `footnotes.php` in your Craft project’s `/config
 
 return [
     'enableAnchorLinks' => true,
+    'referenceStyle' => 'brackets',
 ];
 ```
 
 All other settings keep their defaults. Add any further settings you want to change to the same array. The options below explain the available settings and their defaults.
 
 ## Configuration Options
+
+::: reference
+### `referenceStyle`
+
+**Type:** `string` · **Default:** `'plain'`
+
+Controls how in-text reference numbers appear in the control panel and frontend output. Use `'plain'` for `1` or `'brackets'` for `[1]`.
+
+Footnotes keeps the stored CKEditor anchor text as the semantic number. When `'brackets'` is selected, it adds only the bracket punctuation at display time, so changing the setting updates existing entries without resaving them. A collection can override the plugin default with its own `referenceStyle` option.
+:::
 
 ::: reference
 ### `enableAnchorLinks`

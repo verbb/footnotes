@@ -4,6 +4,7 @@
 
 ### Added
 - Added document-native rich footnote editing and a local `craft.footnotes.collection()` Twig API for single-body, multi-body, and custom rendering workflows.
+- Added configurable plain (`1`) or square-bracketed (`[1]`) in-text reference styles, with a plugin-wide default and per-collection overrides.
 
 ### Changed
 - Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.

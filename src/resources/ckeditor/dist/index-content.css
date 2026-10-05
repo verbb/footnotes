@@ -10,6 +10,14 @@
     font-weight:600;
 }
 
+.ck-content .footnote-marker[data-footnote-reference-style='brackets']::before{
+    content:'[';
+}
+
+.ck-content .footnote-marker[data-footnote-reference-style='brackets']::after{
+    content:']';
+}
+
 .ck-content .footnote-marker.ck-widget_selected{
     border-radius:2px;
     outline:2px solid var(--ck-color-focus-border);

@@ -10,6 +10,7 @@ The saved field value contains accessible references, definitions and return lin
 - Edit footnote definitions in the same CKEditor document as their references.
 - Use paragraphs, links, inline formatting, soft breaks and simple lists inside definitions.
 - Reuse one definition from several references, with a return link for every occurrence.
+- Display in-text references as plain numbers or Wikipedia-style square-bracketed numbers.
 - Render complete footnotes through ordinary field output without frontend JavaScript.
 - Move or combine definitions from one or several content bodies through a local Twig collection.
 - Customise reference, list, item and backlink attributes without replacing semantic markup.

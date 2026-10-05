@@ -116,6 +116,22 @@ it('uses one numbering sequence across added bodies', function() {
         ->and($collection)->toHaveCount(2);
 });
 
+it('supports plain and bracketed collection reference styles', function() {
+    $plain = (new Documents())->collection(['referenceStyle' => 'plain']);
+    $brackets = (new Documents())->collection(['referenceStyle' => 'brackets']);
+
+    expect((string)$plain->add(canonicalDocument()))
+        ->toContain('data-footnote-reference-style="plain"')
+        ->toContain('>1</a>')
+        ->and((string)$brackets->add(canonicalDocument()))
+        ->toContain('data-footnote-reference-style="brackets"')
+        ->toContain('>[1]</a>');
+});
+
+it('rejects unknown collection reference styles', function() {
+    (new Documents())->collection(['referenceStyle' => 'parentheses']);
+})->throws(InvalidArgumentException::class, 'Footnote referenceStyle must be either "plain" or "brackets".');
+
 it('keeps repeated canonical references attached to one definition', function() {
     $html = '<p>First<sup class="footnote footnote-reference"><a id="fnref-reference-a" href="#fn-note-a">1</a></sup> and again<sup class="footnote footnote-reference"><a id="fnref-reference-b" href="#fn-note-a">1</a></sup>.</p>'
         . '<ol class="footnotes"><li class="footnote-item" id="fn-note-a"><p>Shared definition</p></li></ol>';

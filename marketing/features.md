@@ -13,6 +13,7 @@ References and definitions stay connected as content moves. Reuse one definition
 <!-- feature-grid -->
 - :icon[file-description] **Complete field output** Saved CKEditor HTML includes references, definitions and return links, ready for ordinary field rendering.
 - :icon[repeat] **Repeated references** One definition can serve several markers and return readers to every occurrence.
+- :icon[brackets-contain] **Reference styles** Present in-text markers as compact numbers or familiar Wikipedia-style square-bracketed numbers.
 - :icon[accessible] **Accessible navigation** Semantic roles, labels, stable targets and backlinks give each reference a clear destination.
 - :icon[braces] **Local Twig collections** Move or combine notes without request-global state, then use the default renderer or your own markup.
 - :icon[adjustments] **Attribute control** Add project classes and data attributes while retaining Footnotes' semantic structure.

@@ -1,0 +1,7 @@
+.footnote-reference:not([data-footnote-reference-style]) > a::before {
+    content: '[';
+}
+
+.footnote-reference:not([data-footnote-reference-style]) > a::after {
+    content: ']';
+}

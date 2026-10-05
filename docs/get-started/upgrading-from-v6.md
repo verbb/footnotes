@@ -81,6 +81,6 @@ The collection is deliberately local to the Twig variable. Several `add()` calls
 
 ## Settings Behaviour
 
-`enableAnchorLinks` and `enableDuplicateFootnotes` continue to control the classic Twig and GraphQL compatibility processing. Document-native notes and collection output always use linked references, stable note identities, and a backlink for every occurrence. Identical text does not merge separately created canonical notes.
+`enableAnchorLinks` and `enableDuplicateFootnotes` continue to control the classic Twig and GraphQL compatibility processing. The new `referenceStyle` setting defaults to `'plain'`, preserving the existing `1` marker, while `'brackets'` displays `[1]` in CKEditor and frontend output without rewriting stored field values. Collections can override that default locally. Document-native notes and collection output always use linked references, stable note identities, and a backlink for every occurrence. Identical text does not merge separately created canonical notes.
 
 After adopting the collection API, check **Utilities → Deprecation Warnings** for remaining `verbb.footnotes.*` entries. Each warning identifies a compatibility helper that can be updated independently.

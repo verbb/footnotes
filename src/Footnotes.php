@@ -2,6 +2,7 @@
 namespace verbb\footnotes;
 
 use verbb\footnotes\web\assets\ckeditor\CkEditorAsset;
+use verbb\footnotes\web\assets\frontend\ReferenceStylesAsset;
 use verbb\footnotes\base\PluginTrait;
 use verbb\footnotes\helpers\Plugin as PluginHelper;
 use verbb\footnotes\models\Settings;
@@ -82,6 +83,7 @@ class Footnotes extends Plugin
         $this->_registerCkEditorPlugins();
         $this->_registerCkEditorPurifierConfig();
         $this->_registerGraphql();
+        $this->_registerReferenceStyles();
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
             $this->_registerCpRoutes();
@@ -158,7 +160,7 @@ class Footnotes extends Plugin
             $definition = $event->config->getHTMLDefinition(true);
 
             foreach ([
-                'sup' => ['data-footnote-reference', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-text'],
+                'sup' => ['data-footnote-reference', 'data-footnote-id', 'data-footnote-reference-id', 'data-footnote-reference-style', 'data-footnote-text'],
                 'ol' => ['data-footnotes', 'role', 'aria-label'],
                 'li' => ['data-footnote-id', 'data-footnote-number', 'data-footnote-reference-ids', 'role'],
                 'div' => ['data-footnote-backlinks'],
@@ -169,6 +171,13 @@ class Footnotes extends Plugin
                 }
             }
         });
+    }
+
+    private function _registerReferenceStyles(): void
+    {
+        if (Craft::$app->getRequest()->getIsSiteRequest() && $this->getSettings()->getReferenceStyle() === Settings::REFERENCE_STYLE_BRACKETS) {
+            Craft::$app->getView()->registerAssetBundle(ReferenceStylesAsset::class);
+        }
     }
 
     private function _registerGraphql(): void

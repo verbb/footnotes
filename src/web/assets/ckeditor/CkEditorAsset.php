@@ -1,7 +1,11 @@
 <?php
 namespace verbb\footnotes\web\assets\ckeditor;
 
+use verbb\footnotes\Footnotes;
+
+use craft\helpers\Json;
 use craft\web\AssetBundle;
+use craft\web\View;
 
 use craft\ckeditor\web\assets\BaseCkeditorPackageAsset;
 
@@ -50,5 +54,20 @@ class CkEditorAsset extends BaseCkeditorPackageAsset
         self::$_packageRegistered = true;
 
         parent::registerPackage();
+    }
+
+    public function registerAssetFiles($view): void
+    {
+        parent::registerAssetFiles($view);
+
+        $settings = Json::encode([
+            'referenceStyle' => Footnotes::$plugin->getSettings()->getReferenceStyle(),
+        ]);
+        $js = <<<JS
+            window.Craft = window.Craft || {};
+            window.Craft.Footnotes = $settings;
+        JS;
+
+        $view->registerJs($js, View::POS_HEAD, 'verbb-footnotes-settings');
     }
 }

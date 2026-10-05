@@ -352,6 +352,7 @@
         }
         _registerEditingDowncast() {
             const editor = this.editor;
+            const referenceStyle = globalThis.Craft?.Footnotes?.referenceStyle === 'brackets' ? 'brackets' : 'plain';
             editor.conversion.for('editingDowncast').elementToElement({
                 model: 'footnoteList',
                 view: (_modelItem, { writer })=>writer.createContainerElement('ol', {
@@ -390,6 +391,7 @@
                         class: 'footnote footnote-reference footnote-marker',
                         'data-footnote-id': modelItem.getAttribute('footnoteId') || '',
                         'data-footnote-reference-id': modelItem.getAttribute('footnoteReferenceId') || '',
+                        'data-footnote-reference-style': referenceStyle,
                         title: modelItem.getAttribute('footnoteText') || ''
                     }, [
                         writer.createText(number)

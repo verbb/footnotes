@@ -159,9 +159,9 @@ class Service extends Component
                 $listId = $this->listAnchorId($scope, $number);
                 $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => $listId]);
 
-                $numberHtml = Html::tag('a', (string) $number, $anchorAttrs);
+                $numberHtml = Html::tag('a', $this->_referenceMarker($number), $anchorAttrs);
             } else {
-                $numberHtml = (string) $number;
+                $numberHtml = $this->_referenceMarker($number);
             }
 
             $items[] = [
@@ -391,7 +391,7 @@ class Service extends Component
                 'referenceAnchorIds' => array_map(fn($reference) => $reference->anchorId, $references),
                 'listAnchorId' => $footnote->anchorId,
                 'numberMarkup' => $this->settings->enableAnchorLinks
-                    ? Html::tag('a', (string)$footnote->number, ['name' => $footnote->anchorId])
+                    ? Html::tag('a', $this->_referenceMarker($footnote->number), ['name' => $footnote->anchorId])
                     : null,
             ];
         }
@@ -407,7 +407,7 @@ class Service extends Component
      */
     private function _renderFootnoteMarker(int $number, string $scope, array $options): string
     {
-        $replaceWith = (string) $number;
+        $replaceWith = $this->_referenceMarker($number);
 
         if ($this->settings->enableAnchorLinks) {
             $anchorAttributes = $options['anchorAttributes'] ?? [];
@@ -444,7 +444,7 @@ class Service extends Component
         $listId = $this->listAnchorId($itemScope, $number);
         $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => $listId]);
 
-        return Html::tag('a', (string) $number, $anchorAttrs);
+        return Html::tag('a', $this->_referenceMarker($number), $anchorAttrs);
     }
 
     /**
@@ -517,12 +517,19 @@ class Service extends Component
                 $listId = $this->listAnchorId($scope, $number);
                 $anchorAttrs = array_merge_recursive($anchorAttributes, ['name' => $listId]);
 
-                $number = Html::tag('a', (string) $number, $anchorAttrs);
+                $number = Html::tag('a', $this->_referenceMarker($number), $anchorAttrs);
+            } else {
+                $number = $this->_referenceMarker($number);
             }
 
             $result[$number] = $text;
         }
 
         return $result;
+    }
+
+    private function _referenceMarker(int $number): string
+    {
+        return $this->settings->getReferenceStyle() === Settings::REFERENCE_STYLE_BRACKETS ? '[' . $number . ']' : (string)$number;
     }
 }

@@ -28,6 +28,24 @@ The `scope` option prefixes generated IDs so references remain unique when the s
 
 Footnotes keeps full UUIDs in its `data-footnote-id` and `data-footnote-reference-id` attributes as stable internal identities. Public fragment IDs use only a deterministic 10-character UUID token, producing readable targets such as `#fn-0000000001` and `#fnref-0000000002`. A collection scope prefixes that compact token, for example `#fn-article-42-0000000001`. Existing non-UUID and legacy fragment identities remain supported unchanged.
 
+## Choose the Reference Style
+
+The plugin-wide `referenceStyle` setting controls ordinary field output and the CKEditor editing view. Its default is `'plain'`, which displays `1`; set it to `'brackets'` to display `[1]` instead. The stored CKEditor anchor text remains the number itself, so changing the setting updates existing content without resaving entries.
+
+A collection follows the plugin setting by default and can override it locally:
+
+```twig
+{% set footnotes = craft.footnotes.collection({
+    scope: 'article-' ~ entry.id,
+    referenceStyle: 'brackets',
+}) %}
+
+{{ footnotes.add(entry.body) }}
+{{ footnotes.render() }}
+```
+
+Accepted values are `'plain'` and `'brackets'`. The selected punctuation changes only the visible in-text marker; the accessible label remains “Footnote 1”, and the definition list continues to use its normal ordered-list number.
+
 ## Combine Several Content Bodies
 
 Call `add()` for each field or entry that should contribute to the same list. The following page has a main article and a curator's sidebar, then renders one list after both:
@@ -131,7 +149,7 @@ The collection is iterable when the design needs complete control over the defin
 
 The default renderer follows the familiar Wikipedia backlink placement: a compact `.footnote-backlinks` group appears before each rich definition, using a linked `↑` for one reference or a shared arrow followed by lettered return links (`↑ a b`) when several references share the note. The ordered-list marker remains the note's only visible number, while the letters distinguish the places a reader can return to. The links retain `role="doc-backlink"` and descriptive accessible labels.
 
-Footnotes doesn't add frontend styles. A minimal treatment can keep the backlink group beside the first line while allowing the rest of a rich, multi-block definition to flow normally:
+Apart from the two bracket characters needed when the global `referenceStyle` is `'brackets'`, Footnotes doesn't style frontend content. A minimal treatment can keep the backlink group beside the first line while allowing the rest of a rich, multi-block definition to flow normally:
 
 ```css
 .footnote-item {
@@ -164,7 +182,7 @@ Footnotes doesn't add frontend styles. A minimal treatment can keep the backlink
 
 **Returns:** `FootnoteCollection`
 
-Creates an empty local collection. `options.scope` sets a deterministic anchor prefix, while `options.referenceAttributes` adds encoded attributes to generated reference links. The collection has no seed argument; call `add()` for every value you want it to process.
+Creates an empty local collection. `options.scope` sets a deterministic anchor prefix, `options.referenceStyle` selects `'plain'` or `'brackets'` for this collection, and `options.referenceAttributes` adds encoded attributes to generated reference links. When `referenceStyle` is omitted, the collection uses the plugin setting. The collection has no seed argument; call `add()` for every value you want it to process.
 :::
 
 ::: reference

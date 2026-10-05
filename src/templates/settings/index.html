@@ -10,6 +10,18 @@
 {% set pageUrl = 'footnotes/settings' %}
 
 {% block settingsContent %}
+{{ forms.selectField({
+    label: 'Reference style' | t('footnotes'),
+    instructions: 'Choose how footnote numbers appear in prose. This applies to CKEditor previews and ordinary field output; collections can override it when needed.' | t('footnotes'),
+    name: 'referenceStyle',
+    value: settings.referenceStyle,
+    options: [
+        { label: 'Plain number (1)' | t('footnotes'), value: 'plain' },
+        { label: 'Square brackets ([1])' | t('footnotes'), value: 'brackets' },
+    ],
+    errors: settings.getErrors('referenceStyle'),
+}) }}
+
 {{ forms.lightswitchField({
     label: 'Enable anchor links' | t('footnotes'),
     instructions: 'When disabled, the superscript numbers substituting footnote texts will be just plain text. When enabled, those superscript numbers will be anchors linking to the corresponding footnotes (assumed the footnotes in the template are marked up as targets accordingly).' | t('footnotes'),

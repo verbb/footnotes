@@ -70,9 +70,11 @@ Each item exposes the following fields:
 | `listAnchorId` | Fragment target for the rendered definition. |
 | `referenceAnchorId` | First in-text reference ID. |
 | `referenceAnchorIds` | Every in-text reference ID in occurrence order, or `null` for classic inline content. |
-| `numberMarkup` | Compatibility marker markup when `enableAnchorLinks` is enabled, otherwise `null`. |
+| `numberMarkup` | Compatibility marker markup using the configured `referenceStyle` when `enableAnchorLinks` is enabled, otherwise `null`. |
 
 Numbering starts at 1 for each `footnotesProcessed` resolve. If several fields should share one numbered list, collect their results on the client in query order and assign the combined presentation numbers there.
+
+Processed `html` uses the plugin-wide `referenceStyle`. Raw CKEditor `html` keeps the semantic number in each reference anchor; headless clients that request only the stored HTML can apply their preferred punctuation from the numeric `number` value or their own presentation rules.
 
 ## Process an HTML String
 

@@ -2,6 +2,8 @@
 namespace verbb\footnotes\services;
 
 use verbb\footnotes\collections\FootnoteCollection;
+use verbb\footnotes\Footnotes;
+use verbb\footnotes\models\Settings;
 
 use craft\base\Component;
 use craft\htmlfield\HtmlFieldData;
@@ -16,6 +18,9 @@ class Documents extends Component
 
     public function collection(array $options = []): FootnoteCollection
     {
+        $referenceStyle = $options['referenceStyle'] ?? Footnotes::$plugin?->getSettings()->getReferenceStyle() ?? Settings::REFERENCE_STYLE_PLAIN;
+        $options['referenceStyle'] = Settings::normalizeReferenceStyle($referenceStyle);
+
         return new FootnoteCollection($this, $options);
     }
 

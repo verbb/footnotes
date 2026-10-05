@@ -3,6 +3,7 @@ namespace verbb\footnotes\collections;
 
 use verbb\footnotes\models\Footnote;
 use verbb\footnotes\models\FootnoteReference;
+use verbb\footnotes\models\Settings;
 use verbb\footnotes\services\Documents;
 
 use Craft;
@@ -25,6 +26,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
     private array $itemIndexes = [];
     private array $usedAnchorIds = [];
     private int $instance = 0;
+    private string $referenceStyle;
 
 
     // Public Methods
@@ -34,6 +36,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
     {
         $this->documents = $documents;
         $this->options = $options;
+        $this->referenceStyle = Settings::normalizeReferenceStyle($options['referenceStyle'] ?? Settings::REFERENCE_STYLE_PLAIN);
     }
 
     public function add(mixed $value): Markup
@@ -178,6 +181,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
                 'data-footnote-reference' => true,
                 'data-footnote-id' => $noteId,
                 'data-footnote-reference-id' => $referenceId,
+                'data-footnote-reference-style' => $this->referenceStyle,
             ]);
             unset($superscriptAttributes['id'], $superscriptAttributes['title']);
 
@@ -187,7 +191,7 @@ class FootnoteCollection implements Countable, IteratorAggregate
                 'role' => 'doc-noteref',
                 'aria-label' => Craft::t('footnotes', 'Footnote {number}', ['number' => $footnote->number]),
             ], $this->options['referenceAttributes'] ?? []);
-            $anchor = Html::tag('a', (string)$footnote->number, $anchorAttributes);
+            $anchor = Html::tag('a', $this->_referenceMarker($footnote->number), $anchorAttributes);
             $output .= Html::tag('sup', $anchor, $superscriptAttributes);
             $offset = $reference['start'] + $reference['length'];
         }
@@ -261,6 +265,11 @@ class FootnoteCollection implements Countable, IteratorAggregate
         }
 
         return $label;
+    }
+
+    private function _referenceMarker(int $number): string
+    {
+        return $this->referenceStyle === Settings::REFERENCE_STYLE_BRACKETS ? '[' . $number . ']' : (string)$number;
     }
 
     private function _mergeAttributes(array $base, mixed $custom): array
