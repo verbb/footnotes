@@ -149,9 +149,29 @@ The collection is iterable when the design needs complete control over the defin
 
 The default renderer follows the familiar Wikipedia backlink placement: a compact `.footnote-backlinks` group appears before each rich definition, using a linked `↑` for one reference or a shared arrow followed by lettered return links (`↑ a b`) when several references share the note. The ordered-list marker remains the note's only visible number, while the letters distinguish the places a reader can return to. The links retain `role="doc-backlink"` and descriptive accessible labels.
 
-Apart from the two bracket characters needed when the global `referenceStyle` is `'brackets'`, Footnotes doesn't style frontend content. A minimal treatment can keep the backlink group beside the first line while allowing the rest of a rich, multi-block definition to flow normally:
+Apart from the two bracket characters needed when the global `referenceStyle` is `'brackets'`, Footnotes doesn't style frontend content. The following optional treatment keeps bracketed references legible without a cramped underline, keeps the backlink group beside the first line, and allows the rest of a rich, multi-block definition to flow normally:
 
 ```css
+.footnote-reference {
+    font-size: 0.8em;
+    font-weight: 600;
+    line-height: 0;
+    position: relative;
+    top: -0.45em;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+.footnote-reference > a {
+    text-decoration: none;
+}
+
+.footnote-reference > a:hover,
+.footnote-reference > a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+}
+
 .footnote-item {
     padding-inline-start: 1em;
 }
