@@ -7,6 +7,7 @@
 - Added configurable plain (`1`) or square-bracketed (`[1]`) in-text reference styles, with a plugin-wide default and per-collection overrides.
 
 ### Changed
+- Require Verbb Base 3.0.20 or later so shared control-panel layouts use the current asset bundle namespace. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
 - Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
 - Changed UUID-backed public fragment IDs to use compact stable tokens while retaining full UUIDs as internal note and reference identities.
 - Changed footnote backlinks to flow-safe, compact Wikipedia-style indicators before each rich definition, including a single shared arrow and distinct lettered targets for repeated references.
