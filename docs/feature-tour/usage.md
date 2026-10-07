@@ -36,4 +36,4 @@ The saved CKEditor value already contains numbered references, the ordered defin
 
 The page displays the body and its footnotes together. No Footnotes-specific Twig call or frontend JavaScript is required.
 
-When a design needs to move the definitions elsewhere, combine notes from several fields, or control the list markup, follow [Rendering Footnotes](../template-guides/rendering-footnotes.md) to use a local collection.
+When a design needs to move the definitions elsewhere, combine notes from several fields, or control the list markup, follow [Rendering Footnotes](../template-guides/rendering-footnotes.md) to use a footnote collection.

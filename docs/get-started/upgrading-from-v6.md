@@ -1,6 +1,6 @@
 # Upgrading from Footnotes 6
 
-Footnotes keeps existing content and Twig templates working while adding rich editing and a local collection API. The release is non-breaking, so you can update the plugin before changing templates. The changes below explain what to review and which optional improvements are available.
+Footnotes keeps existing content and Twig templates working while adding rich editing and flexible Twig rendering. The release is non-breaking, so you can update the plugin before changing templates. The changes below explain what to review and which optional improvements are available.
 
 ## Breaking Changes
 
@@ -42,7 +42,7 @@ For a normal article, the template can render the field without Footnotes-specif
 ```
 :::
 
-If the design places definitions outside the article, replace the global helpers with a local collection:
+If the design places definitions outside the article, replace the global helpers with a collection:
 
 ::: code-group
 ```twig [Footnotes 6]

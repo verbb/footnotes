@@ -9,7 +9,7 @@
 
 ### Added
 - Added rich footnote editing directly in CKEditor, including formatted definitions, repeated references, and accessible backlinks.
-- Added a local `craft.footnotes.collection()` Twig API for moving, combining, and customising footnote output.
+- Added `craft.footnotes.collection()` for moving, combining, and customising footnote output in Twig.
 - Added configurable plain (`1`) or square-bracketed (`[1]`) in-text reference styles, with a plugin-wide default and per-collection overrides.
 
 ### Changed
@@ -22,7 +22,7 @@
 - Fixed a low-severity denial-of-service vulnerability.
 
 ### Deprecated
-- Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of local collections. Existing templates remain supported.
+- Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of collections. Existing templates remain supported.
 
 ## 6.0.6 - 2026-10-02
 
