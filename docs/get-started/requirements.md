@@ -2,7 +2,7 @@
 
 ## Craft CMS
 
-Footnotes requires Craft CMS 5.0 or greater.
+Footnotes requires Craft CMS 5.9 or greater.
 
 ## PHP
 
