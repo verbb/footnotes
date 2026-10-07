@@ -4,7 +4,6 @@ namespace verbb\footnotes;
 use verbb\footnotes\web\assets\ckeditor\CkEditorAsset;
 use verbb\footnotes\web\assets\frontend\ReferenceStylesAsset;
 use verbb\footnotes\base\PluginTrait;
-use verbb\footnotes\helpers\Plugin as PluginHelper;
 use verbb\footnotes\models\Settings;
 use verbb\footnotes\gql\types\FootnotesProcessedType;
 use verbb\footnotes\web\twig\Extension;
@@ -131,6 +130,10 @@ class Footnotes extends Plugin
 
     private function _registerRedactorPlugins(): void
     {
+        if (!class_exists(Field::class)) {
+            return;
+        }
+
         Event::on(Field::class, Field::EVENT_REGISTER_PLUGIN_PATHS, function(RegisterPluginPathsEvent $event) {
             $event->paths[] = Craft::getAlias('@verbb/footnotes/resources/redactor/');
         });
@@ -138,24 +141,22 @@ class Footnotes extends Plugin
 
     private function _registerCkEditorPlugins(): void
     {
-        if (PluginHelper::isPluginInstalledAndEnabled('ckeditor') && Craft::$app->getRequest()->getIsCpRequest()) {
-            CkEditor::registerCkeditorPackage(CkEditorAsset::class, 'index.js');
+        CkEditor::registerCkeditorPackage(CkEditorAsset::class, 'index.js');
 
-            $view = Craft::$app->getView();
-            $assetManager = $view->getAssetManager();
-            $bundle = $assetManager->getBundle(CkEditorAsset::class);
-
-            // Ensure the package alias exists in the import map, regardless of plugin init order.
-            $view->registerJsImport($bundle->namespace, $assetManager->getAssetUrl($bundle, 'index.js', false));
+        if (!Craft::$app->getRequest()->getIsCpRequest()) {
+            return;
         }
+
+        $view = Craft::$app->getView();
+        $assetManager = $view->getAssetManager();
+        $bundle = $assetManager->getBundle(CkEditorAsset::class);
+
+        // Ensure the package alias exists in the import map, regardless of plugin init order.
+        $view->registerJsImport($bundle->namespace, $assetManager->getAssetUrl($bundle, 'index.js', false));
     }
 
     private function _registerCkEditorPurifierConfig(): void
     {
-        if (!PluginHelper::isPluginInstalledAndEnabled('ckeditor')) {
-            return;
-        }
-
         Event::on(CkeditorField::class, CkeditorField::EVENT_MODIFY_PURIFIER_CONFIG, function(ModifyPurifierConfigEvent $event): void {
             $definition = $event->config->getHTMLDefinition(true);
 
