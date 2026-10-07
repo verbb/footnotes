@@ -8,6 +8,8 @@
     const CLIPBOARD_MIME_TYPE = 'application/x-verbb-footnotes+json';
     const MAX_CLIPBOARD_PAYLOAD_BYTES = 1048576;
     const MAX_CLIPBOARD_DEFINITIONS = 100;
+    // Footnotes uses ordered-list markup for its own document structure. Handle that markup before CKEditor's content-list converters.
+    const FOOTNOTE_STRUCTURE_PRIORITY = 1000000;
     class FootnotesCommand extends ckeditor5.Command {
         refresh() {
             const selection = this.editor.model.document.selection;
@@ -148,43 +150,68 @@
         }
         _registerUpcast() {
             const editor = this.editor;
-            editor.conversion.for('upcast').elementToElement({
-                view: {
-                    name: 'ol',
-                    attributes: {
-                        'data-footnotes': true
-                    }
-                },
-                model: 'footnoteList',
-                converterPriority: 'high'
-            });
-            editor.conversion.for('upcast').elementToElement({
-                view: {
-                    name: 'ol',
-                    classes: 'footnotes'
-                },
-                model: 'footnoteList',
-                converterPriority: 'high'
-            });
-            editor.conversion.for('upcast').elementToElement({
-                view: {
-                    name: 'li',
-                    attributes: {
-                        'data-footnote-id': true
-                    }
-                },
-                model: (viewElement, { writer })=>createFootnoteItem(viewElement, writer),
-                converterPriority: 'high'
-            });
-            editor.conversion.for('upcast').elementToElement({
-                view: {
-                    name: 'li',
-                    classes: 'footnote-item'
-                },
-                model: (viewElement, { writer })=>createFootnoteItem(viewElement, writer),
-                converterPriority: 'high'
-            });
             editor.conversion.for('upcast').add((dispatcher)=>{
+                dispatcher.on('element:ol', (evt, data, conversionApi)=>{
+                    const viewElement = data.viewItem;
+                    if (!viewElement.hasAttribute('data-footnotes') && !viewElement.hasClass('footnotes')) {
+                        return;
+                    }
+                    if (!conversionApi.consumable.consume(viewElement, {
+                        name: true
+                    })) {
+                        return;
+                    }
+                    const list = conversionApi.writer.createElement('footnoteList');
+                    if (!conversionApi.safeInsert(list, data.modelCursor)) {
+                        return;
+                    }
+                    conversionApi.convertChildren(viewElement, list);
+                    conversionApi.updateConversionResult(list, data);
+                    evt.stop();
+                }, {
+                    priority: FOOTNOTE_STRUCTURE_PRIORITY
+                });
+                dispatcher.on('element:li', (evt, data, conversionApi)=>{
+                    const viewElement = data.viewItem;
+                    if (!viewElement.hasAttribute('data-footnote-id') && !viewElement.hasClass('footnote-item')) {
+                        return;
+                    }
+                    if (!conversionApi.consumable.consume(viewElement, {
+                        name: true
+                    })) {
+                        return;
+                    }
+                    const item = createFootnoteItem(viewElement, conversionApi.writer);
+                    if (!conversionApi.safeInsert(item, data.modelCursor)) {
+                        return;
+                    }
+                    conversionApi.convertChildren(viewElement, item);
+                    conversionApi.updateConversionResult(item, data);
+                    evt.stop();
+                }, {
+                    priority: FOOTNOTE_STRUCTURE_PRIORITY
+                });
+                dispatcher.on('element:p', (evt, data, conversionApi)=>{
+                    const viewElement = data.viewItem;
+                    const parent = viewElement.parent;
+                    if (!parent?.is('element', 'li') || !parent.hasAttribute('data-footnote-id') && !parent.hasClass('footnote-item')) {
+                        return;
+                    }
+                    if (!conversionApi.consumable.consume(viewElement, {
+                        name: true
+                    })) {
+                        return;
+                    }
+                    const paragraph = conversionApi.writer.createElement('paragraph');
+                    if (!conversionApi.safeInsert(paragraph, data.modelCursor)) {
+                        return;
+                    }
+                    conversionApi.convertChildren(viewElement, paragraph);
+                    conversionApi.updateConversionResult(paragraph, data);
+                    evt.stop();
+                }, {
+                    priority: FOOTNOTE_STRUCTURE_PRIORITY
+                });
                 dispatcher.on('element:div', (evt, data, conversionApi)=>{
                     const viewElement = data.viewItem;
                     if (!viewElement.hasAttribute('data-footnote-backlinks') && !viewElement.hasClass('footnote-backlinks')) {
@@ -198,6 +225,7 @@
                         return;
                     }
                     data.modelRange = conversionApi.writer.createRange(data.modelCursor);
+                    data.modelCursor = data.modelRange.end;
                     evt.stop();
                 }, {
                     priority: 'highest'
@@ -243,6 +271,7 @@
                         return;
                     }
                     data.modelRange = conversionApi.writer.createRange(data.modelCursor);
+                    data.modelCursor = data.modelRange.end;
                     evt.stop();
                 }, {
                     priority: 'highest'
@@ -251,6 +280,7 @@
         }
         _registerDataDowncast() {
             const editor = this.editor;
+            // A normal element conversion keeps adjacent rich-text list items mapped while the static backlinks are appended.
             editor.conversion.for('dataDowncast').elementToElement({
                 model: 'footnoteList',
                 view: (_modelItem, { writer })=>writer.createContainerElement('ol', {
@@ -260,15 +290,8 @@
                         'aria-label': editor.t('Footnotes')
                     })
             });
-            editor.conversion.for('dataDowncast').elementToStructure({
-                model: {
-                    name: 'footnoteItem',
-                    attributes: [
-                        'footnoteId',
-                        'footnoteNumber',
-                        'footnoteReferenceIds'
-                    ]
-                },
+            editor.conversion.for('dataDowncast').elementToElement({
+                model: 'footnoteItem',
                 view: (modelItem, { writer })=>{
                     const noteId = modelItem.getAttribute('footnoteId') || '';
                     const number = modelItem.getAttribute('footnoteNumber') || '';
@@ -299,8 +322,7 @@
                         writer.createContainerElement('div', {
                             class: 'footnote-backlinks',
                             'data-footnote-backlinks': ''
-                        }, backlinkChildren),
-                        writer.createSlot()
+                        }, backlinkChildren)
                     ];
                     return writer.createContainerElement('li', {
                         class: 'footnote-item',
@@ -311,6 +333,21 @@
                         role: 'doc-endnote'
                     }, children);
                 }
+            });
+            // Keep model children after the static backlink group without using a structure slot, which breaks adjacent list mappings.
+            editor.data.mapper.on('modelToViewPosition', (evt, data)=>{
+                const modelParent = data.modelPosition.parent;
+                if (!modelParent.is('element', 'footnoteItem')) {
+                    return;
+                }
+                const viewParent = data.mapper.toViewElement(modelParent);
+                if (!viewParent?.getChild(0)?.hasClass('footnote-backlinks')) {
+                    return;
+                }
+                data.viewPosition = new ckeditor5.ViewPosition(viewParent, data.modelPosition.offset + 1);
+                evt.stop();
+            }, {
+                priority: 'high'
             });
             editor.conversion.for('dataDowncast').elementToElement({
                 model: {
@@ -362,13 +399,8 @@
                     })
             });
             editor.conversion.for('editingDowncast').elementToElement({
-                model: {
-                    name: 'footnoteItem',
-                    attributes: [
-                        'footnoteId',
-                        'footnoteNumber'
-                    ]
-                },
+                // Definition metadata changes without replacing the container that owns nested rich-text lists.
+                model: 'footnoteItem',
                 view: (modelItem, { writer })=>writer.createContainerElement('li', {
                         class: 'footnote-item ck-footnote-item',
                         'data-footnote-id': modelItem.getAttribute('footnoteId') || '',
