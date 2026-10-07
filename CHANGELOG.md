@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 6.0.8 - 2026-10-07
+
+### Changed
+- Require Verbb Base 3.0.20 or later so shared control-panel layouts use the current asset bundle namespace. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
+
+## 6.0.7 - 2026-10-05
 
 ### Added
 - Added rich footnote editing directly in CKEditor, including formatted definitions, repeated references, and accessible backlinks.
