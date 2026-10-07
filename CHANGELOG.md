@@ -1,11 +1,6 @@
 # Changelog
 
-## 6.0.8 - 2026-10-07
-
-### Changed
-- Require Verbb Base 3.0.20 or later so shared control-panel layouts use the current asset bundle namespace. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
-
-## 6.0.7 - 2026-10-05
+## 6.1.0 - 2026-10-07
 
 ### Added
 - Added rich footnote editing directly in CKEditor, including formatted definitions, repeated references, and accessible backlinks.
@@ -13,7 +8,6 @@
 - Added configurable plain (`1`) or square-bracketed (`[1]`) in-text reference styles, with a plugin-wide default and per-collection overrides.
 
 ### Changed
-- Updated the required version of `verbb/base` to 3.0.20. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
 - Changed CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
 
 ### Fixed
@@ -23,6 +17,17 @@
 
 ### Deprecated
 - Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of collections. Existing templates remain supported.
+
+## 6.0.8 - 2026-10-07
+
+### Changed
+- Require Verbb Base 3.0.20 or later so shared control-panel layouts use the current asset bundle namespace. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
+
+## 6.0.7 - 2026-10-05
+
+### Fixed
+- Fixed a moderate-severity denial-of-service vulnerability.
+- Fixed a low-severity denial-of-service vulnerability.
 
 ## 6.0.6 - 2026-10-02
 
