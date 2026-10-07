@@ -2,7 +2,7 @@
 
 Ordinary CKEditor field output contains its references and definitions, so `{{ entry.body }}` is the right starting point for most templates. Use a footnote collection when the page design needs to separate those parts, combine several content bodies into one numbered list, or render custom markup.
 
-A collection belongs to the local Twig variable that receives it. It has no request-global state, so separate collections form separate numbered groups and several `add()` calls on one collection deliberately share a sequence.
+A collection exists only in the Twig variable that receives it. Separate collections form separate numbered groups, while several `add()` calls on one collection share one sequence.
 
 ## Move Definitions below an Article
 
@@ -114,7 +114,7 @@ Pass `referenceAttributes` when creating the collection to add encoded attribute
 }) }}
 ```
 
-Custom classes are added to Footnotes' semantic classes rather than replacing them. Attribute values are HTML-encoded. Stable Footnotes classes, data markers, roles, accessible labels, IDs, and link targets remain present so the result keeps its document structure.
+Custom classes are added to Footnotes' own classes rather than replacing them. Attribute values are HTML-encoded. Footnotes keeps the classes, data markers, roles, labels, IDs, and link targets needed for the references and definitions to work.
 
 ## Render a Custom List
 
@@ -202,7 +202,7 @@ Apart from the two bracket characters needed when the global `referenceStyle` is
 
 **Returns:** `FootnoteCollection`
 
-Creates an empty local collection. `options.scope` sets a deterministic anchor prefix, `options.referenceStyle` selects `'plain'` or `'brackets'` for this collection, and `options.referenceAttributes` adds encoded attributes to generated reference links. When `referenceStyle` is omitted, the collection uses the plugin setting. The collection has no seed argument; call `add()` for every value you want it to process.
+Creates an empty collection. `options.scope` sets a predictable prefix for generated links, `options.referenceStyle` selects `'plain'` or `'brackets'` for this collection, and `options.referenceAttributes` adds encoded attributes to generated reference links. When `referenceStyle` is omitted, the collection uses the plugin setting. The collection has no seed argument; call `add()` for every value you want it to process.
 :::
 
 ::: reference

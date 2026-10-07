@@ -1,6 +1,8 @@
-# Usage
+# Footnotes in CKEditor
 
 Footnotes keeps each reference and its definition in the same CKEditor document. Authors write the main passage in the usual editing area, while definitions appear in a dedicated footnotes region at the end of that field. The saved field value contains both parts, so ordinary field output is a complete, linked document.
+
+![A CKEditor field with numbered references and rich definitions in its Footnotes region.](../../screenshots/footnotes-editor.png)
 
 ## Add the Footnote Button
 
@@ -12,7 +14,7 @@ The button belongs to the chosen CKEditor configuration rather than every rich-t
 
 Place the caret where the reference should appear, then select **Footnote**. CKEditor inserts a numbered reference, creates its definition in the footnotes region, and moves the caret there so you can start writing. If you select text before using the button, that text becomes the initial definition.
 
-Definitions support paragraphs, links, bold and italic text, subscript and superscript, soft breaks, and simple bulleted or numbered lists. Footnotes cannot contain another footnote, images, tables, embedded entries, media, or other structural widgets. This boundary keeps definitions useful for legal, academic, museum, and editorial notes without turning the footnotes region into a nested page builder.
+Definitions support paragraphs, links, bold and italic text, subscript and superscript, soft breaks, and simple bulleted or numbered lists. A definition cannot contain another footnote, an image, a table, an embedded entry, or media. This keeps the region focused on supporting notes rather than complete page layouts.
 
 Select a numbered reference to return to its definition. From inside a definition, press **Ctrl+Enter** (or **Command+Enter** on macOS) to return to that note's first reference.
 
@@ -20,9 +22,9 @@ Select a numbered reference to return to its definition. From inside a definitio
 
 Copying and pasting a reference inside the same field creates another reference to the same definition. Both markers display the same number, and the definition receives a return link for each occurrence.
 
-Pasting a reference into another CKEditor field carries its rich definition but gives the pasted note a new identity. This keeps changes in one field from unexpectedly changing another. Two notes created separately remain separate even when their wording is identical.
+Pasting a reference into another CKEditor field carries its rich definition but creates a separate note. Changes in one field therefore do not unexpectedly change another. Two notes created separately remain separate even when their wording is identical.
 
-Removing one of several shared references keeps the definition. Removing the last reference removes the definition in the same undoable edit. An empty definition remains valid until its last reference is removed.
+Removing one of several shared references keeps the definition. Removing the last reference removes the definition too, and the editor's normal undo command restores both. An empty definition remains valid until its last reference is removed.
 
 ## Render the Saved Field
 

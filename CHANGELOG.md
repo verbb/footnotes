@@ -3,24 +3,21 @@
 ## Unreleased
 
 ### Added
-- Added document-native rich footnote editing and a local `craft.footnotes.collection()` Twig API for single-body, multi-body, and custom rendering workflows.
+- Added rich footnote editing directly in CKEditor, including formatted definitions, repeated references, and accessible backlinks.
+- Added a local `craft.footnotes.collection()` Twig API for moving, combining, and customising footnote output.
 - Added configurable plain (`1`) or square-bracketed (`[1]`) in-text reference styles, with a plugin-wide default and per-collection overrides.
 
 ### Changed
-- Require Verbb Base 3.0.20 or later so shared control-panel layouts use the current asset bundle namespace. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
-- Changed canonical CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
-- Changed UUID-backed public fragment IDs to use compact stable tokens while retaining full UUIDs as internal note and reference identities.
-- Changed footnote backlinks to flow-safe, compact Wikipedia-style indicators before each rich definition, including a single shared arrow and distinct lettered targets for repeated references.
-- Updated the control-panel definitions region with a compact Footnotes badge, smaller definition text, an aligned ordered-list gutter, and clean editable definitions without rendered backlinks.
+- Updated the required version of `verbb/base` to 3.0.20. ([verbb-base#3](https://github.com/verbb/verbb-base/issues/3))
+- Changed CKEditor content to include accessible references and definitions so fields render complete footnotes without a Twig filter.
+
+### Fixed
+- Fixed CKEditor and Redactor integration when Footnotes initialises first.
+- Fixed a moderate-severity denial-of-service vulnerability.
+- Fixed a low-severity denial-of-service vulnerability.
 
 ### Deprecated
 - Deprecated the request-global `footnotes` filter and `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions in favour of local collections. Existing templates remain supported.
-
-### Fixed
-- Fixed collection rendering when Craft HTML Purifier retains full footnote identities on reference anchors but removes them from the surrounding superscript.
-- Fixed Redactor button registration when Footnotes initialises before Redactor.
-- Fixed a moderate-severity denial-of-service vulnerability.
-- Fixed a low-severity denial-of-service vulnerability.
 
 ## 6.0.6 - 2026-10-02
 

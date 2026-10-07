@@ -10,17 +10,17 @@
         ]
     },
     {
-        "title": "Template Guides",
-        "collapsable": false,
-        "children": [
-            "template-guides/rendering-footnotes"
-        ]
-    },
-    {
         "title": "Feature Tour",
         "collapsable": false,
         "children": [
             "feature-tour/usage"
+        ]
+    },
+    {
+        "title": "Template Guides",
+        "collapsable": false,
+        "children": [
+            "template-guides/rendering-footnotes"
         ]
     },
     {

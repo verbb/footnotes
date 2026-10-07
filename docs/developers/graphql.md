@@ -1,6 +1,6 @@
 # GraphQL
 
-Footnotes stores document-native references and definitions inside the CKEditor field's HTML. A client can request that complete HTML directly, or use Footnotes' processed fields when it needs the body and structured definitions separately.
+Footnotes stores references and definitions inside the CKEditor field's HTML. A client can request that complete HTML directly, or use Footnotes' processed fields when it needs the body and structured definitions separately.
 
 ## Requirements
 
@@ -63,10 +63,10 @@ Each item exposes the following fields:
 
 | Field | Result |
 | --- | --- |
-| `id` | Stable definition identity for document-native notes, or `null` for classic inline content. |
+| `id` | Stored definition ID for current notes, or `null` for classic inline content. |
 | `number` | One-based display number derived from reference order. |
-| `text` | Plain definition text for document-native notes. Classic inline content retains its historical HTML string for compatibility. |
-| `html` | Rich definition HTML for document-native notes, or `null` for classic inline content. |
+| `text` | Plain definition text for current notes. Classic inline content retains its historical HTML string for compatibility. |
+| `html` | Rich definition HTML for current notes, or `null` for classic inline content. |
 | `listAnchorId` | Fragment target for the rendered definition. |
 | `referenceAnchorId` | First in-text reference ID. |
 | `referenceAnchorIds` | Every in-text reference ID in occurrence order, or `null` for classic inline content. |
@@ -74,7 +74,7 @@ Each item exposes the following fields:
 
 Numbering starts at 1 for each `footnotesProcessed` resolve. If several fields should share one numbered list, collect their results on the client in query order and assign the combined presentation numbers there.
 
-Processed `html` uses the plugin-wide `referenceStyle`. Raw CKEditor `html` keeps the semantic number in each reference anchor; headless clients that request only the stored HTML can apply their preferred punctuation from the numeric `number` value or their own presentation rules.
+Processed `html` uses the plugin-wide `referenceStyle`. Raw CKEditor `html` keeps the number in each reference anchor; headless clients that request only the stored HTML can apply their preferred punctuation from the numeric `number` value or their own presentation rules.
 
 ## Process an HTML String
 

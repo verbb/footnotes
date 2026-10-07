@@ -1,10 +1,10 @@
 # Upgrading from Footnotes 6
 
-Footnotes keeps existing content and Twig templates working while adding document-native editing and a local collection API. The release is non-breaking, so you can update the plugin before changing templates. The changes below explain what to review and which optional improvements are available.
+Footnotes keeps existing content and Twig templates working while adding rich editing and a local collection API. The release is non-breaking, so you can update the plugin before changing templates. The changes below explain what to review and which optional improvements are available.
 
 ## Breaking Changes
 
-There are no intended breaking changes. Existing CKEditor and Redactor footnote markup remains readable, and the `footnotes` filter plus the `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions remain available through the compatibility layer.
+There are no intended breaking changes. Existing CKEditor and Redactor footnote markup remains readable, and the `footnotes` filter plus the `footnotes()`, `footnotes_items()`, `footnotes_exist()`, and `footnotes_set()` functions remain available. These helpers now record Craft deprecation warnings when used.
 
 ## Editor Behaviour
 
@@ -12,11 +12,11 @@ Opening a field with inline Footnotes content presents each marker as a numbered
 
 Review an existing entry by opening its CKEditor field, selecting a reference, and confirming that the caret moves to the expected definition. Save and reload the entry, then check that the ordinary field output still contains the reference, definition, and return link.
 
-Canonical notes keep their full UUIDs in `data-footnote-id` and `data-footnote-reference-id`, but generated public fragment IDs use a compact stable token such as `#fn-0000000001`. Existing Footnotes 6 content and non-UUID fragment identities remain readable. If pre-release 6.1 templates or scripts were written against full UUID-shaped fragments, target the semantic classes or data attributes instead of the fragment format.
+Generated fragment IDs use compact targets such as `#fn-0000000001`. Existing Footnotes 6 content and fragment links remain readable. Custom scripts and styles should target Footnotes classes or data attributes rather than relying on the exact fragment format.
 
 ## Deprecated Twig Helpers
 
-The request-global Twig API still works but records Craft deprecation warnings when called. There is no scheduled removal date. New and revised templates should either render the complete field value directly or use `craft.footnotes.collection()` for relocated or combined output.
+The older Twig API shares one footnote list across the request. It still works but records Craft deprecation warnings when called, and there is no scheduled removal date. New and revised templates should either render the complete field value directly or use `craft.footnotes.collection()` for relocated or combined output.
 
 For a normal article, the template can render the field without Footnotes-specific processing:
 
@@ -81,6 +81,6 @@ The collection is deliberately local to the Twig variable. Several `add()` calls
 
 ## Settings Behaviour
 
-`enableAnchorLinks` and `enableDuplicateFootnotes` continue to control the classic Twig and GraphQL compatibility processing. The new `referenceStyle` setting defaults to `'plain'`, preserving the existing `1` marker, while `'brackets'` displays `[1]` in CKEditor and frontend output without rewriting stored field values. Collections can override that default locally. Document-native notes and collection output always use linked references, stable note identities, and a backlink for every occurrence. Identical text does not merge separately created canonical notes.
+`enableAnchorLinks` and `enableDuplicateFootnotes` continue to control the classic Twig and GraphQL compatibility processing. The new `referenceStyle` setting defaults to `'plain'`, preserving the existing `1` marker, while `'brackets'` displays `[1]` in CKEditor and frontend output without rewriting stored field values. Collections can override that default locally. Current CKEditor notes and collection output always use linked references, stable note identities, and a backlink for every occurrence. Identical text does not merge separately created notes.
 
 After adopting the collection API, check **Utilities → Deprecation Warnings** for remaining `verbb.footnotes.*` entries. Each warning identifies a compatibility helper that can be updated independently.
