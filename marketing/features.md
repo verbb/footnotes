@@ -2,7 +2,7 @@
 Footnotes lets CKEditor authors write rich supporting notes without leaving the document, while keeping the published result accessible and ready to render.
 <!-- feature-intro-end -->
 
-<!-- feature-media -->
+<!-- feature-media media-shadow="false" -->
 ## Give every note room to breathe
 
 A citation rarely fits comfortably inside a small popover. Footnotes puts definitions in an editable region at the end of the same CKEditor document, where authors can use paragraphs, links, inline formatting and simple lists with the editor controls they already know.
