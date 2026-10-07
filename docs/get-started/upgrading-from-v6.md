@@ -72,7 +72,16 @@ If the design places definitions outside the article, replace the global helpers
 </article>
 
 {% if footnotes.hasNotes %}
-    {{ footnotes.render() }}
+    <ol>
+        {% for item in footnotes %}
+            {% set reference = item.references | first %}
+
+            <li id="{{ item.anchorId }}">
+                {{ item.html }}
+                <a href="#{{ reference.anchorId }}">Return</a>
+            </li>
+        {% endfor %}
+    </ol>
 {% endif %}
 ```
 :::
