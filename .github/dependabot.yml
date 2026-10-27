@@ -1,0 +1,44 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /src/resources/ckeditor
+    schedule:
+      interval: weekly
+    # Group security updates without introducing routine version-update PRs.
+    open-pull-requests-limit: 0
+    groups:
+      ckeditor:
+        applies-to: security-updates
+        patterns:
+          - ckeditor5
+          - '@ckeditor/ckeditor5-*'
+        exclude-patterns:
+          - '@ckeditor/ckeditor5-dev-*'
+        update-types:
+          - minor
+          - patch
+      # Keep the deferred build-tool migration separate from compatible updates.
+      ckeditor-build-tools:
+        applies-to: security-updates
+        patterns:
+          - '@ckeditor/ckeditor5-dev-*'
+          - '@rollup/plugin-terser'
+          - serialize-javascript
+          - rollup-plugin-styles
+          - query-string
+          - decode-uri-component
+      build-dependencies:
+        applies-to: security-updates
+        patterns:
+          - '*'
+        exclude-patterns:
+          - ckeditor5
+          - '@ckeditor/ckeditor5-*'
+          - '@rollup/plugin-terser'
+          - serialize-javascript
+          - rollup-plugin-styles
+          - query-string
+          - decode-uri-component
+        update-types:
+          - minor
+          - patch
