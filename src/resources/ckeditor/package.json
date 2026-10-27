@@ -21,7 +21,7 @@
     "ckeditor5-metadata.json"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-build-tools": "43.0.1",
+    "@ckeditor/ckeditor5-dev-build-tools": "62.5.0",
     "ckeditor5": "^47.5.0"
   },
   "peerDependencies": {
