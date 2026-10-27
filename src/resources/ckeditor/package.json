@@ -22,7 +22,7 @@
   ],
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-build-tools": "43.0.1",
-    "ckeditor5": "^47.5.0"
+    "ckeditor5": "^47.6.0"
   },
   "peerDependencies": {
     "ckeditor5": "^47.5.0 || ^48.0.1 || ^0.0.0-nightly"
