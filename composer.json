@@ -2,7 +2,7 @@
     "name": "verbb/footnotes",
     "description": "A Craft CMS plugin for adding rich, linked footnotes to CKEditor content.",
     "type": "craft-plugin",
-    "version": "6.1.0",
+    "version": "6.1.1",
     "keywords": [
         "craft",
         "cms",

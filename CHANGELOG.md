@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.1.1 - 2026-10-28
+
+### Changed
+- Update build dependencies and group Dependabot security updates.
+- Update SVGO, PostCSS, Nano ID and Browserslist dependencies.
+- Update CKEditor build dependencies.
+
+### Removed
+- Remove unused CKEditor tooling and update compatibility.
+
 ## 6.1.0 - 2026-10-07
 
 ### Added
