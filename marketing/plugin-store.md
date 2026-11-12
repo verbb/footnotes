@@ -1,6 +1,6 @@
 Footnotes lets CKEditor authors write rich supporting notes without leaving the document. References stay in the main text while definitions live in an editable footnotes region at the end of the same field.
 
-The saved field value contains references, definitions and return links, so ordinary field output is complete. Developers can also use Twig to move or combine definitions, customise the markup, or request structured rich notes through GraphQL.
+The saved field value contains references, definitions and return links, so ordinary field output is complete.
 
 ## Features
 

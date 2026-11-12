@@ -16,7 +16,6 @@ References and definitions stay connected as content moves. Reuse one definition
 - :icon[file-description] **Complete field output** Saved CKEditor HTML includes references, definitions and return links, ready for ordinary field rendering.
 - :icon[brackets-contain] **Reference styles** Present in-text markers as compact numbers or familiar Wikipedia-style square-bracketed numbers.
 - :icon[accessible] **Accessible navigation** Labels, linked targets and backlinks give each reference a clear destination.
-- :icon[braces] **Twig flexibility** Move or combine notes from one or several fields, then use the default list or your own markup.
 - :icon[api] **GraphQL data** Headless clients can request plain text, rich HTML and every repeated reference target.
 <!-- feature-grid-end -->
 
