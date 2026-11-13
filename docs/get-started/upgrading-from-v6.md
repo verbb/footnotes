@@ -1,4 +1,4 @@
-# Upgrading from Footnotes 6
+# Upgrading from v6
 
 Footnotes keeps existing content and Twig templates working while adding rich editing and flexible Twig rendering. The release is non-breaking, so you can update the plugin before changing templates. The changes below explain what to review and which optional improvements are available.
 

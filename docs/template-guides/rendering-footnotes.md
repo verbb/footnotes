@@ -26,7 +26,7 @@ Suppose an entry has a CKEditor field with the handle `body`. Create the collect
 
 The `scope` option prefixes generated IDs so references remain unique when the same entry appears elsewhere on the page, such as in a modal or related-content card. Use a stable value based on the surrounding component or entry when fragment URLs or cached HTML need deterministic IDs.
 
-Footnotes keeps full UUIDs in its `data-footnote-id` and `data-footnote-reference-id` attributes as stable internal identities. Public fragment IDs use only a deterministic 10-character UUID token, producing readable targets such as `#fn-0000000001` and `#fnref-0000000002`. A collection scope prefixes that compact token, for example `#fn-article-42-0000000001`. Existing non-UUID and legacy fragment identities remain supported unchanged.
+Footnotes keeps full UUIDs in its `data-footnote-id` and `data-footnote-reference-id` attributes as stable internal identities. Public fragment IDs use only a deterministic 10-character UUID token, producing readable targets such as `#fn-0000000001` and `#fnref-0000000002`. A collection scope prefixes that compact token, for example `#fn-article-42-0000000001`.
 
 ## Choose the Reference Style
 

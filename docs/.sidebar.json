@@ -13,7 +13,7 @@
         "title": "Feature Tour",
         "collapsable": false,
         "children": [
-            "feature-tour/usage"
+            "feature-tour/footnotes-in-ckeditor"
         ]
     },
     {
@@ -24,10 +24,11 @@
         ]
     },
     {
-        "title": "Developers",
+        "title": "GraphQL",
         "collapsable": false,
         "children": [
-            "developers/graphql"
+            "graphql/queries",
+            "graphql/interfaces-types"
         ]
     }
 ]

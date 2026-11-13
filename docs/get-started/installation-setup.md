@@ -24,4 +24,4 @@ composer require verbb/footnotes && php craft plugin/install footnotes
 
 ## First Steps
 
-Add the Footnote button to the CKEditor configurations that need it. [Footnotes in CKEditor](../feature-tour/usage.md) takes you through the editor workflow and the content it supports.
+Add the Footnote button to the CKEditor configurations that need it. [Footnotes in CKEditor](../feature-tour/footnotes-in-ckeditor.md) takes you through the editor workflow and the content it supports.

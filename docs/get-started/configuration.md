@@ -2,13 +2,13 @@
 
 You can customise Footnotes’ settings using a PHP configuration file. This is optional: each setting has a default, so you only need to include the values you want to change.
 
-To override a setting, create `footnotes.php` in your Craft project’s `/config` directory and return an array of setting names and values. For example, the following will enable footnote anchor links:
+To override a setting, create `footnotes.php` in your Craft project’s `/config` directory and return an array of setting names and values. For example, the following will display reference numbers in brackets:
 
 ```php
 <?php
 
 return [
-    'enableAnchorLinks' => true,
+    'referenceStyle' => 'brackets',
 ];
 ```
 
@@ -33,7 +33,7 @@ Footnotes stores the number itself and adds brackets when the field is displayed
 
 Whether to enable `<a>` tags for footnotes.
 
-This setting applies to the classic `footnotes` Twig filter and GraphQL's `numberMarkup` value. Current CKEditor content and the collection API always produce linked, accessible references and backlinks.
+This setting applies to inline notes processed for GraphQL's `numberMarkup` value and to the Twig helpers kept for [upgrading templates](upgrading-from-v6.md#deprecated-twig-helpers). CKEditor footnotes and the collection API always produce linked, accessible references and backlinks.
 :::
 
 ::: reference
@@ -41,5 +41,5 @@ This setting applies to the classic `footnotes` Twig filter and GraphQL's `numbe
 
 **Type:** `bool` · **Default:** `false`
 
-Whether classic Twig processing combines footnotes with identical content. Current CKEditor footnotes use identity instead: two separately created notes remain separate even when their content matches, while copied references can point to the same definition.
+Whether inline notes with identical content share one footnote when processed for GraphQL or by the Twig helpers kept for [upgrading templates](upgrading-from-v6.md#deprecated-twig-helpers). CKEditor footnotes use identity instead: two separately created notes remain separate even when their content matches, while copied references can point to the same definition.
 :::
