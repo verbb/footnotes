@@ -4,7 +4,7 @@ You can install Footnotes via the plugin store, or through Composer.
 
 ## Craft Plugin Store
 
-To install **Footnotes**, navigate to the **Plugin Store** section of your Craft control panel, search for `Footnotes`, and select **Try**.
+To install **Footnotes**, navigate to the _Plugin Store_ section of your Craft control panel, search for `Footnotes`, and click the _Install_ button.
 
 ## Composer
 
@@ -22,4 +22,6 @@ cd /path/to/project
 composer require verbb/footnotes && php craft plugin/install footnotes
 ```
 
-After installation, add the Footnote button to the CKEditor configurations that need it. The [Footnotes in CKEditor](../feature-tour/usage.md) page takes you through the editor workflow and its supported content.
+## First Steps
+
+Add the Footnote button to the CKEditor configurations that need it. [Footnotes in CKEditor](../feature-tour/usage.md) takes you through the editor workflow and the content it supports.
